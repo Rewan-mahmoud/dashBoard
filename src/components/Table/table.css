@@ -1,0 +1,45 @@
+.tables{
+    padding: 40px 25px;
+    border-radius: 25px;
+}
+.table>:not(caption)>*>* {
+    border: none !important;
+}
+.icons img{
+    margin-left: 8px;
+}
+.table th{
+    color: #299ECC;
+    font-size: 16px;
+    font-family: "Cairo", sans-serif;
+    padding-bottom: 40px;
+}
+.DashBoardTableTitle h3
+{
+    color: #299ECC;
+    font-size: 30px;
+    font-family: "Cairo", sans-serif;
+
+
+}
+.table td{
+    font-size: 16px;
+    font-family: "Cairo", sans-serif;
+}
+.tableTitle {
+    margin-bottom: 20px;
+}
+.DashBoardTableTitle button {
+    border: none;
+    border-radius: 25px;
+    padding: 10px 25px;
+    background-color: #c3e1ea;
+}
+.tableTitle span{
+    font-size: 16px;
+    font-family: "Cairo", sans-serif;
+    color: #299ECC;
+    font-weight: bold;
+    margin-left: 15px;
+
+}

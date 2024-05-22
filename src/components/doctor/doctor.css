@@ -1,0 +1,30 @@
+.drTableIcon img{
+    margin-left: 16px;
+    cursor: pointer;
+}
+.table td {
+    padding-bottom: 40px;
+}
+.tableTitle h3{
+    color: #299ECC;
+    font-size: 30px;
+    font-family: "Cairo", sans-serif;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+.tableTitle button{
+    width: 180px;
+    height: 45px;
+    background-color: #239EC2;
+    border-radius: 18px;
+    border: none;
+    margin-left: 50px;
+
+
+}
+.tableTitle span{
+    color: #FFFFFF;
+    font-size: 16px;
+    line-height: 15px;
+    font-family: "Cairo", sans-serif;
+}

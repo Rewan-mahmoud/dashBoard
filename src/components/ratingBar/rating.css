@@ -1,0 +1,16 @@
+.filled{
+    color: #FABF35;
+    cursor: pointer;
+}
+.ratingTable{
+    padding: 40px 25px !important;
+    border-radius: 25px !important;
+}
+.ratingTitle {
+    color: #299ECC;
+    font-size: 25px;
+    font-family: "Cairo", sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 28px 0px;
+}

@@ -1,0 +1,39 @@
+.Header{
+    direction: rtl;
+    background-color: white;
+}
+.title{
+    text-decoration: none;
+    font-size: 26px;
+    color: #239EC2;
+    font-family: cairo;
+}
+.searchInput{
+    padding: 10px 20px;
+}
+.HeaderIcons img{
+    margin-left: 24px;
+}
+.searchInput {
+     padding: 5px 80px ;
+    border-radius: 13px;
+    width: 100%;
+    border: 1px solid #239EC2; 
+    outline: none; 
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+
+}
+.searchContainer {
+    position: relative;
+    width: 56%;
+  }
+  
+
+  
+  .searchIcon {
+    position: absolute;
+    top: 63%;
+    right: 45px; /* adjust this value based on your preference */
+    transform: translateY(-50%);
+  }
+  

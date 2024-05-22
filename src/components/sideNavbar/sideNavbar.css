@@ -1,0 +1,23 @@
+
+.nav-link{
+    color: black;
+    font-size: 14;
+    font-family: "Cairo", sans-serif;
+    transition: all 0s;
+}
+.NavTitle {
+  margin-bottom: 40px;
+  padding: 0px 24px;
+}
+.NavTitle:hover{
+    background-color: #F4F6F9;
+}
+ .NavTitle:hover .nav-link,img{
+
+    color: #239EC2;
+} 
+/* .active{
+    background-color: #F4F6F9 !important;
+ 
+    color: #239EC2 !important;
+} */
