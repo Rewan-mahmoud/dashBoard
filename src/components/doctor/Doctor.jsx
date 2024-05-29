@@ -3,7 +3,7 @@ import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import plus from '../../assests/plus.svg';
 import Groupppp from '../../assests/Groupppp.svg';
-
+import { Link } from 'react-router-dom';
 import "./doctor.css"
 const Doctor = () => {
     const [data, setData] = useState([
@@ -55,11 +55,13 @@ const Doctor = () => {
         <div className="container tables bg-white mt-5">
           <div className="tableTitle d-flex justify-content-between ">
           <h3>بيانات الأطباء والمعالجون</h3>
-          <button > 
+          <Link to="/DoctorData">       
+            <button > 
           <img src={plus} alt="" />
         <span className='pe-3'> اضافة </span>   
    
-          </button>
+          </button></Link>
+ 
           </div>
        
           <table className=" table TableDr text-center ">
@@ -68,7 +70,6 @@ const Doctor = () => {
               <th  scope="col ">الرقم</th>
               <th scope="col ">الاسم باللغة العربية</th>
               <th scope="col ">الاسم باللغة الانجليزية</th>
-              
               <th scope="col ">الرقم</th>
               <th scope="col ">البريد الالكتروني </th>
               <th scope="col ">التحكم </th>
@@ -119,8 +120,8 @@ const Doctor = () => {
                     </React.Fragment>
                   ) : (
                     <React.Fragment>
-                      <div className='drTableIcon'>
-                      <img src={Groupppp} alt="" />
+                    <div className='drTableIcon'>
+                    <Link to="/DoctorsProfile"><img src={Groupppp} alt="" /></Link>
                     <img 
                      onClick={() => handleEdit(row.id)}
                     src={edit} alt="" />

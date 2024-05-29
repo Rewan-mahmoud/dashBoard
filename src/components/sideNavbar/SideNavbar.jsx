@@ -25,7 +25,7 @@ function SideNavbar() {
     return (
       <>
 
-  <div className="sideNavbar col-md-2   ">
+  <div className="sideNavbar col-md-2 ">
 
  <nav class="nav nav-pills flex-column ">
 <div className='d-flex NavTitle '>
@@ -69,6 +69,10 @@ function SideNavbar() {
 <img src={play} alt="" />
 <Link to="Meetings" className="nav-link">  اللقائات </Link>
 </div>
+<div className='d-flex NavTitle'>
+<img src={play} alt="" />
+<Link to="RatingPage" className="nav-link">  التقييمات </Link>
+</div>
 
 <div className='d-flex NavTitle'>
 <img src={Group2} alt="" />
@@ -106,7 +110,7 @@ function SideNavbar() {
 
 <div className='d-flex NavTitle'>
 <img src={setting} alt="" />
-<Link to="Settings" className="nav-link">  اعدادات عامة  </Link>
+<Link to="/Settings/PublicSettings" className="nav-link">  اعدادات عامة  </Link>
 </div>
 <img className='  mt-5' src={drPic} alt=""  />
 </nav>

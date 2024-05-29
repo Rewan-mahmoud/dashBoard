@@ -28,14 +28,12 @@ height: 150px;
     font-size: 18px;
     text-align: center;
 }
-.form-group img{
+.form-group .upload{
     position: absolute;
     top: 40px;
     left: 0;  
     pointer-events: none;
-
     right: 0;
-  
     content: "  ";
     display: block;
     margin: 0 auto;
@@ -66,4 +64,34 @@ margin-bottom: 24px;
 
 .setting {
     padding: 0px;
+}
+.table-bordered{
+/* border-color: #239EC2 !important ; */
+width: 50%;
+text-align: center;
+border: 1px solid #239EC2 !important;
+}
+.form-label{
+    color: #868686;
+    font-family: "Cairo", sans-serif;
+    font-size: 18px;
+
+}
+textarea{
+    background-color:#f1f1f1 !important;
+    border: none !important;
+}
+.settingNav a{
+    margin-left: 15px;
+}
+.form-group .addUpload{
+    position: absolute;
+    top: 80px;
+    left: 0;  
+    pointer-events: none;
+    right: 0;
+    content: "  ";
+    display: block;
+    margin: 0 auto;
+    text-align: center;
 }

@@ -3,7 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Header from "./components/Header/Header"
 import './App.css';
-import { BrowserRouter as Router, Route, Switch, Routes } from 'react-router-dom';
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SideNavbar from './components/sideNavbar/SideNavbar';
 import DashBoard from './components/dashboard/DashBoard';
 import Doctor from './components/doctor/Doctor';
@@ -21,6 +22,15 @@ import Users from './components/users/Users';
 import LotalyProgram from './components/LoyaltyProgram/LotalyProgram';
 import Questions from './components/Questions/Questions';
 import Settings from './components/setting/Settings';
+import PublicSettings from './components/setting/PublicSettings';
+import VisibilitySettings from './components/setting/VisibilitySettings';
+import ReturnPolicy from './components/setting/ReturnPolicy';
+import CopyRights from './components/setting/CopyRights';
+import CommonQuestions from './components/setting/CommonQuestions';
+import RatingPage from './components/RatingsPage/RatingPage';
+import DoctorsProfile from './components/doctor/DoctorsProfile';
+import DoctorData from './components/doctor/DoctorData';
+// import PublicSettings from './components/setting/PublicSettings';
 
 
 function App() {
@@ -50,8 +60,17 @@ function App() {
               <Route path="/Users" element={<Users />} />
               <Route path="/LotalyProgram" element={<LotalyProgram />} />
               <Route path="/Questions" element={<Questions />} />
-              <Route path="/Settings" element={<Settings />} />
-            
+              <Route path="/Settings" element={<Settings />} >
+              <Route path="PublicSettings" element={<PublicSettings />} />
+              <Route path="VisibilitySettings" element={<VisibilitySettings />} />
+              <Route path="ReturnPolicy" element={<ReturnPolicy />} />
+              <Route path="CopyRights" element={<CopyRights />} />
+              <Route path="CommonQuestions" element={<CommonQuestions />} />
+            </Route>
+              <Route path="RatingPage" element={<RatingPage />} />
+              <Route path="DoctorsProfile" element={<DoctorsProfile />} />
+              <Route path="DoctorData" element={<DoctorData />} />
+        
         
               
             </Routes>

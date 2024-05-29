@@ -1,3 +1,6 @@
+
+
+
 .drTableIcon img{
     margin-left: 16px;
     cursor: pointer;
@@ -27,4 +30,70 @@
     font-size: 16px;
     line-height: 15px;
     font-family: "Cairo", sans-serif;
+}
+.DoctorsProfile{
+    font-family: "Cairo", sans-serif;
+}
+.doctorProfileInfo{
+    margin: 40px 40px 0px  40px;
+    font-family: "Cairo", sans-serif;
+}
+.doctorProfileInfo,.work h2 {
+    font-size: 37px;
+    font-family: "Cairo", sans-serif;
+}
+.doctorProfileInfo p{
+    font-size: 20px;
+    color: #868686;
+    /* padding:  23px 0px; */
+}
+.time{
+    width: 103px;
+    height: 48px;
+    background-color: #E5F9FF;
+border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.time span {
+padding: 0px 16px;
+font-family: 'Aphaya Libre', serif;
+font-size: 16px;
+font-weight: 600;
+
+}
+
+.work p {
+    padding: 0px 20px;
+}
+
+.pref p{
+line-height: 41px;
+font-size: 20px;
+font-weight: light;
+letter-spacing: 2%;
+margin-top: 40px;
+}
+.special p{
+/* width: 120px;
+height: 44px; */
+padding: 10px 18px;
+font-size: 16px;
+background-color: #d1eef5 ;
+margin-left: 18px;
+box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+border-radius: 12px;
+}
+.DoctorsProfileTitle h2 {
+    margin: 40px 0px;
+}
+.trash{
+    cursor: pointer;
+}
+.addAnotherWork .addWork{
+    border-radius: 18px !important;
+    border: 3px dashed #299ECC !important ;
+    background-color: #F8F8F8;
+    padding: 10px 0px;
 }
