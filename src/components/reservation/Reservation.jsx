@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import clock from '../../assests/clock-rewind.svg';
-import arrow from '../../assests/arrow.svg';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import plus from '../../assests/plus.svg';
+import { Button, Modal } from 'react-bootstrap';
 // import "./table.css"
 const Reservation = () => {
     const [data, setData] = useState([
@@ -15,13 +17,11 @@ const Reservation = () => {
     
       const [editingId, setEditingId] = useState(null);
       const [newRowData, setNewRowData] = useState({});
-    
-      const handleEdit = (id) => {
-        setEditingId(id);
-        const rowToEdit = data.find(row => row.id === id);
-        const newRowDataCopy = { ...rowToEdit };
-        setNewRowData(newRowDataCopy);
-      };
+      const [show, setShow] = useState(false);
+
+      const handleClose = () => setShow(false);
+      const handleShow = () => setShow(true);
+
     
       const handleDelete = (id) => {
         const newData = data.filter(row => row.id !== id);
@@ -36,6 +36,14 @@ const Reservation = () => {
         }));
       };
     
+    
+
+  const handleDateChange = (date) => {
+    setNewRowData(prevData => ({
+      ...prevData,
+      Date: date
+    }));
+  };
       const handleSave = () => {
         const newData = data.map(row => {
           if (row.id === editingId) {
@@ -52,7 +60,11 @@ const Reservation = () => {
         <div className="container tables bg-white mt-5">
           <div className=" tableTitle  d-flex justify-content-between">
           <h3>الحجوزات </h3>
-        
+          <button > 
+          <img src={plus} alt="" />
+        <span className='pe-3'> اضافة </span>   
+   
+          </button>
           </div>
        
           <table className=" table ">
@@ -139,10 +151,9 @@ const Reservation = () => {
                   ) : (
                     <React.Fragment>
                       <div className='icons'>
-                      <img src={clock} alt="" />
-                    <img 
-                     onClick={() => handleEdit(row.id)}
-                    src={edit} alt="" />
+                        
+                      <img  variant="primary" onClick={handleShow} src={clock} alt="" />
+          
                     <img 
                     src={deletee} alt=""
                     onClick={() => handleDelete(row.id)}/>
@@ -150,6 +161,45 @@ const Reservation = () => {
                     </React.Fragment>
                   )}
                 </td>
+<div className='Modal'>
+<Modal show={show} onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title> <p>اعادة جدولة المواعيد</p>  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <div className='settingForm mb-5'>
+                  <label htmlFor="formGroupExampleInput">الطبيب المعالج  :</label>
+                  <select className="form-control">
+  <option value="option1"> احمد عبدالله</option>
+  <option value="option2"> عصام مسعد</option>
+  <option value="option3"> روان محمود</option>
+</select>
+
+            
+                  </div>
+                  <label htmlFor="formGroupExampleInput">الطبيب المعالج  :</label>
+            <DatePicker
+                    selected={newRowData.Date}
+                    onChange={handleDateChange}
+                    showTimeSelect
+                    dateFormat="Pp"
+                  />
+                
+                </Modal.Body>
+                <Modal.Footer>
+                <div
+            className='BottomButtons'>
+                <button onClick={handleClose} className='save'>
+                    <span> حفظ</span>
+                </button>
+                <button onClick={handleClose} className='cancel'>
+                    <span> الغاء</span>
+                </button>
+            </div>
+                </Modal.Footer>
+            </Modal>
+</div>
+              
               </tr>
             ))}
           </tbody>

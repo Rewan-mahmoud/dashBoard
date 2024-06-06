@@ -12,44 +12,38 @@ import SideNavbar from '../sideNavbar/SideNavbar';
 function Header() {
   return (
     <>
-    <div className="Header ">
-  <nav className='d-flex align-items-center justify-content-between'>
-    <div>
-      <img src={img} width="100" alt=""/>
-      <a className='title'>خبراء النفس</a>
-       </div>
+      <div className="Header">
+        <nav className='d-flex align-items-center justify-content-between'>
+          <div>
+            <img src={img} width="100" alt=""/>
+            <a className='title'>خبراء النفس</a>
+          </div>
 
+          <div className="searchContainer">
+            <input
+              className="searchInput"
+              placeholder="بحث"
+              type="search"
+              aria-label="Search"
+            />
+            <img className="searchIcon" src={search} alt="Search" />
+          </div>
 
-    <div className="searchContainer">
-     <input
-    className="searchInput"
-    placeholder="بحث"
-    type="search"
-    aria-label="Search"
-    />
-  <img className="searchIcon" src={search} alt="Search" />
-    </div>
-
-
-  
-
-   <div className='HeaderIcons'>
- <a href=""><img src={Vector} alt=""/></a>
-<a href=""><img src={star} alt=""/></a>  
-<a href=""><img src={person} alt=""/></a>
-<a href=""><img src={Verticalcontainer} alt="" /></a>
-<a href=""><img src={mingcute} alt=""/></a>
-
-   </div>
-  </nav>
-    </div>
-    
-
-    
+          <div className='HeaderIcons'>
+            <a href=""><img src={Vector} alt=""/></a>
+            <a href="/RatingPage"><img src={star} alt=""/></a>  
+            <a href=""><img src={person} alt=""/></a>
+            <a href=""><img src={Verticalcontainer} alt=""/></a>
+            <div className="dropdown">
+              <a href=""><img src={mingcute} alt=""/></a>
+              <div className="dropdown-content">
+                <a href="/Login">Logout</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
     </>
-
- 
-
   );
 }
 

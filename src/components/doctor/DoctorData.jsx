@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import trash from '../../assests/trash.svg';
 import add from '../../assests/add-image.svg';
+import upload from '../../assests/uploaddd.svg';
 export default function DoctorData() {
   const [works, setWorks] = useState([{ id: 1, start: '', end: '' }]);
 
@@ -117,11 +118,58 @@ export default function DoctorData() {
             <input type="text" className="form-control py-5" />
           </div>
          <div className="col-md-12">
-            <label htmlFor="formGroupExampleInput">سيرة شحصية:</label>
+            <label htmlFor="formGroupExampleInput">سيرة شحصية باللغة الانجليزية:</label>
             <input type="text" className="form-control py-5" />
           </div>
+         <div className="col-md-12">
+            <label htmlFor="formGroupExampleInput">المهارات:</label>
+            <input type="text" className="form-control py-5" />
+          </div>
+         <div className="col-md-12">
+            <label htmlFor="formGroupExampleInput">المهارات باللغة الانجليزية:</label>
+            <input type="text" className="form-control py-5" />
+          </div>
+         <div className="col-md-12">
+            <label htmlFor="formGroupExampleInput">التخصصات:</label>
+            <input type="text" className="form-control py-5" />
+          </div>
+         <div className="col-md-12">
+            <label htmlFor="formGroupExampleInput">التخصصات باللغة الانجليزية:</label>
+            <input type="text" className="form-control py-5" />
+          </div>
+          <div className="row">
+          <div className="col-md-6">
+<form method="post" action="#" id="#">
+      <div className="form-group files">
+        <img className='upload' src={upload} alt="" />
+     <div className='fileUpload'>اسقط او اسحب,او <span> اختار</span>  ملفا للتحميل</div>
+        <input type="file" className="form-control" multiple="" />
+     
+      </div>
+    </form>
         
-   
+</div>
+<div className="col-md-6">
+<form method="post" action="#" id="#">
+      <div className="form-group files">
+        <img className='upload' src={upload} alt="" />
+     <div className='fileUpload'>اسقط او اسحب,او <span> اختار</span>  ملفا للتحميل</div>
+        <input type="file" className="form-control" multiple="" />
+     
+      </div>
+    </form>
+</div>          
+</div>
+
+          <div
+            className='BottomButtons'>
+                <button className='save'>
+                    <span> حفظ</span>
+                </button>
+                <button className='cancel'>
+                    <span> الغاء</span>
+                </button>
+            </div>
         </div>
       </form>
     </div>

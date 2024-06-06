@@ -16,12 +16,8 @@ const Table = () => {
       const [editingId, setEditingId] = useState(null);
       const [newRowData, setNewRowData] = useState({});
     
-      const handleEdit = (id) => {
-        setEditingId(id);
-        const rowToEdit = data.find(row => row.id === id);
-        const newRowDataCopy = { ...rowToEdit };
-        setNewRowData(newRowDataCopy);
-      };
+      
+      
     
       const handleDelete = (id) => {
         const newData = data.filter(row => row.id !== id);
@@ -50,12 +46,12 @@ const Table = () => {
     
       return (
         <div className="container tables bg-white mt-5">
-          <div className="DashBoardTableTitle d-flex justify-content-between">
+          <div className="DashBoardTableTitle mb-5 d-flex justify-content-between">
           <h3>الحجوزات</h3>
-          <button > 
-        <span> مشاهدة الكل</span>   
-       <img src={arrow} alt="" />
-          </button>
+          <button >
+          <span className='pe-3'>مشاهدة الكل</span>
+          <img src={arrow} alt="" />
+        </button>
           </div>
        
           <table className=" table ">
@@ -143,9 +139,7 @@ const Table = () => {
                     <React.Fragment>
                       <div className='icons'>
                       <img src={clock} alt="" />
-                    <img 
-                     onClick={() => handleEdit(row.id)}
-                    src={edit} alt="" />
+                  
                     <img 
                     src={deletee} alt=""
                     onClick={() => handleDelete(row.id)}/>

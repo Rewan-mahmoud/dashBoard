@@ -1,10 +1,8 @@
+import React from 'react';
 import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import Header from "./components/Header/Header"
-import './App.css';
-
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import Header from "./components/Header/Header";
 import SideNavbar from './components/sideNavbar/SideNavbar';
 import DashBoard from './components/dashboard/DashBoard';
 import Doctor from './components/doctor/Doctor';
@@ -30,21 +28,29 @@ import CommonQuestions from './components/setting/CommonQuestions';
 import RatingPage from './components/RatingsPage/RatingPage';
 import DoctorsProfile from './components/doctor/DoctorsProfile';
 import DoctorData from './components/doctor/DoctorData';
-// import PublicSettings from './components/setting/PublicSettings';
+import AddTreatmentPlans from './components/TreatmentPlans/AddTreatmentPlans';
+import AddMeetings from './components/meetings/AddMeetings';
+import AddUsers from './components/users/AddUsers';
+import AddPermissions from './components/Permissions/AddPermissions';
+import AddServices from './components/services/AddServices';
+import AddQuestions from './components/Questions/AddQuestions';
+import LoginPage from './components/login/Login';
+import './App.css';
 
-
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/Login';
 
   return (
     <div className="App">
-     <Header/>
-     <Router>
+      {!isLoginPage && <Header />}
       <div className="container-fluid">
         <div className="row">
-          <SideNavbar />
+          {!isLoginPage && <SideNavbar />}
           <div className="col">
-            <Routes> {/* Replace Route with Routes */}
-              <Route path="/" element={<DashBoard />} /> {/* Use 'element' prop to specify component */}
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/" element={<DashBoard />} />
               <Route path="/Dashboard" element={<DashBoard />} />
               <Route path="/Doctor" element={<Doctor />} />
               <Route path="/Patients" element={<Patients />} />
@@ -60,25 +66,35 @@ function App() {
               <Route path="/Users" element={<Users />} />
               <Route path="/LotalyProgram" element={<LotalyProgram />} />
               <Route path="/Questions" element={<Questions />} />
-              <Route path="/Settings" element={<Settings />} >
-              <Route path="PublicSettings" element={<PublicSettings />} />
-              <Route path="VisibilitySettings" element={<VisibilitySettings />} />
-              <Route path="ReturnPolicy" element={<ReturnPolicy />} />
-              <Route path="CopyRights" element={<CopyRights />} />
-              <Route path="CommonQuestions" element={<CommonQuestions />} />
-            </Route>
-              <Route path="RatingPage" element={<RatingPage />} />
-              <Route path="DoctorsProfile" element={<DoctorsProfile />} />
-              <Route path="DoctorData" element={<DoctorData />} />
-        
-        
-              
+              <Route path="/Settings" element={<Settings />}>
+                <Route path="PublicSettings" element={<PublicSettings />} />
+                <Route path="VisibilitySettings" element={<VisibilitySettings />} />
+                <Route path="ReturnPolicy" element={<ReturnPolicy />} />
+                <Route path="CopyRights" element={<CopyRights />} />
+                <Route path="CommonQuestions" element={<CommonQuestions />} />
+              </Route>
+              <Route path="/RatingPage" element={<RatingPage />} />
+              <Route path="/DoctorsProfile" element={<DoctorsProfile />} />
+              <Route path="/DoctorData" element={<DoctorData />} />
+              <Route path="/AddTreatmentPlans" element={<AddTreatmentPlans />} />
+              <Route path="/AddMeetings" element={<AddMeetings />} />
+              <Route path="/AddUsers" element={<AddUsers />} />
+              <Route path="/AddPermissions" element={<AddPermissions />} />
+              <Route path="/AddServices" element={<AddServices />} />
+              <Route path="/AddQuestions" element={<AddQuestions />} />
             </Routes>
           </div>
         </div>
-      </div>
-    </Router>
+        </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 

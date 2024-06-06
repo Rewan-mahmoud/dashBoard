@@ -60,7 +60,8 @@ const Doctor = () => {
           <img src={plus} alt="" />
         <span className='pe-3'> اضافة </span>   
    
-          </button></Link>
+          </button>
+          </Link>
  
           </div>
        
@@ -122,9 +123,7 @@ const Doctor = () => {
                     <React.Fragment>
                     <div className='drTableIcon'>
                     <Link to="/DoctorsProfile"><img src={Groupppp} alt="" /></Link>
-                    <img 
-                     onClick={() => handleEdit(row.id)}
-                    src={edit} alt="" />
+                    <Link to="/DoctorData"><img src={edit} alt="" /></Link>  
                     <img 
                     src={deletee} alt=""
                     onClick={() => handleDelete(row.id)}/>

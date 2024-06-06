@@ -3,7 +3,9 @@ import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import check from '../../assests/check.svg';
 import plus from '../../assests/plus.svg';
-
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
 // import "./mee.css"
 const TreatmentPlans = () => {
@@ -20,12 +22,22 @@ const TreatmentPlans = () => {
     
       const [editingId, setEditingId] = useState(null);
       const [newRowData, setNewRowData] = useState({});
+      const [isAdding, setIsAdding] = useState(false);
+      const [newData, setNewData] = useState({
+        id: data.length + 1,
+        NameArabic: '',
+        NameEnglish: '',
+        icon: '', // Initially no icon
+      });
     
-      const handleEdit = (id) => {
-        setEditingId(id);
-        const rowToEdit = data.find(row => row.id === id);
-        const newRowDataCopy = { ...rowToEdit };
-        setNewRowData(newRowDataCopy);
+      const toggleActive = (id) => {
+        const newData = data.map(row => {
+          if (row.id === id) {
+            return { ...row, active: !row.active };
+          }
+          return row;
+        });
+        setData(newData);
       };
     
       const handleDelete = (id) => {
@@ -42,26 +54,52 @@ const TreatmentPlans = () => {
       };
     
       const handleSave = () => {
-        const newData = data.map(row => {
+        const updatedData = data.map(row => {
           if (row.id === editingId) {
-            return newRowData;
+            return { ...row, ...newRowData };
           }
           return row;
         });
-        setData(newData);
+        setData(updatedData);
         setEditingId(null);
         setNewRowData({});
+      };
+    
+      const handleAdd = () => {
+        setIsAdding(true);
+      };
+    
+      const handleAddChange = (e, key) => {
+        const { value } = e.target;
+        setNewData(prevData => ({
+          ...prevData,
+          [key]: value
+        }));
+      };
+    
+      const handleAddSave = () => {
+        setData(prevData => [...prevData, newData]);
+        setNewData({
+          id: data.length + 2, // increment id for next new row
+          NameArabic: '',
+          NameEnglish: '',
+          icon: '', // Initially no icon
+        });
+        setIsAdding(false);
       };
     
       return (
         <div className="container tables bg-white mt-5">
              <div className="tableTitle d-flex justify-content-between ">
         <h3> الخطط العلاجية للمعالج</h3>
-          <button > 
+        
+        <Link to="/AddTreatmentPlans">       
+            <button > 
           <img src={plus} alt="" />
         <span className='pe-3'> اضافة </span>   
    
           </button>
+          </Link>
           </div>
        
           <table className=" table TableDr text-center ">
@@ -114,28 +152,46 @@ const TreatmentPlans = () => {
             
               
                 <td>
-                  {editingId === row.id ? (
-                    <React.Fragment>
-                      <button onClick={handleSave}>Save</button>
-                      <button onClick={() => setEditingId(null)}>Cancel</button>
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <div className='drTableIcon'>
-                      <img src={check} alt="" />
-    
-                    <img 
-                     onClick={() => handleEdit(row.id)}
-                    src={edit} alt="" />
-                    <img 
-                    src={deletee} alt=""
-                    onClick={() => handleDelete(row.id)}/>
-                   </div>
-                    </React.Fragment>
-                  )}
-                </td>
-              </tr>
-            ))}
+                {editingId === row.id ? (
+                  <React.Fragment>
+                    <button onClick={handleSave}>Save</button>
+                    <button onClick={() => setEditingId(null)}>Cancel</button>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <div className='drTableIcon'>
+                      <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
+                      <img 
+                        src={edit} 
+                        alt="edit" 
+                        onClick={() => {
+                          setEditingId(row.id);
+                          setNewRowData(row);
+                        }} 
+                      />
+                      <img 
+                        src={deletee} 
+                        alt="delete" 
+                        onClick={() => handleDelete(row.id)} 
+                      />
+                    </div>
+                  </React.Fragment>
+                )}
+              </td>
+            </tr>
+          ))}
+          {isAdding && (
+            <tr>
+              <td>{newData.id}</td>
+              <td></td>
+              <td><input type="text" value={newData.NameArabic} onChange={(e) => handleAddChange(e, 'NameArabic')} /></td>
+              <td><input type="text" value={newData.NameEnglish} onChange={(e) => handleAddChange(e, 'NameEnglish')} /></td>
+              <td>
+                <button onClick={handleAddSave}>Add</button>
+                <button onClick={() => setIsAdding(false)}>Cancel</button>
+              </td>
+            </tr>
+          )}
           </tbody>
         </table>
         </div>

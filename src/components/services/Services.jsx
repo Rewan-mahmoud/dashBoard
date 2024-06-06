@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
-import check from '../../assests/check.svg';
-import eye from '../../assests/eye.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+import plus from '../../assests/plus.svg';
 
-// import "./Services.css"
 const Services = () => {
     const [data, setData] = useState([
-        { id: 1, NameArabic: 'احمد محمد ', gender: 'انثى ', Number: "01282001377" , email : 'ahmedmohamed941@gmail.com'},
-        { id: 2, NameArabic: 'احمد محمد ', gender: 'انثى ', Number: "01282001377" , email : 'ahmedmohamed941@gmail.com'},
-        { id: 3, NameArabic: 'احمد محمد ', gender: 'انثى ', Number: "01282001377" , email : 'ahmedmohamed941@gmail.com'},
-        { id: 4, NameArabic: 'احمد محمد ', gender: 'انثى ', Number: "01282001377" , email : 'ahmedmohamed941@gmail.com'},
-        { id: 5, NameArabic: 'احمد محمد ', gender: 'انثى ', Number: "01282001377" , email : 'ahmedmohamed941@gmail.com'},
-        { id: 6, NameArabic: 'احمد محمد ', gender: 'انثى ', Number: "01282001377" , email : 'ahmedmohamed941@gmail.com'},
+        { id: 1, MainCategory: 'جلسة فورية  ', Subcategory: 'اضرابات التعلم ', SpecialictName: "احمد محمد" },
+        { id: 2, MainCategory: 'جلسة فورية  ',  Subcategory: 'اضرابات التعلم ', SpecialictName: "احمد محمد"  },
+        { id: 3, MainCategory: 'جلسة فورية  ',  Subcategory: 'اضرابات التعلم ', SpecialictName: "احمد محمد"  },
+        { id: 4, MainCategory: 'جلسة فورية  ',  Subcategory: 'اضرابات التعلم ', SpecialictName: "احمد محمد"  },
+        { id: 5, MainCategory: 'جلسة فورية  ',  Subcategory: 'اضرابات التعلم ', SpecialictName: "احمد محمد"  },
+        { id: 6, MainCategory: 'جلسة فورية  ',  Subcategory: 'اضرابات التعلم ', SpecialictName: "احمد محمد"  },
 
 
       ]);
     
       const [editingId, setEditingId] = useState(null);
       const [newRowData, setNewRowData] = useState({});
+   
     
       const handleEdit = (id) => {
         setEditingId(id);
@@ -51,24 +53,39 @@ const Services = () => {
         setEditingId(null);
         setNewRowData({});
       };
+
+      const toggleActive = (id) => {
+        const newData = data.map(row => {
+          if (row.id === id) {
+            return { ...row, active: !row.active };
+          }
+          return row;
+        });
+        setData(newData);
+      };
     
       return (
         <div className="container tables bg-white mt-5">
-          <div className="tableTitle  ">
-          <h3 > المرضى  </h3>
-       
+         <div className="tableTitle d-flex justify-content-between ">
+            <h3>  الخدمات</h3>
+            <Link to="/AddServices">       
+            <button > 
+          <img src={plus} alt="" />
+          <span className='pe-3'> اضافة </span>   
+          </button>
+          </Link>
           </div>
        
           <table className=" table TableDr text-center ">
           <thead >
             <tr >
-              <th  scope="col ">الرقم</th>
-              <th scope="col ">الاسم باللغة العربية</th>
-              <th scope="col ">الجنس  </th>
-              
-              <th scope="col ">رقم الجوال</th>
-              <th scope="col ">الايميل  </th>
-              <th scope="col ">الاعدادات </th>
+              <th  scope="col ">الرقم  </th>
+              <th  scope="col ">اسم الفئة الاساسية</th>
+              <th scope="col ">الاسم الفئة الفرعية </th>
+              <th scope="col ">اسم المختص  </th>
+            
+              <th scope="col">التحكم</th>
+             
              
             </tr>
           </thead>
@@ -78,56 +95,52 @@ const Services = () => {
                 <td >{row.id}</td>
                 <td >
                   {editingId === row.id ? (
-                    <input type="text" value={newRowData.NameArabic} onChange={(e) => handleChange(e, 'NameArabic')} />
+                    <input type="text" value={newRowData.MainCategory} onChange={(e) => handleChange(e, 'MainCategory')} />
                   ) : (
-                    row.NameArabic
+                    row.MainCategory
                   )}
                 </td>
                 <td>
                   {editingId === row.id ? (
-                    <input type="text" value={newRowData.gender} onChange={(e) => handleChange(e, 'gender')} />
+                    <input type="text" value={newRowData.Subcategory} onChange={(e) => handleChange(e, 'Subcategory')} />
                   ) : (
-                    row.gender
+                    row.Subcategory
                   )}
                 </td>
                 <td >
                   {editingId === row.id ? (
-                    <input type="text" value={newRowData.Number} onChange={(e) => handleChange(e, 'Number')} />
+                    <input type="text" value={newRowData.SpecialictName} onChange={(e) => handleChange(e, 'SpecialictName')} />
                   ) : (
-                    row.Number
+                    row.SpecialictName
                   )}
                 </td>
-                <td>
-                  {editingId === row.id ? (
-                    <input type="text" value={newRowData.email} onChange={(e) => handleChange(e, 'email')} />
-                  ) : (
-                    row.email
-                  )}
-                </td>
+             
             
               
             
-              
                 <td>
-                  {editingId === row.id ? (
-                    <React.Fragment>
-                      <button onClick={handleSave}>Save</button>
-                      <button onClick={() => setEditingId(null)}>Cancel</button>
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <div className='drTableIcon'>
-                      <img src={check} alt="" />
-                    <img 
-                     onClick={() => handleEdit(row.id)}
-                    src={edit} alt="" />
-                    <img 
-                    src={deletee} alt=""
-                    onClick={() => handleDelete(row.id)}/>
-                   </div>
-                    </React.Fragment>
-                  )}
-                </td>
+                    {editingId === row.id ? (
+                      <React.Fragment>
+                        <button onClick={handleSave}>Save</button>
+                        <button onClick={() => setEditingId(null)}>Cancel</button>
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <div className='drTableIcon'>
+                          {/* Apply conditional class based on active state */}
+                       
+                         <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
+                         <Link >
+                         <img 
+                            src={edit} alt="" /></Link>
+                        
+                          <img 
+                            src={deletee} alt=""
+                            onClick={() => handleDelete(row.id)}/>
+                        </div>
+                      </React.Fragment>
+                    )}
+                  </td>
               </tr>
             ))}
           </tbody>

@@ -1,7 +1,7 @@
 
 
 
-.drTableIcon img{
+.drTableIcon img , svg{
     margin-left: 16px;
     cursor: pointer;
 }
@@ -96,4 +96,18 @@ border-radius: 12px;
     border: 3px dashed #299ECC !important ;
     background-color: #F8F8F8;
     padding: 10px 0px;
+}
+
+.AddTreatmentPlansButton span {
+    width: 108px;
+    height: 50px;
+    color: white;
+    font-size: 25px;
+    background-color: #23C29C !important;
+    border-radius: 18px;
+    text-align: center;
+
+}
+.AddTreatmentPlansButton{
+    text-align: left
 }

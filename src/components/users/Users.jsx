@@ -3,8 +3,9 @@ import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import check from '../../assests/check.svg';
 import plus from '../../assests/plus.svg';
-
-
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 // import "./mee.css"
 const Users = () => {
     const [data, setData] = useState([
@@ -18,18 +19,21 @@ const Users = () => {
       const [editingId, setEditingId] = useState(null);
       const [newRowData, setNewRowData] = useState({});
     
-      const handleEdit = (id) => {
-        setEditingId(id);
-        const rowToEdit = data.find(row => row.id === id);
-        const newRowDataCopy = { ...rowToEdit };
-        setNewRowData(newRowDataCopy);
-      };
+
     
       const handleDelete = (id) => {
         const newData = data.filter(row => row.id !== id);
         setData(newData);
       };
-    
+      const toggleActive = (id) => {
+        const newData = data.map(row => {
+          if (row.id === id) {
+            return { ...row, active: !row.active };
+          }
+          return row;
+        });
+        setData(newData);
+      };
       const handleChange = (e, key) => {
         const { value } = e.target;
         setNewRowData(prevData => ({
@@ -54,11 +58,13 @@ const Users = () => {
         <div className="container tables bg-white mt-5">
              <div className="tableTitle d-flex justify-content-between ">
           <h3>  المستخدمين</h3>
-          <button > 
+          <Link to="/AddUsers">       
+            <button > 
           <img src={plus} alt="" />
         <span className='pe-3'> اضافة </span>   
    
           </button>
+          </Link>
           </div>
        
           <table className=" table TableDr text-center ">
@@ -112,11 +118,11 @@ const Users = () => {
                   ) : (
                     <React.Fragment>
                       <div className='drTableIcon'>
-                      <img src={check} alt="" />
-    
-                    <img 
-                     onClick={() => handleEdit(row.id)}
-                    src={edit} alt="" />
+                      <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
+    <Link to="/AddUsers">
+    <img src={edit} alt="" />
+    </Link>
+                   
                     <img 
                     src={deletee} alt=""
                     onClick={() => handleDelete(row.id)}/>

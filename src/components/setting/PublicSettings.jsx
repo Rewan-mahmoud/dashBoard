@@ -8,7 +8,7 @@ function PublicSettings() {
           <div className="tableTitle d-flex justify-content-between">
 
 <h3>اعدادات عامة</h3>    
-<p>الشعار</p>
+<span className='text-align'>الشعار</span>
 </div>
 
 <div className="container">
@@ -52,8 +52,34 @@ function PublicSettings() {
 <label for="formGroupExampleInput"> الوقت</label>
 <input type="text" class="form-control"/>
 </div>
-<div class="col-md-12">
-<label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding</label>
+<div class="col-md-6">
+<label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة العربية</label>
+
+<input type="text" class="form-control"/>
+</div>
+<div class="col-md-6">
+<label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة الانجليزية</label>
+
+<input type="text" class="form-control"/>
+</div>
+<div class="col-md-6">
+<label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة العربية</label>
+
+<input type="text" class="form-control"/>
+</div>
+<div class="col-md-6">
+<label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة الانجليزية</label>
+
+<input type="text" class="form-control"/>
+</div>
+<div class="col-md-6">
+<label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة العربية</label>
+
+<input type="text" class="form-control"/>
+</div>
+<div class="col-md-6">
+<label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة الانجليزية</label>
+
 <input type="text" class="form-control"/>
 </div>
 </div>

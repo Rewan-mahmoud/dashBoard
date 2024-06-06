@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
-import check from '../../assests/check.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 import plus from '../../assests/plus.svg';
-import './permission.css';
 
-// import "./mee.css"
 const Permissions = () => {
-    const [data, setData] = useState([
-        { id: 1, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed  ', Number: "تأمل" , email : '5 مراحل'},
-        { id: 2, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "تأمل" , email : '5 مراحل'},
-        { id: 3, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "تأمل" , email : '5 مراحل'},
-        { id: 4, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "تأمل" , email : '5 مراحل'},
-        { id: 5, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "تأمل" , email : '5 مراحل'},
-        { id: 6, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "تأمل" , email : '5 مراحل'},
+  const [data, setData] = useState([
+    { id: 1, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed  ', Number: "تعديل" },
+    { id: 2, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "تعديل" },
+    { id: 3, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "انشاء" },
+    { id: 4, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "تعديل" },
+    { id: 5, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "انشاء" },
+    { id: 6, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed ', Number: "تعديل" },
 
 
-      ]);
-    
+  ]);
       const [editingId, setEditingId] = useState(null);
       const [newRowData, setNewRowData] = useState({});
+   
     
       const handleEdit = (id) => {
         setEditingId(id);
@@ -52,16 +52,28 @@ const Permissions = () => {
         setEditingId(null);
         setNewRowData({});
       };
+
+      const toggleActive = (id) => {
+        const newData = data.map(row => {
+          if (row.id === id) {
+            return { ...row, active: !row.active };
+          }
+          return row;
+        });
+        setData(newData);
+      };
     
       return (
         <div className="container tables bg-white mt-5">
-             <div className="tableTitle d-flex justify-content-between ">
+                   <div className="tableTitle d-flex justify-content-between ">
         <h3> الصلاحيات  </h3>
-          <button > 
+        <Link to="/AddPermissions">       
+            <button > 
           <img src={plus} alt="" />
         <span className='pe-3'> اضافة </span>   
    
           </button>
+          </Link>
           </div>
        
           <table className=" table TableDr text-center ">
@@ -100,46 +112,37 @@ const Permissions = () => {
                   )}
                 </td>
               
+             
             
               
             
-              
                 <td>
-                  {editingId === row.id ? (
-                    <React.Fragment>
-                      <button onClick={handleSave}>Save</button>
-                      <button onClick={() => setEditingId(null)}>Cancel</button>
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <div className='drTableIcon'>
-                      <img src={check} alt="" />
-    
-                    <img 
-                     onClick={() => handleEdit(row.id)}
-                    src={edit} alt="" />
-                    <img 
-                    src={deletee} alt=""
-                    onClick={() => handleDelete(row.id)}/>
-                   </div>
-                    </React.Fragment>
-                  )}
-                </td>
+                    {editingId === row.id ? (
+                      <React.Fragment>
+                        <button onClick={handleSave}>Save</button>
+                        <button onClick={() => setEditingId(null)}>Cancel</button>
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <div className='drTableIcon'>
+                          {/* Apply conditional class based on active state */}
+                       
+                         <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
+                         <Link >
+                         <img 
+                            src={edit} alt="" /></Link>
+                        
+                          <img 
+                            src={deletee} alt=""
+                            onClick={() => handleDelete(row.id)}/>
+                        </div>
+                      </React.Fragment>
+                    )}
+                  </td>
               </tr>
             ))}
-          
           </tbody>
-         
         </table>
-        <div
-            className='BottomButtons'>
-                <button className='save'>
-                    <span> حفظ</span>
-                </button>
-                <button className='cancel'>
-                    <span> الغاء</span>
-                </button>
-            </div>
         </div>
        
       );

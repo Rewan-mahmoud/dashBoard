@@ -21,3 +21,12 @@
  
     color: #239EC2 !important;
 } */
+.drPic p{
+font-size: 18px;
+margin-top: 20px;
+font-family: "Cairo", sans-serif;
+color: #239EC2;
+}
+.drPic span{
+    color: black;
+}

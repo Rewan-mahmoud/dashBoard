@@ -42,9 +42,9 @@ height: 150px;
 .fileUpload span{
    color: #239EC2 ; 
 }
-.settingForm input{
-border-radius: 18px;
-background-color: #F8F8F8;
+.settingForm input,select{
+border-radius: 18px !important;
+background-color: #F8F8F8 !important;
 border: none !important;
 margin-bottom: 24px;
 }
@@ -81,6 +81,10 @@ textarea{
     background-color:#f1f1f1 !important;
     border: none !important;
 }
+.AddQuestions input {
+    background-color:#f1f1f1 !important;
+    border: none !important;
+}
 .settingNav a{
     margin-left: 15px;
 }
@@ -95,3 +99,19 @@ textarea{
     margin: 0 auto;
     text-align: center;
 }
+.custom-select {
+    position: relative;
+  }
+  
+
+  .arrow-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px; /* Adjust as needed */
+    transform: translateY(-50%);
+  }
+  
+  .arrow-icon svg {
+    color: #555; /* Change color as needed */
+  }
+  

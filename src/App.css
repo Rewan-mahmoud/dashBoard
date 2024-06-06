@@ -13,3 +13,37 @@
     margin-bottom: 20px;
 }
 
+.icons{
+    cursor: pointer;
+}
+.modal-header{
+    flex-direction: column;
+     font-size: 30px;
+     color: #239EC2;
+     font-family: "Cairo", sans-serif;
+     font-weight: bold;
+}
+.activeIcon{
+    color: green;
+}
+.inactive{
+    color: gray;
+}
+.AddServicesButton button {
+    width: 170px;
+    height: 40px;
+    background-color: #239EC2;
+    font-family: "Cairo", sans-serif;
+    border-radius: 18px;
+    border: none;
+    margin-left: 50px;
+    color:white;
+}
+.AddServicesButton button img {
+    width: 17px;
+
+
+}
+.duration {
+    
+}

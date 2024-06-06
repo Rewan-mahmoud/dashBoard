@@ -3,7 +3,7 @@ import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import check from '../../assests/check.svg';
 import plus from '../../assests/plus.svg';
-
+import { Link } from 'react-router-dom';
 
 // import "./mee.css"
 const Questions = () => {
@@ -53,11 +53,13 @@ const Questions = () => {
         <div className="container tables bg-white mt-5">
              <div className="tableTitle d-flex justify-content-between ">
           <h3>  الاسئلة والاجوبة</h3>
-          <button > 
+          <Link to="/AddQuestions">       
+            <button > 
           <img src={plus} alt="" />
         <span className='pe-3'> اضافة </span>   
    
           </button>
+          </Link>
           </div>
        
           <table className=" table TableDr text-center ">

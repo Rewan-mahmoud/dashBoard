@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
-import check from '../../assests/check.svg';
-import eye from '../../assests/eye.svg';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 // import "./Patients.css"
 const Patients = () => {
     const [data, setData] = useState([
@@ -19,6 +19,7 @@ const Patients = () => {
     
       const [editingId, setEditingId] = useState(null);
       const [newRowData, setNewRowData] = useState({});
+   
     
       const handleEdit = (id) => {
         setEditingId(id);
@@ -50,6 +51,16 @@ const Patients = () => {
         setData(newData);
         setEditingId(null);
         setNewRowData({});
+      };
+
+      const toggleActive = (id) => {
+        const newData = data.map(row => {
+          if (row.id === id) {
+            return { ...row, active: !row.active };
+          }
+          return row;
+        });
+        setData(newData);
       };
     
       return (
@@ -107,28 +118,29 @@ const Patients = () => {
             
               
             
-              
                 <td>
-                  {editingId === row.id ? (
-                    <React.Fragment>
-                      <button onClick={handleSave}>Save</button>
-                      <button onClick={() => setEditingId(null)}>Cancel</button>
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <div className='drTableIcon'>
-                      <img src={check} alt="" />
-                      <img src={eye} alt="" />
-                    <img 
-                     onClick={() => handleEdit(row.id)}
-                    src={edit} alt="" />
-                    <img 
-                    src={deletee} alt=""
-                    onClick={() => handleDelete(row.id)}/>
-                   </div>
-                    </React.Fragment>
-                  )}
-                </td>
+                    {editingId === row.id ? (
+                      <React.Fragment>
+                        <button onClick={handleSave}>Save</button>
+                        <button onClick={() => setEditingId(null)}>Cancel</button>
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <div className='drTableIcon'>
+                          {/* Apply conditional class based on active state */}
+                       
+                         <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
+                         <Link to="/AddMeetings">
+                         <img 
+                            src={edit} alt="" /></Link>
+                        
+                          <img 
+                            src={deletee} alt=""
+                            onClick={() => handleDelete(row.id)}/>
+                        </div>
+                      </React.Fragment>
+                    )}
+                  </td>
               </tr>
             ))}
           </tbody>

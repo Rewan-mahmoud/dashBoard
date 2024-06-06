@@ -35,11 +35,27 @@
     padding: 10px 25px;
     background-color: #c3e1ea;
 }
-.tableTitle span{
+.DashBoardTableTitle span{
     font-size: 16px;
     font-family: "Cairo", sans-serif;
     color: #299ECC;
     font-weight: bold;
     margin-left: 15px;
 
+}
+
+.Modal{
+    width: 70%;
+}
+.LoginPageButton{
+    border: none;
+    border-radius: 25px;
+    padding: 10px 60px;
+    font-family: "Cairo", sans-serif;
+    background-color: #299ECC;
+    color: white;
+}
+.LoginPage input {
+    border-radius: 10px;
+    font-family: "Cairo", sans-serif;
 }

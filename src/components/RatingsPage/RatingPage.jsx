@@ -3,7 +3,8 @@ import deletee from '../../assests/delete.svg';
 import check from '../../assests/checkIcon.svg';
 import starFilled from "../../assests/star.svg";
 import starEmpty from '../../assests/starEmpty.svg';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 // StarRating Component
 const StarRating = ({ rating, onRatingChange }) => {
   const handleStarClick = (index) => {
@@ -25,6 +26,7 @@ const StarRating = ({ rating, onRatingChange }) => {
   );
 };
 
+
 export default function RatingPage() {
   const [data, setData] = useState([
     { id: 1, DoctorName: 'احمد محمد', Ratings: 3, Comments: "good" },
@@ -34,7 +36,15 @@ export default function RatingPage() {
     { id: 5, DoctorName: 'احمد محمد', Ratings: 1, Comments: "good" },
     { id: 6, DoctorName: 'احمد محمد', Ratings: 3, Comments: "good" },
   ]);
-
+  const toggleActive = (id) => {
+    const newData = data.map(row => {
+      if (row.id === id) {
+        return { ...row, active: !row.active };
+      }
+      return row;
+    });
+    setData(newData);
+  };
   const [editingId, setEditingId] = useState(null);
   const [newRowData, setNewRowData] = useState({});
 
@@ -127,7 +137,8 @@ export default function RatingPage() {
                 ) : (
                   <React.Fragment>
                     <div className='drTableIcon'>
-                     <img src={check} alt="" />
+    <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
+
                       <img src={deletee} alt="Delete" onClick={() => handleDelete(row.id)} />
                     </div>
                   </React.Fragment>
