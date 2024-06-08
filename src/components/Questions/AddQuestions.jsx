@@ -1,6 +1,8 @@
 export default function AddQuestions() {
+    
     return (
         <>
+            <div className="container tables bg-white mt-5">
             <div className="tableTitle d-flex justify-content-between">
                 <h3>الاسئلة الشائعة </h3>
             </div>
@@ -36,6 +38,16 @@ export default function AddQuestions() {
                     </div>
                 </div>
        
+                </div>
+                <div
+            className='BottomButtons'>
+                <button className='save'>
+                    <span> حفظ</span>
+                </button>
+                <button className='cancel'>
+                    <span> الغاء</span>
+                </button>
+            </div>
             </div>
         </>
     );

@@ -36,8 +36,8 @@ function Header() {
             <a href=""><img src={Verticalcontainer} alt=""/></a>
             <div className="dropdown">
               <a href=""><img src={mingcute} alt=""/></a>
-              <div className="dropdown-content">
-                <a href="/Login">Logout</a>
+              <div className="dropdown-content logout">
+                <a href="/Login">تسجيل خروج</a>
               </div>
             </div>
           </div>

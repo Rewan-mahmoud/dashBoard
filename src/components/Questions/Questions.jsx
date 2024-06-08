@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
-import check from '../../assests/check.svg';
 import plus from '../../assests/plus.svg';
 import { Link } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 // import "./mee.css"
 const Questions = () => {
     const [data, setData] = useState([
@@ -47,6 +47,15 @@ const Questions = () => {
         setData(newData);
         setEditingId(null);
         setNewRowData({});
+      };
+      const toggleActive = (id) => {
+        const newData = data.map(row => {
+          if (row.id === id) {
+            return { ...row, active: !row.active };
+          }
+          return row;
+        });
+        setData(newData);
       };
     
       return (
@@ -107,7 +116,7 @@ const Questions = () => {
                   ) : (
                     <React.Fragment>
                       <div className='drTableIcon'>
-                      <img src={check} alt="" />
+                      <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
     
                     <img 
                      onClick={() => handleEdit(row.id)}

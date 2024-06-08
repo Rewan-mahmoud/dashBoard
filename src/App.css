@@ -1,10 +1,11 @@
+
 .App {
     direction: rtl;
 }
 
 
 .col {
-    padding: 20px;
+    /* padding: 20px; */
     background-color: #F4F6F9;
 
   }
@@ -44,6 +45,65 @@
 
 
 }
-.duration {
-    
+.LoginContent{
+    padding: 0px 130px;
+}
+.LoginContent h1 {
+   color: #239EC2;
+    font-size: 64px;
+    font-family: "Cairo", sans-serif;
+}
+.LoginContent p {
+   font-size:24px ; 
+   color: #646466;
+   margin-top: 20px;
+   font-family: "Cairo", sans-serif;
+}
+.leftSide{
+    height: 100vh;
+    background-color: #F4F6F9;
+}
+.AddUserArrow-icon {
+    position: absolute;
+    top: 45%;
+    left: 232px;
+    transform: translateY(-50%);
+}
+.ReservationArrow-icon{
+    position: absolute;
+    top: 32%;
+    left: 299px;
+    transform: translateY(-50%);
+    color: #239EC2;
+}
+.modal{
+    --bs-modal-width: 680px !important;
+    /* --bs-modal-padding: 4rem !important; */
+    --bs-modal-footer-border-color:none !important;
+}
+.modal-backdrop{
+    --bs-backdrop-bg: #f4f4f4 !important;
+}
+
+.modal-footer{
+    padding: 40px 20px !important;
+}
+.reservationSelect {
+    width: 23rem;
+    font-family: "Cairo", sans-serif;
+    padding: 0px 29px;
+    height: 3rem;
+    padding-right: 53px;
+    position: relative;
+}
+.Calender {
+    position: absolute;
+    right: 38px;
+    bottom: 53px;
+}
+.LotalyProgram img {
+    transform: translate(0px, 50px);
+}
+.logout a{
+    font-family: "Cairo", sans-serif;
 }

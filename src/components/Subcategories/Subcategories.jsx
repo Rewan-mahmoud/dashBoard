@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import plus from '../../assests/plus.svg';
+import check from '../../assests/check.svg';
 import Frame1 from '../../assests/Frame1.svg';
 import Frame2 from '../../assests/Frame2.svg';
 import Frame3 from '../../assests/Frame3.svg';
@@ -10,6 +11,7 @@ import Frame5 from '../../assests/Frame5.svg';
 import Frame6 from '../../assests/Frame6.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 const Subcategories = () => {
   const [data, setData] = useState([
@@ -28,8 +30,9 @@ const Subcategories = () => {
     id: data.length + 1,
     NameArabic: '',
     NameEnglish: '',
-    icon: '',
+    icon: '', // Initially no icon
   });
+  const [selectedIcon, setSelectedIcon] = useState(null); // New state for selected icon file
 
   const toggleActive = (id) => {
     const newData = data.map(row => {
@@ -40,7 +43,10 @@ const Subcategories = () => {
     });
     setData(newData);
   };
-
+  const handleIconChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedIcon(file);
+  };
   const handleDelete = (id) => {
     const newData = data.filter(row => row.id !== id);
     setData(newData);
@@ -92,7 +98,7 @@ const Subcategories = () => {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle d-flex justify-content-between ">
-        <h3>الفئات</h3>
+        <h3>الفئات الفرعية</h3>
         <button onClick={handleAdd}>
           <img src={plus} alt="" />
           <span className='pe-3'>اضافة</span>
@@ -113,7 +119,15 @@ const Subcategories = () => {
           {data.map(row => (
             <tr key={row.id}>
               <td>{row.id}</td>
-              <td><img src={row.icon} alt="" /></td>
+              <td> {editingId === row.id ? (
+              selectedIcon ? (
+                <img src={URL.createObjectURL(selectedIcon)} alt="Selected Icon" />
+              ) : (
+                <input type="file" onChange={handleIconChange} accept="image/*" />
+              )
+            ) : (
+              <img src={row.icon} alt="Icon" />
+            )}</td>
               <td>
                 {editingId === row.id ? (
                   <input type="text" value={newRowData.NameArabic || row.NameArabic} onChange={(e) => handleChange(e, 'NameArabic')} />
@@ -157,18 +171,21 @@ const Subcategories = () => {
               </td>
             </tr>
           ))}
-          {isAdding && (
-            <tr>
-              <td>{newData.id}</td>
-              <td></td>
-              <td><input type="text" value={newData.NameArabic} onChange={(e) => handleAddChange(e, 'NameArabic')} /></td>
-              <td><input type="text" value={newData.NameEnglish} onChange={(e) => handleAddChange(e, 'NameEnglish')} /></td>
-              <td>
-                <button onClick={handleAddSave}>Add</button>
-                <button onClick={() => setIsAdding(false)}>Cancel</button>
-              </td>
-            </tr>
-          )}
+    {isAdding && (
+  <tr>
+    <td>{newData.id}</td>
+    <td>
+      <input type="file" onChange={handleIconChange} accept="image/*" />
+    </td>
+    <td><input type="text" value={newData.NameArabic} onChange={(e) => handleAddChange(e, 'NameArabic')} /></td>
+    <td><input type="text" value={newData.NameEnglish} onChange={(e) => handleAddChange(e, 'NameEnglish')} /></td>
+    <td>
+      <button onClick={handleAddSave}>Add</button>
+      <button onClick={() => setIsAdding(false)}>Cancel</button>
+    </td>
+  </tr>
+)}
+
         </tbody>
       </table>
     </div>

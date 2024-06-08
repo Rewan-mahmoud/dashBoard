@@ -4,7 +4,10 @@ import clock from '../../assests/clock-rewind.svg';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import plus from '../../assests/plus.svg';
+import calendar from '../../assests/calendar.svg';
 import { Button, Modal } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 // import "./table.css"
 const Reservation = () => {
     const [data, setData] = useState([
@@ -161,33 +164,45 @@ const Reservation = () => {
                     </React.Fragment>
                   )}
                 </td>
-<div className='Modal'>
+<div className='Modal '>
 <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title> <p>اعادة جدولة المواعيد</p>  </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <div className='settingForm mb-5'>
+                  <div className='settingForm'>
                   <label htmlFor="formGroupExampleInput">الطبيب المعالج  :</label>
-                  <select className="form-control">
+                  <br />
+                  <select className="form-control reservationSelect">
   <option value="option1"> احمد عبدالله</option>
   <option value="option2"> عصام مسعد</option>
   <option value="option3"> روان محمود</option>
 </select>
-
+<div className="ReservationArrow-icon">
+  <FontAwesomeIcon icon={faChevronDown} />
+  </div>
+  </div>
             
-                  </div>
-                  <label htmlFor="formGroupExampleInput">الطبيب المعالج  :</label>
-            <DatePicker
-                    selected={newRowData.Date}
-                    onChange={handleDateChange}
-                    showTimeSelect
-                    dateFormat="Pp"
-                  />
-                
+               <div className=' settingForm'>
+               <label className='mb-4' htmlFor="formGroupExampleInput">تحديد تاريخ جديد:</label>
+        <br />
+               <DatePicker
+        className='reservationSelect form-control '
+                       selected={newRowData.Date}
+                       onChange={handleDateChange}
+                      //  showTimeSelect
+                      //  dateFormat="Pp"
+                     />
+                    <img className='Calender' src={calendar}/>
+
+               </div>
+        
+                 
                 </Modal.Body>
                 <Modal.Footer>
+                  
                 <div
+                
             className='BottomButtons'>
                 <button onClick={handleClose} className='save'>
                     <span> حفظ</span>

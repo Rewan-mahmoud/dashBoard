@@ -12,8 +12,8 @@ function Login() {
             <img src={img} width="100" alt=""/>
             <a className='title'>خبراء النفس</a>
           </div>
-       <div className='text-center'>
-       <h1 className=''>مرحبا !</h1>
+       <div className='text-center LoginContent'>
+       <h1 className=''>مرحباً !</h1>
        <p >مرحبا بعودتك! ادخل بياناتك</p>
       <form className='mt-5'>
   <div class="form-group mb-4 ">
@@ -23,7 +23,7 @@ function Login() {
     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="كلمة السر"/>
   </div>
  <div className='text-center '>
-  <button type="submit" className="LoginPageButton">تسجيل الدخول</button>
+  <button type="submit" className="LoginPageButton " >تسجيل الدخول</button>
 
  </div>
 </form>
