@@ -3,6 +3,13 @@ import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import clock from '../../assests/clock-rewind.svg';
 import arrow from '../../assests/arrow.svg';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import plus from '../../assests/plus.svg';
+import calendar from '../../assests/calendar.svg';
+import { Button, Modal } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import "./table.css"
 const Table = () => {
     const [data, setData] = useState([
@@ -15,8 +22,9 @@ const Table = () => {
     
       const [editingId, setEditingId] = useState(null);
       const [newRowData, setNewRowData] = useState({});
-    
-      
+      const handleClose = () => setShow(false);
+      const handleShow = () => setShow(true);
+      const [show, setShow] = useState(false);
       
     
       const handleDelete = (id) => {
@@ -43,6 +51,12 @@ const Table = () => {
         setEditingId(null);
         setNewRowData({});
       };
+      const handleDateChange = (date) => {
+        setNewRowData(prevData => ({
+          ...prevData,
+          Date: date
+        }));
+      };
     
       return (
         <div className="container tables bg-white mt-5">
@@ -54,7 +68,7 @@ const Table = () => {
         </button>
           </div>
        
-          <table className=" table ">
+          <table className=" table  borderless">
           <thead>
             <tr>
               <th scope="col">الرقم</th>
@@ -138,7 +152,7 @@ const Table = () => {
                   ) : (
                     <React.Fragment>
                       <div className='icons'>
-                      <img src={clock} alt="" />
+                      <img  variant="primary" onClick={handleShow} src={clock} alt="" />
                   
                     <img 
                     src={deletee} alt=""
@@ -147,6 +161,56 @@ const Table = () => {
                     </React.Fragment>
                   )}
                 </td>
+                <div className='Modal '>
+<Modal show={show} onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title> <p>اعادة جدولة المواعيد</p>  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <div className='settingForm'>
+                  <label htmlFor="formGroupExampleInput">الطبيب المعالج  :</label>
+                  <br />
+                  <select className="form-control reservationSelect">
+  <option value="option1"> احمد عبدالله</option>
+  <option value="option2"> عصام مسعد</option>
+  <option value="option3"> روان محمود</option>
+</select>
+<div className="ReservationArrow-icon">
+  <FontAwesomeIcon icon={faChevronDown} />
+  </div>
+  </div>
+            
+               <div className=' settingForm'>
+               <label className='mb-4' htmlFor="formGroupExampleInput">تحديد تاريخ جديد:</label>
+        <br />
+               <DatePicker
+        className='reservationSelect form-control '
+                       selected={newRowData.Date}
+                       onChange={handleDateChange}
+                      //  showTimeSelect
+                      //  dateFormat="Pp"
+                     />
+                    <img className='Calender' src={calendar}/>
+
+               </div>
+        
+                 
+                </Modal.Body>
+                <Modal.Footer>
+                  
+                <div
+                
+            className='BottomButtons'>
+                <button onClick={handleClose} className='save'>
+                    <span> حفظ</span>
+                </button>
+                <button onClick={handleClose} className='cancel'>
+                    <span> الغاء</span>
+                </button>
+            </div>
+                </Modal.Footer>
+            </Modal>
+</div>
               </tr>
             ))}
           </tbody>

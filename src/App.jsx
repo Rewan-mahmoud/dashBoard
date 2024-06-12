@@ -1,7 +1,7 @@
+// App.js
 import React from 'react';
-import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route  ,useLocation} from 'react-router-dom';
 import Header from "./components/Header/Header";
 import SideNavbar from './components/sideNavbar/SideNavbar';
 import DashBoard from './components/dashboard/DashBoard';
@@ -36,65 +36,70 @@ import AddServices from './components/services/AddServices';
 import AddQuestions from './components/Questions/AddQuestions';
 import LoginPage from './components/login/Login';
 import './App.css';
+import { AuthProvider, useAuth } from './AuthContext';
+import ProtectedRoute from './ProtectedRoute';
 
 function AppContent() {
   const location = useLocation();
-  const isLoginPage = location.pathname === '/Login';
+  const { isAuthenticated } = useAuth();
+  const isLoginPage = location.pathname === '/login';
 
   return (
     <div className="App">
-      {!isLoginPage && <Header />}
+      {!isLoginPage && isAuthenticated && <Header />}
       <div className="container-fluid">
         <div className="row">
-          {!isLoginPage && <SideNavbar />}
+          {!isLoginPage && isAuthenticated && <SideNavbar />}
           <div className="col">
             <Routes>
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/" element={<DashBoard />} />
-              <Route path="/Dashboard" element={<DashBoard />} />
-              <Route path="/Doctor" element={<Doctor />} />
-              <Route path="/Patients" element={<Patients />} />
-              <Route path="/Categories" element={<Categories />} />
-              <Route path="/Subcategories" element={<Subcategories />} />
-              <Route path="/slider" element={<Slider />} />
-              <Route path="/Services" element={<Services />} />
-              <Route path="/Reservation" element={<Reservation />} />
-              <Route path="/Meetings" element={<Meetings />} />
-              <Route path="/TreatmentPlans" element={<TreatmentPlans />} />
-              <Route path="/Permissions" element={<Permissions />} />
-              <Route path="/Copon" element={<Copon />} />
-              <Route path="/Users" element={<Users />} />
-              <Route path="/LotalyProgram" element={<LotalyProgram />} />
-              <Route path="/Questions" element={<Questions />} />
-              <Route path="/Settings" element={<Settings />}>
-                <Route path="PublicSettings" element={<PublicSettings />} />
-                <Route path="VisibilitySettings" element={<VisibilitySettings />} />
-                <Route path="ReturnPolicy" element={<ReturnPolicy />} />
-                <Route path="CopyRights" element={<CopyRights />} />
-                <Route path="CommonQuestions" element={<CommonQuestions />} />
+              <Route path="/" element={<ProtectedRoute element={<LoginPage />} />} />
+              <Route path="/Dashboard" element={<ProtectedRoute element={<DashBoard />} />} />
+              <Route path="/Doctor" element={<ProtectedRoute element={<Doctor />} />} />
+              <Route path="/Patients" element={<ProtectedRoute element={<Patients />} />} />
+              <Route path="/Categories" element={<ProtectedRoute element={<Categories />} />} />
+              <Route path="/Subcategories" element={<ProtectedRoute element={<Subcategories />} />} />
+              <Route path="/slider" element={<ProtectedRoute element={<Slider />} />} />
+              <Route path="/Services" element={<ProtectedRoute element={<Services />} />} />
+              <Route path="/Reservation" element={<ProtectedRoute element={<Reservation />} />} />
+              <Route path="/Meetings" element={<ProtectedRoute element={<Meetings />} />} />
+              <Route path="/TreatmentPlans" element={<ProtectedRoute element={<TreatmentPlans />} />} />
+              <Route path="/Permissions" element={<ProtectedRoute element={<Permissions />} />} />
+              <Route path="/Copon" element={<ProtectedRoute element={<Copon />} />} />
+              <Route path="/Users" element={<ProtectedRoute element={<Users />} />} />
+              <Route path="/LotalyProgram" element={<ProtectedRoute element={<LotalyProgram />} />} />
+              <Route path="/Questions" element={<ProtectedRoute element={<Questions />} />} />
+              <Route path="/Settings" element={<ProtectedRoute element={<Settings />} />}>
+                <Route path="PublicSettings" element={<ProtectedRoute element={<PublicSettings />} />} />
+                <Route path="VisibilitySettings" element={<ProtectedRoute element={<VisibilitySettings />} />} />
+                <Route path="ReturnPolicy" element={<ProtectedRoute element={<ReturnPolicy />} />} />
+                <Route path="CopyRights" element={<ProtectedRoute element={<CopyRights />} />} />
+                <Route path="CommonQuestions" element={<ProtectedRoute element={<CommonQuestions />} />} />
               </Route>
-              <Route path="/RatingPage" element={<RatingPage />} />
-              <Route path="/DoctorsProfile" element={<DoctorsProfile />} />
-              <Route path="/DoctorData" element={<DoctorData />} />
-              <Route path="/AddTreatmentPlans" element={<AddTreatmentPlans />} />
-              <Route path="/AddMeetings" element={<AddMeetings />} />
-              <Route path="/AddUsers" element={<AddUsers />} />
-              <Route path="/AddPermissions" element={<AddPermissions />} />
-              <Route path="/AddServices" element={<AddServices />} />
-              <Route path="/AddQuestions" element={<AddQuestions />} />
+              <Route path="/RatingPage" element={<ProtectedRoute element={<RatingPage />} />} />
+              <Route path="/DoctorsProfile" element={<ProtectedRoute element={<DoctorsProfile />} />} />
+              <Route path="/DoctorData" element={<ProtectedRoute element={<DoctorData />} />} />
+              <Route path="/AddTreatmentPlans" element={<ProtectedRoute element={<AddTreatmentPlans />} />} />
+              <Route path="/AddMeetings" element={<ProtectedRoute element={<AddMeetings />} />} />
+              <Route path="/AddUsers" element={<ProtectedRoute element={<AddUsers />} />} />
+              <Route path="/AddPermissions" element={<ProtectedRoute element={<AddPermissions />} />} />
+              <Route path="/AddServices" element={<ProtectedRoute element={<AddServices />} />} />
+              <Route path="/AddQuestions" element={<ProtectedRoute element={<AddQuestions />} />} />
             </Routes>
           </div>
         </div>
-        </div>
+      </div>
     </div>
   );
 }
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 }
 

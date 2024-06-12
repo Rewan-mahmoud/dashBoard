@@ -70,7 +70,7 @@ const Reservation = () => {
           </button>
           </div>
        
-          <table className=" table ">
+          <table className=" table  borderless">
           <thead>
             <tr>
               <th scope="col">الرقم</th>

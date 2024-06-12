@@ -11,16 +11,15 @@ import Frame5 from '../../assests/Frame5.svg';
 import Frame6 from '../../assests/Frame6.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
-
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 const Subcategories = () => {
   const [data, setData] = useState([
-    { id: 1, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed Mohamed', icon: Frame1 },
-    { id: 2, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed Mohamed', icon: Frame2 },
-    { id: 3, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed Mohamed', icon: Frame3 },
-    { id: 4, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed Mohamed', icon: Frame4 },
-    { id: 5, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed Mohamed', icon: Frame5 },
-    { id: 6, NameArabic: 'احمد محمد ', NameEnglish: 'Ahmed Mohamed', icon: Frame6 },
+    { id: 1, NameArabic: ' اضطرابات التعلم ', NameEnglish: ' learning DisOrders', icon: Frame1 },
+    { id: 2 ,NameArabic: ' اضطرابات التعلم ', NameEnglish: ' learning DisOrders',icon: Frame2 },
+    { id: 3,NameArabic: ' اضطرابات التعلم ', NameEnglish: ' learning DisOrders',icon: Frame3 },
+    { id: 4,NameArabic: ' اضطرابات التعلم ', NameEnglish: ' learning DisOrders',icon: Frame4 },
+    { id: 5,NameArabic: ' اضطرابات التعلم ', NameEnglish: ' learning DisOrders',icon: Frame5 },
+    { id: 6,NameArabic: ' اضطرابات التعلم ', NameEnglish: ' learning DisOrders',icon: Frame6 },
   ]);
 
   const [editingId, setEditingId] = useState(null);
@@ -105,13 +104,14 @@ const Subcategories = () => {
         </button>
       </div>
 
-      <table className="table TableDr text-center">
+      <table className="table borderless TableDr text-center">
         <thead>
           <tr>
             <th scope="col">الرقم</th>
             <th scope="col">الايقون</th>
             <th scope="col">الاسم باللغة العربية</th>
             <th scope="col">الاسم باللغة الانجليزية</th>
+            <th scope="col"> الفئة الاساسية </th>
             <th scope="col">التحكم</th>
           </tr>
         </thead>
@@ -141,6 +141,18 @@ const Subcategories = () => {
                 ) : (
                   row.NameEnglish
                 )}
+              </td>
+              <td>
+              <div className="custom-select ">
+    <select type="text" className="form-control ">
+    <option value="option1"> الاطفال و اليافعين </option>
+    <option value="option2"> العلاج النفسي و السلوكي  </option>
+    <option value="option3"> العلاقات و الاسرة   </option>
+  </select>
+  <div className="arrow-icon">
+  <FontAwesomeIcon icon={faChevronDown} />
+  </div>
+</div>
               </td>
               <td>
                 {editingId === row.id ? (

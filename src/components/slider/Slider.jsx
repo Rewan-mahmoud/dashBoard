@@ -126,7 +126,7 @@ const Slider = () => {
     };
 
     return (
-        <div className="container tables bg-white mt-5">
+        <div className="container  tables bg-white mt-5">
             <div className="tableTitle d-flex justify-content-between">
                 <h3>السليدر</h3>
                 <button onClick={handleAdd}>
@@ -135,7 +135,7 @@ const Slider = () => {
                 </button>
             </div>
 
-            <table className="table TableDr text-center">
+            <table className="table borderless  TableDr text-center">
                 <thead>
                     <tr>
                         <th scope="col">الرقم</th>

@@ -38,7 +38,7 @@ export default function AddUsers() {
           </div>
           <div className="col-md-4">
             <label htmlFor="formGroupExampleInput">الصلاحيات :</label>
-            <div class="custom-select">
+      
             <div className="custom-select">
   <select type="text" className="form-control">
    
@@ -50,7 +50,7 @@ export default function AddUsers() {
   <div className="arrow-icon">
   <FontAwesomeIcon icon={faChevronDown} />
   </div>
-</div>
+
 </div>
 
           </div>

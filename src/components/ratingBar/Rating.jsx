@@ -51,7 +51,7 @@ const Rating = () => {
   return (
     <div className="container tables bg-white mt-5">
         <h3 className='ratingTitle' >اعلي تقييما</h3>
-    <table className='table '>
+    <table className='table borderless '>
       
       <tbody>
         <tr>

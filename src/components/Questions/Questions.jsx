@@ -71,7 +71,7 @@ const Questions = () => {
           </Link>
           </div>
        
-          <table className=" table TableDr text-center ">
+          <table className=" table borderless TableDr text-center ">
           <thead >
             <tr >
               <th  scope="col ">الرقم</th>
