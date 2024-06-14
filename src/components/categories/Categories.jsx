@@ -12,15 +12,17 @@ const Categories = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [newData, setNewData] = useState({
     id: '',
-    name: '',
-    details: '',
+    name_ar: '',
+    name_en: '',
+    details_ar: '',
+    details_en: '',
     image: '',
     status: 'active',
   });
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [error, setError] = useState(null);
 
-  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YzNmYzNkNS02YTUwLTRlNDItODcyOS1jZWFjYWRkOTc2ODAiLCJqdGkiOiJiMjI5NjUzYzY3NDkwNGJiYTU3YzE0ODliMmE5MTFiODk3ODVhZjQ5YmU3MjMxZmMwMDUzOGMzNmM4M2YwMWYzZDdlNjQyNjA4MGU2ZmJkMyIsImlhdCI6MTcxODE0MjgyMC45MTQ5MzUsIm5iZiI6MTcxODE0MjgyMC45MTQ5MzgsImV4cCI6MTc0OTY3ODgyMC45MTIyNywic3ViIjoiMSIsInNjb3BlcyI6W119.DbDKDSSRK-_xgrV9gg62Hx463abNhu1li1ENeMeV9_B34MFQUtQD1z3992g25CtCPPCAZU_sscM6hzSZ99SxHHgAax8lqYC-Hx6japYx1pQV52xNZMwNVxHosszHUDkJeKkTH7TmymyXHwXJ_C47r8Y-iaX2G3_6EoVaW0crdxuTA-588USgtQLQ-G-uStt52H1u4H0iIz4RjIDLDn6HkjmsgAouqBPemB1f5afDiOycnI6EwhE-sTjN8s9E3OxjirwATZe5BLEnc1_rhOKriZtjFesIpU4n-aIU5lDF9cprqOTyu74nK6uWBMY5D07rQUpMVuUmOF45RGmffZONXXT-rLydfZTRgRNfbLa4QtofAr6BDqPQnxVuVWd0UDDWb82X-cj411qPtSBVYsHY9WoNr7io7JIIMpjvQ-HAtl8D_u7PEti6AmPv-W1aF2QBL2BQ79_LLT8GKvu3wZ5GEkOd6GEpu8y9CyW_VIJB5husn3VsETmfCD48W51Sin82Tv5lNvJk0-aaR0UfPVLOYWxLLN1t-RvmISGBWzgV3d4nViccAnKHiofxVp16yY4244sI6cmXsQ4ISRBofXNrBEWWvUjzZv3mDBdcrOleS025Mb-g_P3X57fHmQzY2q8TlAJbEP7yWLvLQOg0tYaPmil8Qt7XeLwGZcH-dm5b1AE";
+  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YzNmYzNkNS02YTUwLTRlNDItODcyOS1jZWFjYWRkOTc2ODAiLCJqdGkiOiJkNDY4M2RhOTEwMTQwY2NhOWNiNTk4ZTIyYWM4NGQxZTg0OTQ2OWY5NjExYTgwYzg0N2ZiNDdjNmEwMTI4YzFkMzY5ODQxZTgzMmE4ODcwNSIsImlhdCI6MTcxODIwMjI5OS4xODMxNTIsIm5iZiI6MTcxODIwMjI5OS4xODMxNTUsImV4cCI6MTc0OTczODI5OS4xNzkyNTcsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.Yx9dWC5YZY1qUoOzlKvp-IQQCYvv-lBzmRZIoBYcM7DTWsdMPAR470lfw84TDfw-taGdpHmOXOj5hyyIxcjHHZrwOqVqOS2vRQ-VUNV5d8frSyj4edCcqUgLmdFY8DmozazAG2na_jewgFdeElA7ozZZE-QSfPYSho6UZL-a7TzInp3SJli47Bo7GjiV4Patcr26YJIqHXkvjFy-UVZeLLrslZOMzZjN144Yih8d_nXlXvyhqnOY7c9DDMMzFQ5Hz6pMpBYvpgAw-WdIgYXKQ8h3qDFVD5MhV9VXWLh46XsOgl6eKg7L-AA_9NUtweOn5f2uY0Qw2Gbd226tCjirJ3u1GkdkYbTzNIeqxYumbx3hsctHc9D1zNU4qq1ruKAWpjleHBfyvwGA0rYIRynwPiPkophy8eEVeJWuxeTkC9ooaIhdkNnh6yV9HpKrQbObLXamrwNWxZgLp5qV4dhi3zofd0gWrVea_I-oQshUKH8Fzz2YTnZOewJWK8nxgaYv70UOQaD6PheH1ILAsS1qZBc7agnjhuTkVA0n9dmhenUuzEUQ4rPG7tumUOrRPLlxrJNqeVBXz41b2SSett7Za4Al65wkfckSCe5ER2C7-o5_F9INvJzkuPJ6uYsZtXSrzw6lOJ9KbEdfW2VZq2shYt-jjFDQobYj7hdBDqD4eOE";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,18 +52,40 @@ const Categories = () => {
     fetchData();
   }, [token]);
 
-  const toggleActive = (id) => {
-    setData(prevData =>
-      prevData.map(row =>
-        row.id === id ? { ...row, status: row.status === 'active' ? 'inactive' : 'active' } : row
-      )
-    );
+  const toggleActive = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 'active' ? 0 : 1;
+      const response = await fetch(`https://naql.nozzm.com/api/active_category/${id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'lang': 'ar'
+        },
+        body: JSON.stringify({ stauts: newStatus }), // Ensure the parameter name is correct
+      });
+      const result = await response.json();
+      if (result.status) {
+        setData(prevData =>
+          prevData.map(row =>
+            row.id === id ? { ...row, status: newStatus === 1 ? 'active' : 'inactive' } : row
+          )
+        );
+      } else {
+        console.error('Failed to toggle active status:', result.message);
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error('Error toggling active status:', error);
+      setError(error.message);
+    }
   };
 
   const handleIconChange = (e) => {
     const file = e.target.files[0];
     setSelectedIcon(file);
-    setNewData(prevData => ({
+    setNewRowData(prevData => ({
       ...prevData,
       image: file,
     }));
@@ -100,20 +124,30 @@ const Categories = () => {
 
   const handleSave = async () => {
     try {
+      const formData = new FormData();
+      formData.append('name_ar', newRowData.name_ar);
+      formData.append('name_en', newRowData.name_en);
+      formData.append('details_ar', newRowData.details_ar);
+      formData.append('details_en', newRowData.details_en);
+      if (selectedIcon) {
+        formData.append('image', selectedIcon);
+      }
+
       const response = await fetch(`https://naql.nozzm.com/api/update_category/${editingId}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'lang': 'ar',
-          'accept' : 'application/json'
+          'accept': 'application/json'
         },
-        body: JSON.stringify(newRowData),
+        body: formData,
       });
       const result = await response.json();
       if (result.status) {
-        setData(data.map(row => row.id === editingId ? newRowData : row));
+        setData(data.map(row => row.id === editingId ? { ...row, ...newRowData, image: selectedIcon ? URL.createObjectURL(selectedIcon) : row.image } : row));
         setEditingId(null);
         setNewRowData({});
+        setSelectedIcon(null);
       } else {
         console.error('Failed to save data:', result.message);
         setError(result.message);
@@ -138,9 +172,10 @@ const Categories = () => {
 
   const handleAddSave = async () => {
     const formData = new FormData();
-    formData.append('name', newData.name);
-    formData.append('details', newData.details);
-    formData.append('status', newData.status);
+    formData.append('name_ar', newData.name_ar);
+    formData.append('name_en', newData.name_en);
+    formData.append('details_ar', newData.details_ar);
+    formData.append('details_en', newData.details_en);
     if (newData.image) {
       formData.append('image', newData.image);
     }
@@ -160,8 +195,10 @@ const Categories = () => {
         setData(prevData => [...prevData, result.data]); // Assuming the new data is returned in the response
         setNewData({
           id: '',
-          name: '',
-          details: '',
+          name_ar: '',
+          name_en: '',
+          details_ar: '',
+          details_en: '',
           image: '',
           status: 'active',
         });
@@ -193,8 +230,10 @@ const Categories = () => {
           <tr>
             <th scope="col">الرقم</th>
             <th scope="col">الايقون</th>
-            <th scope="col">الاسم</th>
-            <th scope="col">التفاصيل</th>
+            <th scope="col"> الاسم باللغة العربية</th>
+            {/* <th scope="col"> الاسم باللغة الانجليزية</th> */}
+            <th scope="col">التفاصيل باللغة العربية</th>
+            {/* <th scope="col">التفاصيل باللغة الانجليزية</th> */}
             <th scope="col">الحالة</th>
             <th scope="col">التحكم</th>
           </tr>
@@ -216,26 +255,47 @@ const Categories = () => {
               </td>
               <td>
                 {editingId === row.id ? (
-                  <input type="text" value={newRowData.name || row.name} onChange={(e) => handleChange(e, 'name')} />
+                  <input type="text" value={newRowData.name_ar || row.name_ar} onChange={(e) => handleChange(e, 'name_ar')} />
                 ) : (
-                  row.name
+                  row.name_ar
                 )}
               </td>
+              {/* <td>
+                {editingId === row.id ? (
+                  <input type="text" value={newRowData.name_en || row.name_en} onChange={(e) => handleChange(e, 'name_en')} />
+                ) : (
+                  row.name_en
+                )}
+              </td> */}
               <td>
                 {editingId === row.id ? (
-                  <input type="text" value={newRowData.details || row.details} onChange={(e) => handleChange(e, 'details')} />
+                  <input type="text" value={newRowData.details_ar || row.details_ar} onChange={(e) => handleChange(e, 'details_ar')} />
                 ) : (
-                  row.details
+                  row.details_ar
                 )}
               </td>
+              {/* <td>
+                {editingId === row.id ? (
+                  <input type="text" value={newRowData.details_en || row.details_en} onChange={(e) => handleChange(e, 'details_en')} />
+                ) : (
+                  row.details_en
+                )}
+              </td> */}
               <td>
-                <FontAwesomeIcon icon={faCircleCheck} className={row.status === 'active' ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  className={row.status === 'active' ? 'activeIcon' : 'inactive'}
+                  onClick={() => toggleActive(row.id, row.status)}
+                />
               </td>
               <td>
                 {editingId === row.id ? (
                   <React.Fragment>
                     <button onClick={handleSave}>Save</button>
-                    <button onClick={() => setEditingId(null)}>Cancel</button>
+                    <button onClick={() => {
+                      setEditingId(null);
+                      setSelectedIcon(null);
+                    }}>Cancel</button>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
@@ -266,10 +326,16 @@ const Categories = () => {
                 <input type="file" onChange={handleIconChange} accept="image/*" />
               </td>
               <td>
-                <input type="text" value={newData.name} onChange={(e) => handleAddChange(e, 'name')} />
+                <input type="text" value={newData.name_ar} onChange={(e) => handleAddChange(e, 'name_ar')} />
               </td>
               <td>
-                <input type="text" value={newData.details} onChange={(e) => handleAddChange(e, 'details')} />
+                <input type="text" value={newData.name_en} onChange={(e) => handleAddChange(e, 'name_en')} />
+              </td>
+              <td>
+                <input type="text" value={newData.details_ar} onChange={(e) => handleAddChange(e, 'details_ar')} />
+              </td>
+              <td>
+                <input type="text" value={newData.details_en} onChange={(e) => handleAddChange(e, 'details_en')} />
               </td>
               <td>
                 <select value={newData.status} onChange={(e) => handleAddChange(e, 'status')}>
