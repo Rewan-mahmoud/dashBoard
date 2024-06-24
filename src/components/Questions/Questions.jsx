@@ -74,19 +74,37 @@ const Questions = () => {
     setNewRowData({});
   };
 
-  const toggleActive = (id) => {
-    const newData = data.map(row => {
-      if (row.id === id) {
-        return { ...row, active: !row.active };
+
+  const toggleActive = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 'active' ? 0 : 1;
+      const response = await fetch(`https://naql.nozzm.com/api/active_questions/${id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'lang': 'ar'
+        },
+        body: JSON.stringify({ stauts: newStatus }), // Ensure the parameter name is correct
+      });
+      const result = await response.json();
+      if (result.status) {
+        setData(prevData =>
+          prevData.map(row =>
+            row.id === id ? { ...row, status: newStatus === 1 ? 'active' : 'inactive' } : row
+          )
+        );
+      } else {
+        console.error('Failed to toggle active status:', result.message);
+        setError(result.message);
       }
-      return row;
-    });
-    setData(newData);
+    } catch (error) {
+      console.error('Error toggling active status:', error);
+      setError(error.message);
+    }
   };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
     <div className="container tables bg-white mt-5">
@@ -124,9 +142,9 @@ const Questions = () => {
               </td>
               <td>
                 {editingId === row.id ? (
-                  <input type="text" value={newRowData.name_eng || row.name_eng} onChange={(e) => handleChange(e, 'name_eng')} />
+                  <input type="text" value={newRowData.name_en || row.name_en} onChange={(e) => handleChange(e, 'name_en')} />
                 ) : (
-                  row.name_eng
+                  row.name_en
                 )}
               </td>
               <td>
