@@ -43,6 +43,7 @@ function AppContent() {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   const isLoginPage = location.pathname === '/login';
+  
 
   return (
     <div className="App">
@@ -77,8 +78,7 @@ function AppContent() {
                 <Route path="CommonQuestions" element={<ProtectedRoute element={<CommonQuestions />} />} />
               </Route>
               <Route path="/RatingPage" element={<ProtectedRoute element={<RatingPage />} />} />
-              <Route path="/DoctorsProfile" element={<ProtectedRoute element={<DoctorsProfile />} />} />
-              <Route path="/DoctorData" element={<ProtectedRoute element={<DoctorData />} />} />
+              <Route path="/DoctorsProfile/:id" element={<DoctorsProfile />} />              <Route path="/DoctorData" element={<ProtectedRoute element={<DoctorData />} />} />
               <Route path="/AddTreatmentPlans" element={<ProtectedRoute element={<AddTreatmentPlans />} />} />
               <Route path="/AddMeetings" element={<ProtectedRoute element={<AddMeetings />} />} />
               <Route path="/AddUsers" element={<ProtectedRoute element={<AddUsers />} />} />

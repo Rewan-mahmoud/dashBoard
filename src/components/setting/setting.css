@@ -30,7 +30,7 @@ height: 150px;
 }
 .form-group .upload{
     position: absolute;
-    top: 40px;
+    bottom: 83px;
     left: 0;  
     pointer-events: none;
     right: 0;
@@ -53,6 +53,7 @@ margin-bottom: 24px;
     font-family: "Cairo", sans-serif;
     margin-bottom: 24px;
     color: #868686;
+    margin-left: 20px;
 }
 .setting .nav-item a {
     color: #868686  !important;

@@ -22,14 +22,7 @@ function Settings() {
 
       <div className="container tables bg-white mt-5">
       <Outlet/>
-      <div className="BottomButtons">
-        <button className="save">
-          <span> حفظ</span>
-        </button>
-        <button className="cancel">
-          <span> الغاء</span>
-        </button>
-      </div>
+  
       </div>
 
       

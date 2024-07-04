@@ -83,7 +83,15 @@ function PublicSettings() {
 <input type="text" class="form-control"/>
 </div>
 </div>
-</form>
+</form>    
+<div className="BottomButtons">
+        <button className="save">
+          <span> حفظ</span>
+        </button>
+        <button className="cancel">
+          <span> الغاء</span>
+        </button>
+      </div>
     </>
   );
 }

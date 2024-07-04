@@ -40,18 +40,35 @@ const Questions = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, []);
 
   const handleEdit = (id) => {
     setEditingId(id);
     const rowToEdit = data.find(row => row.id === id);
-    const newRowDataCopy = { ...rowToEdit };
-    setNewRowData(newRowDataCopy);
+    setNewRowData({ ...rowToEdit });
   };
 
-  const handleDelete = (id) => {
-    const newData = data.filter(row => row.id !== id);
-    setData(newData);
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`https://naql.nozzm.com/api/destroy_questions/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'lang': 'en',
+        },
+      });
+      const result = await response.json();
+      if (result.status) {
+        setData(data.filter(row => row.id !== id));
+      } else {
+        console.error('Failed to delete data:', result.message);
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error('Error deleting data:', error);
+      setError(error.message);
+    }
   };
 
   const handleChange = (e, key) => {
@@ -62,18 +79,39 @@ const Questions = () => {
     }));
   };
 
-  const handleSave = () => {
-    const newData = data.map(row => {
-      if (row.id === editingId) {
-        return newRowData;
-      }
-      return row;
-    });
-    setData(newData);
-    setEditingId(null);
-    setNewRowData({});
-  };
+  const handleSave = async () => {
+    try {
+      const response = await fetch(`https://naql.nozzm.com/api/update_questions/${editingId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'lang': 'ar',
+        },
+        body: JSON.stringify(newRowData),
+      });
 
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+
+      if (result.status) {
+        const newData = data.map(row => (row.id === editingId ? newRowData : row));
+        setData(newData);
+        setEditingId(null);
+        setNewRowData({});
+      } else {
+        console.error('Failed to save data:', result.message);
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error('Error saving data:', error);
+      setError(error.message);
+    }
+  };
 
   const toggleActive = async (id, currentStatus) => {
     try {
@@ -86,9 +124,15 @@ const Questions = () => {
           'Content-Type': 'application/json',
           'lang': 'ar'
         },
-        body: JSON.stringify({ stauts: newStatus }), // Ensure the parameter name is correct
+        body: JSON.stringify({ status: newStatus }),
       });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
       const result = await response.json();
+
       if (result.status) {
         setData(prevData =>
           prevData.map(row =>
@@ -104,7 +148,6 @@ const Questions = () => {
       setError(error.message);
     }
   };
-
 
   return (
     <div className="container tables bg-white mt-5">
@@ -125,7 +168,6 @@ const Questions = () => {
             <th scope="col">السؤال باللغة العربية</th>
             <th scope="col">السؤال باللغة الانجليزية</th>
             <th scope="col">الحالة  </th>
-            
             <th scope="col">التحكم</th>
           </tr>
         </thead>
@@ -135,14 +177,14 @@ const Questions = () => {
               <td>{row.id}</td>
               <td>
                 {editingId === row.id ? (
-                  <input type="text" value={newRowData.name || row.name} onChange={(e) => handleChange(e, 'name')} />
+                  <input type="text" value={newRowData.name_ar || ''} onChange={(e) => handleChange(e, 'name_ar')} />
                 ) : (
-                  row.name
+                  row.name_ar
                 )}
               </td>
               <td>
                 {editingId === row.id ? (
-                  <input type="text" value={newRowData.name_en || row.name_en} onChange={(e) => handleChange(e, 'name_en')} />
+                  <input type="text" value={newRowData.name_en || ''} onChange={(e) => handleChange(e, 'name_en')} />
                 ) : (
                   row.name_en
                 )}
@@ -156,37 +198,33 @@ const Questions = () => {
               </td>
               <td>
                 {editingId === row.id ? (
-                  <React.Fragment>
+                  <>
                     <button onClick={handleSave}>Save</button>
                     <button onClick={() => {
                       setEditingId(null);
-                      // setSelectedIcon(null);
+                      setNewRowData({});
                     }}>Cancel</button>
-                  </React.Fragment>
+                  </>
                 ) : (
-                  <React.Fragment>
-                    <div className="drTableIcon">
-                      <img
-                        src={edit}
-                        alt="edit"
-                        onClick={() => {
-                          setEditingId(row.id);
-                          setNewRowData(row);
-                        }}
-                      />
-                      <img
-                        src={deletee}
-                        alt="delete"
-                        onClick={() => handleDelete(row.id)}
-                      />
-                    </div>
-                  </React.Fragment>
+                  <div className="drTableIcon">
+                    <img
+                      src={edit}
+                      alt="edit"
+                      onClick={() => handleEdit(row.id)}
+                    />
+                    <img
+                      src={deletee}
+                      alt="delete"
+                      onClick={() => handleDelete(row.id)}
+                    />
+                  </div>
                 )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {error && <div className="alert alert-danger">{error}</div>}
     </div>
   );
 };

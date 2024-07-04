@@ -107,3 +107,13 @@
 .logout a{
     font-family: "Cairo", sans-serif;
 }
+a{
+    text-decoration: none !important;
+}
+.editbutton{
+    border: none !important;
+    background-color: transparent;
+}
+.img-thumbnail {
+    border: none;
+}

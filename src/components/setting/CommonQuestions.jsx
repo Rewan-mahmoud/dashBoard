@@ -2,7 +2,7 @@ export default function CommonQuestions() {
     return (
         <>
             <div className="tableTitle d-flex justify-content-between">
-                <h3>اضافة اسئلة واجوبة  </h3>
+                <h3>الاسئلة الشائعة    </h3>
             </div>
             <div className="container mb-5">
                 <div className="row mb-5">
