@@ -3,13 +3,14 @@ import img from '../../assests/logo.png';
 import cuate from '../../assests/cuate.svg';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
+
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth(); 
+  const { login, logout } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,8 +33,7 @@ function Login() {
         return;
       }
 
-   
-      login(); 
+      login();
       navigate('/Dashboard');
       setIsLoading(false);
     } catch (error) {
@@ -42,6 +42,10 @@ function Login() {
     }
   };
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/Login');
+  };
 
   return (
     <div className="LoginPage row">
@@ -79,11 +83,12 @@ function Login() {
             </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <div className='text-center'>
-              <button type="submit" className="LoginPageButton" disabled={isLoading}>
+              <button type="submit" className="LoginPageButton" onClick={handleLogout} disabled={isLoading}>
                 {isLoading ? 'جاري التسجيل...' : 'تسجيل الدخول'}
               </button>
             </div>
           </form>
+        
         </div>
       </div>
       <div className='leftSide col-md-6'>

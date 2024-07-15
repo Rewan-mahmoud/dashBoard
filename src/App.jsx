@@ -1,7 +1,6 @@
-// App.js
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Routes, Route  ,useLocation} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from "./components/Header/Header";
 import SideNavbar from './components/sideNavbar/SideNavbar';
 import DashBoard from './components/dashboard/DashBoard';
@@ -42,8 +41,7 @@ import ProtectedRoute from './ProtectedRoute';
 function AppContent() {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
-  const isLoginPage = location.pathname === '/login';
-  
+  const isLoginPage = location.pathname === '/Login';
 
   return (
     <div className="App">
@@ -53,8 +51,8 @@ function AppContent() {
           {!isLoginPage && isAuthenticated && <SideNavbar />}
           <div className="col">
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/" element={<ProtectedRoute element={<LoginPage />} />} />
+              <Route path="/Login" element={<LoginPage />} />
+              <Route path="/" element={<ProtectedRoute element={<DashBoard />} />} />
               <Route path="/Dashboard" element={<ProtectedRoute element={<DashBoard />} />} />
               <Route path="/Doctor" element={<ProtectedRoute element={<Doctor />} />} />
               <Route path="/Patients" element={<ProtectedRoute element={<Patients />} />} />
@@ -78,7 +76,8 @@ function AppContent() {
                 <Route path="CommonQuestions" element={<ProtectedRoute element={<CommonQuestions />} />} />
               </Route>
               <Route path="/RatingPage" element={<ProtectedRoute element={<RatingPage />} />} />
-              <Route path="/DoctorsProfile/:id" element={<DoctorsProfile />} />              <Route path="/DoctorData" element={<ProtectedRoute element={<DoctorData />} />} />
+              <Route path="/DoctorsProfile/:id" element={<ProtectedRoute element={<DoctorsProfile />} />} />
+              <Route path="/DoctorData" element={<ProtectedRoute element={<DoctorData />} />} />
               <Route path="/AddTreatmentPlans" element={<ProtectedRoute element={<AddTreatmentPlans />} />} />
               <Route path="/AddMeetings" element={<ProtectedRoute element={<AddMeetings />} />} />
               <Route path="/AddUsers" element={<ProtectedRoute element={<AddUsers />} />} />

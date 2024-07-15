@@ -12,9 +12,25 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('isAuthenticated', 'true');
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('isAuthenticated');
+  const logout = async () => {
+    try {
+      const response = await fetch('https://naql.nozzm.com/api/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'lang': 'en',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Failed to logout:', error);
+    } finally {
+      setIsAuthenticated(false);
+      localStorage.setItem('isAuthenticated' , 'false');
+    }
   };
 
   useEffect(() => {
