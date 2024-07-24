@@ -77,6 +77,8 @@ function AppContent() {
               </Route>
               <Route path="/RatingPage" element={<ProtectedRoute element={<RatingPage />} />} />
               <Route path="/DoctorsProfile/:id" element={<ProtectedRoute element={<DoctorsProfile />} />} />
+      
+ 
               <Route path="/DoctorData" element={<ProtectedRoute element={<DoctorData />} />} />
               <Route path="/AddTreatmentPlans" element={<ProtectedRoute element={<AddTreatmentPlans />} />} />
               <Route path="/AddMeetings" element={<ProtectedRoute element={<AddMeetings />} />} />

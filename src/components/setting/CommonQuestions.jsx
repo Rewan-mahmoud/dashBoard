@@ -39,6 +39,14 @@ export default function CommonQuestions() {
                         <label htmlFor="textareaEn2" className="form-label">  كيفية الاستخدام :</label>
                         <textarea className="form-control" id="textareaEn2" rows="4"></textarea>
                     </div>
+                    <div className='BottomButtons mt-5'>
+            <button className='save'>
+              <span>حفظ</span>
+            </button>
+            <button className='cancel'>
+              <span>الغاء</span>
+            </button>
+          </div>
             </div>
         </>
     );
