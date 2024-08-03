@@ -189,13 +189,8 @@ const Patients = () => {
                   row.email
                 )}
               </td>
-              <td>
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  className={row.status === 'active' ? 'activeIcon' : 'inactive'}
-                  onClick={() => toggleActive(row.id, row.status)}
-                />
-              </td>
+              <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
+
               <td>
                 {editingId === row.id ? (
                   <React.Fragment>
