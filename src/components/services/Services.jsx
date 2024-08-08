@@ -57,7 +57,7 @@ const Services = () => {
       const response = await fetch(`https://naql.nozzm.com/api/destory_service/${id}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
           'Authorization': `Bearer ${token}`,
           'lang': 'ar',
         },
@@ -164,7 +164,7 @@ const Services = () => {
             <th scope="col">الرقم</th>
             <th scope="col">اسم الفئة الاساسية</th>
             <th scope="col">الاسم الفئة الفرعية</th>
-            <th scope="col">اسم المختص</th>
+     
             <th scope="col">التحكم</th>
           </tr>
         </thead>
@@ -186,13 +186,7 @@ const Services = () => {
                   row.Subcategory
                 )}
               </td>
-              <td>
-                {editingId === row.id ? (
-                  <input type="text" value={newRowData.SpecialistName} onChange={(e) => handleChange(e, 'SpecialistName')} />
-                ) : (
-                  row.SpecialistName
-                )}
-              </td>
+           
               <td>
                 {editingId === row.id ? (
                   <React.Fragment>

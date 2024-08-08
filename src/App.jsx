@@ -20,7 +20,6 @@ import LotalyProgram from './components/LoyaltyProgram/LotalyProgram';
 import Questions from './components/Questions/Questions';
 import Settings from './components/setting/Settings';
 import PublicSettings from './components/setting/PublicSettings';
-import VisibilitySettings from './components/setting/VisibilitySettings';
 import ReturnPolicy from './components/setting/ReturnPolicy';
 import CopyRights from './components/setting/CopyRights';
 import CommonQuestions from './components/setting/CommonQuestions';
@@ -70,7 +69,6 @@ function AppContent() {
               <Route path="/Questions" element={<ProtectedRoute element={<Questions />} />} />
               <Route path="/Settings" element={<ProtectedRoute element={<Settings />} />}>
                 <Route path="PublicSettings" element={<ProtectedRoute element={<PublicSettings />} />} />
-                <Route path="VisibilitySettings" element={<ProtectedRoute element={<VisibilitySettings />} />} />
                 <Route path="ReturnPolicy" element={<ProtectedRoute element={<ReturnPolicy />} />} />
                 <Route path="CopyRights" element={<ProtectedRoute element={<CopyRights />} />} />
                 <Route path="CommonQuestions" element={<ProtectedRoute element={<CommonQuestions />} />} />
