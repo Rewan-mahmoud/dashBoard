@@ -27,7 +27,7 @@ function SideNavbar() {
 
   <div className="sideNavbar col-md-2 ">
 
- <nav class="nav nav-pills flex-column ">
+ <nav className="nav nav-pills flex-column ">
 <div className='d-flex NavTitle '>
 <img src={Group} alt="" />
 <Link   to="/Dashboard"  className="nav-link " >لوحة التحكم</Link>
@@ -119,10 +119,6 @@ function SideNavbar() {
 
 </nav>
 </div>
-
-
-
-
       </>
 
   

@@ -197,8 +197,8 @@ const Services = () => {
                   <React.Fragment>
                     <div className='drTableIcon'>
                       <FontAwesomeIcon icon={faCircleCheck} className={row.status === 'active' ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id, row.status)} />
-                      <Link>
-                        <img src={edit} alt="edit" onClick={() => handleEdit(row.id)} />
+                      <Link to="/UpdateServices">
+                        <img src={edit} alt="edit" />
                       </Link>
                       <img src={deletee} alt="delete" onClick={() => handleDelete(row.id)} />
                     </div>

@@ -29,7 +29,7 @@ const AddPermissions = () => {
     
           </div>
           </div>
-          <table class="table borderless table-borderless">
+          <table className="table borderless table-borderless">
   <thead>
     <tr>
       <th scope="col">الرقم</th>

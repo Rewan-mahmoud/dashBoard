@@ -36,6 +36,7 @@ import LoginPage from './components/login/Login';
 import './App.css';
 import { AuthProvider, useAuth } from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
+import UpdateServices from './components/services/UpdateServices';
 
 function AppContent() {
   const location = useLocation();
@@ -75,9 +76,8 @@ function AppContent() {
               </Route>
               <Route path="/RatingPage" element={<ProtectedRoute element={<RatingPage />} />} />
               <Route path="/DoctorsProfile/:id" element={<ProtectedRoute element={<DoctorsProfile />} />} />
-      
- 
               <Route path="/DoctorData" element={<ProtectedRoute element={<DoctorData />} />} />
+              <Route path="/UpdateServices" element={<ProtectedRoute element={<UpdateServices />} />} />
               <Route path="/AddTreatmentPlans" element={<ProtectedRoute element={<AddTreatmentPlans />} />} />
               <Route path="/AddMeetings" element={<ProtectedRoute element={<AddMeetings />} />} />
               <Route path="/AddUsers" element={<ProtectedRoute element={<AddUsers />} />} />
