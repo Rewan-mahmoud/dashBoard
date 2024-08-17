@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import plus from '../../assests/plus.svg';
+import add from '../../assests/add.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -23,6 +24,7 @@ const Categories = () => {
   const [error, setError] = useState(null);
 
   const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YzNmYzNkNS02YTUwLTRlNDItODcyOS1jZWFjYWRkOTc2ODAiLCJqdGkiOiJkNDY4M2RhOTEwMTQwY2NhOWNiNTk4ZTIyYWM4NGQxZTg0OTQ2OWY5NjExYTgwYzg0N2ZiNDdjNmEwMTI4YzFkMzY5ODQxZTgzMmE4ODcwNSIsImlhdCI6MTcxODIwMjI5OS4xODMxNTIsIm5iZiI6MTcxODIwMjI5OS4xODMxNTUsImV4cCI6MTc0OTczODI5OS4xNzkyNTcsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.Yx9dWC5YZY1qUoOzlKvp-IQQCYvv-lBzmRZIoBYcM7DTWsdMPAR470lfw84TDfw-taGdpHmOXOj5hyyIxcjHHZrwOqVqOS2vRQ-VUNV5d8frSyj4edCcqUgLmdFY8DmozazAG2na_jewgFdeElA7ozZZE-QSfPYSho6UZL-a7TzInp3SJli47Bo7GjiV4Patcr26YJIqHXkvjFy-UVZeLLrslZOMzZjN144Yih8d_nXlXvyhqnOY7c9DDMMzFQ5Hz6pMpBYvpgAw-WdIgYXKQ8h3qDFVD5MhV9VXWLh46XsOgl6eKg7L-AA_9NUtweOn5f2uY0Qw2Gbd226tCjirJ3u1GkdkYbTzNIeqxYumbx3hsctHc9D1zNU4qq1ruKAWpjleHBfyvwGA0rYIRynwPiPkophy8eEVeJWuxeTkC9ooaIhdkNnh6yV9HpKrQbObLXamrwNWxZgLp5qV4dhi3zofd0gWrVea_I-oQshUKH8Fzz2YTnZOewJWK8nxgaYv70UOQaD6PheH1ILAsS1qZBc7agnjhuTkVA0n9dmhenUuzEUQ4rPG7tumUOrRPLlxrJNqeVBXz41b2SSett7Za4Al65wkfckSCe5ER2C7-o5_F9INvJzkuPJ6uYsZtXSrzw6lOJ9KbEdfW2VZq2shYt-jjFDQobYj7hdBDqD4eOE";
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,8 +131,11 @@ const Categories = () => {
       formData.append('name_en', newRowData.name_en);
       formData.append('details_ar', newRowData.details_ar);
       formData.append('details_en', newRowData.details_en);
+      
       if (selectedIcon) {
         formData.append('image', selectedIcon);
+      } else {
+        formData.append('image', newRowData.image); // Send existing image if no new one is selected
       }
 
       const response = await fetch(`https://naql.nozzm.com/api/update_category/${editingId}`, {
@@ -170,14 +175,26 @@ const Categories = () => {
     }));
   };
 
+  const handleIconChanges = (e) => {
+    const file = e.target.files[0];
+    setNewData(prevData => ({
+      ...prevData,
+      image: file,
+    }));
+};
+
   const handleAddSave = async () => {
     const formData = new FormData();
     formData.append('name_ar', newData.name_ar);
     formData.append('name_en', newData.name_en);
     formData.append('details_ar', newData.details_ar);
     formData.append('details_en', newData.details_en);
+    
     if (newData.image) {
       formData.append('image', newData.image);
+    } else {
+      setError('الصورة مطلوبة.');
+      return; // Stop execution if no image is uploaded
     }
 
     try {
@@ -200,7 +217,6 @@ const Categories = () => {
           details_ar: '',
           details_en: '',
           image: '',
-          status: 'active',
         });
         setIsAdding(false);
       } else {
@@ -230,11 +246,10 @@ const Categories = () => {
           <tr>
             <th scope="col">الرقم</th>
             <th scope="col">الايقون</th>
-            <th scope="col"> الاسم باللغة العربية</th>
-            {/* <th scope="col"> الاسم باللغة الانجليزية</th> */}
-            <th scope="col">التفاصيل باللغة العربية</th>
-            {/* <th scope="col">التفاصيل باللغة الانجليزية</th> */}
-            <th scope="col">الحالة</th>
+            <th scope="col"> الاسم بالعربي </th>
+            <th scope="col"> الاسم  </th>
+            <th scope="col">التفاصيل بالعربي </th>
+            <th scope="col">التفاصيل  </th>
             <th scope="col">التحكم</th>
           </tr>
         </thead>
@@ -247,7 +262,7 @@ const Categories = () => {
                   selectedIcon ? (
                     <img src={URL.createObjectURL(selectedIcon)} alt="Selected Icon" />
                   ) : (
-                    <input type="file" onChange={handleIconChange} accept="image/*" />
+                    <input type="file" className="form-control"  onChange={handleIconChange} accept="image/*" />
                   )
                 ) : (
                   <img src={row.image} alt="Icon" />
@@ -255,50 +270,60 @@ const Categories = () => {
               </td>
               <td>
                 {editingId === row.id ? (
-                  <input type="text" value={newRowData.name_ar || row.name_ar} onChange={(e) => handleChange(e, 'name_ar')} />
+                  <input type="text" className="form-control" value={newRowData.name_ar || row.name_ar} onChange={(e) => handleChange(e, 'name_ar')} />
                 ) : (
                   row.name_ar
                 )}
               </td>
-              {/* <td>
+              <td>
                 {editingId === row.id ? (
-                  <input type="text" value={newRowData.name_en || row.name_en} onChange={(e) => handleChange(e, 'name_en')} />
+                  <input type="text" className="form-control" value={newRowData.name_en || row.name_en} onChange={(e) => handleChange(e, 'name_en')} />
                 ) : (
                   row.name_en
                 )}
-              </td> */}
+              </td>
               <td>
                 {editingId === row.id ? (
-                  <input type="text" value={newRowData.details_ar || row.details_ar} onChange={(e) => handleChange(e, 'details_ar')} />
+                  <input type="text" className="form-control"  value={newRowData.details_ar || row.details_ar} onChange={(e) => handleChange(e, 'details_ar')} />
                 ) : (
                   row.details_ar
                 )}
               </td>
-              {/* <td>
+              <td>
                 {editingId === row.id ? (
-                  <input type="text" value={newRowData.details_en || row.details_en} onChange={(e) => handleChange(e, 'details_en')} />
+                  <input type="text" className="form-control" value={newRowData.details_en || row.details_en} onChange={(e) => handleChange(e, 'details_en')} />
                 ) : (
                   row.details_en
                 )}
-              </td> */}
-              <td>
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  className={row.status === 'active' ? 'activeIcon' : 'inactive'}
-                  onClick={() => toggleActive(row.id, row.status)}
-                />
               </td>
               <td>
+             
                 {editingId === row.id ? (
                   <React.Fragment>
-                    <button onClick={handleSave}>Save</button>
-                    <button onClick={() => {
+                    <button className="btn  btn-sm ml-2" onClick={handleSave}>
+                    <img 
+                      src={add} 
+                      alt="add" 
+                      style={{ width: '20px' }} 
+                    />
+                    </button>
+                    <button className="btn  btn-sm" onClick={() => {
                       setEditingId(null);
                       setSelectedIcon(null);
-                    }}>Cancel</button>
+                    }}>
+                       <img 
+                          src={deletee} 
+                          alt="delete" 
+                        />
+                    </button>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
+                     <FontAwesomeIcon
+                        icon={faCircleCheck}
+                        className={row.status === 'active' ? 'activeIcon' : 'inactive'}
+                        onClick={() => toggleActive(row.id, row.status)}
+                      />
                     <div className="drTableIcon">
                       <img
                         src={edit}
@@ -321,31 +346,37 @@ const Categories = () => {
           ))}
           {isAdding && (
             <tr>
-              <td>New</td>
+              <td>{newData.id}</td>
               <td>
-                <input type="file" onChange={handleIconChange} accept="image/*" />
+                <input type="file" className="form-control" onChange={handleIconChanges} accept="image/*" />
               </td>
               <td>
-                <input type="text" value={newData.name_ar} onChange={(e) => handleAddChange(e, 'name_ar')} />
+                <input type="text" className="form-control" value={newData.name_ar} onChange={(e) => handleAddChange(e, 'name_ar')} />
               </td>
               <td>
-                <input type="text" value={newData.name_en} onChange={(e) => handleAddChange(e, 'name_en')} />
+                <input type="text" className="form-control" value={newData.name_en} onChange={(e) => handleAddChange(e, 'name_en')} />
               </td>
               <td>
-                <input type="text" value={newData.details_ar} onChange={(e) => handleAddChange(e, 'details_ar')} />
+                <input type="text" className="form-control" value={newData.details_ar} onChange={(e) => handleAddChange(e, 'details_ar')} />
               </td>
               <td>
-                <input type="text" value={newData.details_en} onChange={(e) => handleAddChange(e, 'details_en')} />
-              </td>
-              <td>
-                <select value={newData.status} onChange={(e) => handleAddChange(e, 'status')}>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </td>
-              <td>
-                <button onClick={handleAddSave}>Add</button>
-                <button onClick={() => setIsAdding(false)}>Cancel</button>
+                <input type="text" className="form-control" value={newData.details_en} onChange={(e) => handleAddChange(e, 'details_en')} />
+              </td>      
+                <td>
+                <button class="btn  btn-sm" onClick={handleAddSave}>
+                <img 
+                  src={add} 
+                  alt="add" 
+                  style={{ width: '20px' }} 
+
+                />
+                </button>
+                <button class="btn btn-sm" onClick={() => setIsAdding(false)}>
+                <img 
+                  src={deletee} 
+                  alt="delete" 
+                />
+                </button>
               </td>
             </tr>
           )}

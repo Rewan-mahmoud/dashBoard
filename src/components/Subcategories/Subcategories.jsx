@@ -220,6 +220,7 @@ const Subcategories = () => {
       const response = await fetch('https://naql.nozzm.com/api/add_subcategory', {
         method: 'POST',
         headers: {
+          'Accept':'application/json',
           'Authorization': `Bearer ${token}`,
         },
         body: formData,

@@ -45,7 +45,7 @@ const DoctorsProfile = () => {
         <h3>الملف الشخصي للطبيب</h3>
       </div>
       <div className='d-flex'>
-        <div>
+        <div className='imgDr'>
           <img src={doctor.image || doctorPhoto} alt={doctor.name} />
         </div>
         <div className='doctorProfileInfo'>
@@ -61,11 +61,7 @@ const DoctorsProfile = () => {
           <p>الي</p>
           <div className='time'><span> 7 م</span></div>
         </div>
-        <div className="d-flex align-items-center mt-5">
-          <div className='time'><span> 7 ص</span></div>
-          <p>الي</p>
-          <div className='time'><span> 7 م</span></div>
-        </div>
+   
       </div>
       <div className='pref DoctorsProfileTitle'>
         <h2>االسيرة الشخصية</h2>
