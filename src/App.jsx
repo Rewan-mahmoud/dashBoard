@@ -33,6 +33,7 @@ import AddPermissions from './components/Permissions/AddPermissions';
 import AddServices from './components/services/AddServices';
 import AddQuestions from './components/Questions/AddQuestions';
 import LoginPage from './components/login/Login';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import './App.css';
 import { AuthProvider, useAuth } from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
@@ -50,6 +51,7 @@ function AppContent() {
         <div className="row">
           {!isLoginPage && isAuthenticated && <SideNavbar />}
           <div className="col">
+          <ScrollToTop />
             <Routes>
               <Route path="/Login" element={<LoginPage />} />
               <Route path="/" element={<ProtectedRoute element={<DashBoard />} />} />

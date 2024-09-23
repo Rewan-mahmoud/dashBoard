@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Plusss from '../../assests/Plusss.svg';
-import { Link } from 'react-router-dom';
+
 const AddQuestions = ({ onSave }) => {
+  const navigate = useNavigate();
+  const location = useLocation(); // Get the passed row data
+  const rowToEdit = location.state?.row; // Access the row data
+
   const [nameAr, setNameAr] = useState('');
   const [nameEn, setNameEn] = useState('');
   const [items, setItems] = useState([{ name_ar: '', name_en: '' }]);
   const [error, setError] = useState(null);
+
+  // Populate the form fields with question and answers data when editing
+  useEffect(() => {
+    if (rowToEdit) {
+      setNameAr(rowToEdit.name_ar);
+      setNameEn(rowToEdit.name_en);
+      setItems(rowToEdit.answers || [{ name_ar: '', name_en: '' }]);
+    }
+  }, [rowToEdit]);
 
   const handleSave = async () => {
     const newQuestion = {
@@ -14,10 +28,14 @@ const AddQuestions = ({ onSave }) => {
       items: items,
     };
 
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YzNmYzNkNS02YTUwLTRlNDItODcyOS1jZWFjYWRkOTc2ODAiLCJqdGkiOiJkNDY4M2RhOTEwMTQwY2NhOWNiNTk4ZTIyYWM4NGQxZTg0OTQ2OWY5NjExYTgwYzg0N2ZiNDdjNmEwMTI4YzFkMzY5ODQxZTgzMmE4ODcwNSIsImlhdCI6MTcxODIwMjI5OS4xODMxNTIsIm5iZiI6MTcxODIwMjI5OS4xODMxNTUsImV4cCI6MTc0OTczODI5OS4xNzkyNTcsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.Yx9dWC5YZY1qUoOzlKvp-IQQCYvv-lBzmRZIoBYcM7DTWsdMPAR470lfw84TDfw-taGdpHmOXOj5hyyIxcjHHZrwOqVqOS2vRQ-VUNV5d8frSyj4edCcqUgLmdFY8DmozazAG2na_jewgFdeElA7ozZZE-QSfPYSho6UZL-a7TzInp3SJli47Bo7GjiV4Patcr26YJIqHXkvjFy-UVZeLLrslZOMzZjN144Yih8d_nXlXvyhqnOY7c9DDMMzFQ5Hz6pMpBYvpgAw-WdIgYXKQ8h3qDFVD5MhV9VXWLh46XsOgl6eKg7L-AA_9NUtweOn5f2uY0Qw2Gbd226tCjirJ3u1GkdkYbTzNIeqxYumbx3hsctHc9D1zNU4qq1ruKAWpjleHBfyvwGA0rYIRynwPiPkophy8eEVeJWuxeTkC9ooaIhdkNnh6yV9HpKrQbObLXamrwNWxZgLp5qV4dhi3zofd0gWrVea_I-oQshUKH8Fzz2YTnZOewJWK8nxgaYv70UOQaD6PheH1ILAsS1qZBc7agnjhuTkVA0n9dmhenUuzEUQ4rPG7tumUOrRPLlxrJNqeVBXz41b2SSett7Za4Al65wkfckSCe5ER2C7-o5_F9INvJzkuPJ6uYsZtXSrzw6lOJ9KbEdfW2VZq2shYt-jjFDQobYj7hdBDqD4eOE";
+    const token = "your_token_here"; // Replace with your actual token
 
     try {
-      const response = await fetch('https://naql.nozzm.com/api/add_questions', {
+      const url = rowToEdit
+        ? `https://naql.nozzm.com/api/update_questions/${rowToEdit.id}` // Update if editing
+        : 'https://naql.nozzm.com/api/add_questions'; // Create new if adding
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -27,25 +45,18 @@ const AddQuestions = ({ onSave }) => {
         },
         body: JSON.stringify(newQuestion),
       });
+
       const result = await response.json();
-      if (result.status) {
-        onSave(result.data); // Pass the new question to the parent component
-        setNameAr('');
-        setNameEn('');
-        setItems([{ name_ar: '', name_en: '' }]);
-        setError(null);
-      } else {
-        setError(result.message);
+      if (result?.status) {
+        onSave(result.status); // Call parent save function if successful
+        navigate('/Questions'); // Navigate back to the questions page
       }
     } catch (error) {
       setError('Failed to save the question. Please try again.');
     }
   };
 
-  const handleAddAnswer = () => {
-    setItems([...items, { name_ar: '', name_en: '' }]);
-  };
-
+  // Handle change in the answers input fields
   const handleAnswerChange = (index, field, value) => {
     const newItems = items.map((item, i) =>
       i === index ? { ...item, [field]: value } : item
@@ -53,11 +64,15 @@ const AddQuestions = ({ onSave }) => {
     setItems(newItems);
   };
 
+  const handleAddAnswer = () => {
+    setItems([...items, { name_ar: '', name_en: '' }]);
+  };
+
   return (
     <>
       <div className="container tables bg-white mt-5">
         <div className="tableTitle d-flex justify-content-between">
-          <h3>اضافة الاسئلة والاجوبة </h3>
+          <h3>{rowToEdit ? 'تعديل السؤال' : 'اضافة الاسئلة والاجوبة'}</h3>
         </div>
         <div className="container AddQuestions mb-5">
           <div className="row mb-5">
@@ -100,16 +115,16 @@ const AddQuestions = ({ onSave }) => {
           ))}
           <div className="col-md-12 text-align-left mt-3 mb-3 AddTreatmentPlansButton">
             <span type="button" onClick={handleAddAnswer}>
-              <img className='mt-2' src={Plusss} alt="Add" />
+              <img className="mt-2" src={Plusss} alt="Add" />
             </span>
           </div>
           {error && <div className="alert alert-danger">{error}</div>}
-          <div className='BottomButtons'>
-            <button className='save' onClick={handleSave}>
-              <span>حفظ</span>
+          <div className="BottomButtons">
+            <button className="save" onClick={handleSave}>
+              <span>{rowToEdit ? 'تعديل' : 'حفظ'}</span>
             </button>
-            <button className='cancel'>
-           <Link to='/Questions'><span >الغاء</span></Link>   
+            <button className="cancel" onClick={() => navigate('/Questions')}>
+              <span>الغاء</span>
             </button>
           </div>
         </div>

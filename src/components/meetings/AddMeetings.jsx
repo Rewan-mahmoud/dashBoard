@@ -8,7 +8,7 @@ const AddMeetings = ({ onSave }) => {
         name_ar: meeting.name_ar || '',
         name_en: meeting.name_en || '',
         doctor_id: meeting.doctor?.id || '',
-        encounters_types_id: meeting.encounters_type?.id || '', // Correct field name
+        encounters_types_id: meeting.encounters_type?.id || '',
         seats_num: meeting.seats_num || '',
         price: meeting.price || '',
         date: meeting.date || '',
@@ -17,7 +17,7 @@ const AddMeetings = ({ onSave }) => {
         details_en: meeting.details_en || '',
         objectives_ar: meeting.objectives_ar || '',
         objectives_en: meeting.objectives_en || '',
-        image: meeting.image || '',
+        image: meeting.image || '', // This will handle the existing image
     });
     const [doctors, setDoctors] = useState([]);
     const [encounterTypes, setEncounterTypes] = useState([]);
@@ -130,7 +130,7 @@ const AddMeetings = ({ onSave }) => {
             reader.onloadend = () => {
                 setFormData(prevData => ({
                     ...prevData,
-                    image: reader.result
+                    image: reader.result // Update image with the new file content
                 }));
             };
             reader.readAsDataURL(file);
@@ -204,9 +204,17 @@ const AddMeetings = ({ onSave }) => {
                     </div>
                     <div className="col-md-12">
                         <label htmlFor="image">الصورة:</label>
+
+                        {/* Display existing image */}
+                        {formData.image && (
+                            <div className="mb-3">
+                                <img src={formData.image} alt="Meeting" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
+                            </div>
+                        )}
+
+                        {/* File input for uploading new image */}
                         <input type="file" className="form-control py-5" onChange={handleImageChange} />
                     </div>
-                    {/* {error && <div className="alert alert-danger">{error}</div>} */}
                     <div className='BottomButtons'>
                         <button className='save' type="submit" disabled={isLoading}>
                             <span>{isLoading ? 'جاري الحفظ...' : 'حفظ'}</span>

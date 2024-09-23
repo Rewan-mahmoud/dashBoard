@@ -2,7 +2,10 @@
 .App {
     direction: rtl;
 }
-
+html {
+    scroll-behavior: smooth;
+  }
+  
 
 .col {
     /* padding: 20px; */
@@ -120,3 +123,51 @@ a{
 .addtional{
     color: aqua;
 }
+/* General button styles */
+button {
+    font-size: 14px;
+
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Save button specific styling */
+  .save-btn {
+    background-color: #299ecc;
+    padding: 8px 16px;
+    color: white;
+    margin:0px  10px;
+  }
+  
+  .save-btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+  }
+  
+  .save-btn:active {
+    transform: scale(0.95);
+  }
+  
+  /* Cancel button specific styling */
+  .cancel-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 16px;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+  }
+  
+  .cancel-btn:active {
+    transform: scale(0.95);
+  }
+  .fixed-icon {
+    width: 50px;
+    height: 50px;
+    object-fit: contain; /* Ensures the aspect ratio is maintained */
+  }
+  

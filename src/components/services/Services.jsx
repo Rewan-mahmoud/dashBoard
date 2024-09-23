@@ -29,8 +29,8 @@ const Services = () => {
         if (result.status) {
           setData(result.data.data.map(item => ({
             id: item.id,
-            MainCategory: item.category.name,
-            Subcategory: item.sub_category.name,
+            MainCategory: item?.category?.name,
+            Subcategory: item?.sub_category?.name,
             SpecialistName: item.Service_doctors[0]?.doctors.name || 'N/A'
           })));
         } else {

@@ -2,13 +2,7 @@ import React, { useState, useEffect } from 'react';
 import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import plus from '../../assests/plus.svg';
-import check from '../../assests/check.svg';
-import Frame1 from '../../assests/Frame1.svg';
-import Frame2 from '../../assests/Frame2.svg';
-import Frame3 from '../../assests/Frame3.svg';
-import Frame4 from '../../assests/Frame4.svg';
-import Frame5 from '../../assests/Frame5.svg';
-import Frame6 from '../../assests/Frame6.svg';
+import add from '../../assests/add.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -122,6 +116,10 @@ const Subcategories = () => {
   const handleIconChange = (e) => {
     const file = e.target.files[0];
     setSelectedIcon(file);
+    setNewRowData(prevData => ({
+      ...prevData,
+      image: file,
+    }));
   };
   const handleDelete = async (id) => {
     try {
@@ -320,45 +318,58 @@ const Subcategories = () => {
                 </div>
               </td>
               <td>
-          
-                {editingId === row.id ? (
-                  <React.Fragment>
-                    <button onClick={handleSave}>Save</button>
-                    <button onClick={() => setEditingId(null)}>Cancel</button>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <div className='drTableIcon'>
-                       <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  className={row.status === 'active' ? 'activeIcon' : 'inactive'}
-                  onClick={() => toggleActive(row.id, row.status)}
-                />
- 
-                                <img 
-                        src={edit} 
-                        alt="edit" 
-                        onClick={() => {
-                          setEditingId(row.id);
-                          setNewRowData(row);
-                        }} 
-                      />
-                      <img 
-                        src={deletee} 
-                        alt="delete" 
-                        onClick={() => handleDelete(row.id)} 
-                      />
-                    </div>
-                  </React.Fragment>
-                )}
-              </td>
+             
+             {editingId === row.id ? (
+               <React.Fragment>
+                 <button className="btn  btn-sm ml-2" onClick={handleSave}>
+                 <img 
+                   src={add} 
+                   alt="add" 
+                   style={{ width: '20px' }} 
+                 />
+                 </button>
+                 <button className="btn  btn-sm" onClick={() => {
+                   setEditingId(null);
+                   setSelectedIcon(null);
+                 }}>
+                    <img 
+                       src={deletee} 
+                       alt="delete" 
+                     />
+                 </button>
+               </React.Fragment>
+             ) : (
+               <React.Fragment>
+                  <FontAwesomeIcon
+                     icon={faCircleCheck}
+                     className={row.status === 'active' ? 'activeIcon' : 'inactive'}
+                     onClick={() => toggleActive(row.id, row.status)}
+                   />
+                 <div className="drTableIcon">
+                   <img
+                     src={edit}
+                     alt="edit"
+                     onClick={() => {
+                       setEditingId(row.id);
+                       setNewRowData(row);
+                     }}
+                   />
+                   <img
+                     src={deletee}
+                     alt="delete"
+                     onClick={() => handleDelete(row.id)}
+                   />
+                 </div>
+               </React.Fragment>
+             )}
+           </td>
             </tr>
           ))}
           {isAdding && (
             <tr>
               <td>{newData.id}</td>
-              <td>
-                <input type="file" onChange={handleIconChange} accept="image/*" />
+           <td>
+                <input type="file" className="form-control" onChange={handleIconChange} accept="image/*" />
               </td>
               <td><input type="text" value={newData.NameArabic} onChange={(e) => handleAddChange(e, 'NameArabic')} /></td>
               <td><input type="text" value={newData.NameEnglish} onChange={(e) => handleAddChange(e, 'NameEnglish')} /></td>
