@@ -6,12 +6,14 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('isAuthenticated') === 'true';
   });
+  const [token, setToken] = useState(localStorage.getItem('authToken') || '');
 
-  const login = () => {
+  const login = (newToken) => {
     setIsAuthenticated(true);
     localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('authToken', newToken); // Save the token
+    setToken(newToken);
   };
-
   const logout = async () => {
     try {
       const response = await fetch('https://naql.nozzm.com/api/logout', {
@@ -28,18 +30,24 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Failed to logout:', error);
     } finally {
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('authToken'); // Remove the token
       setIsAuthenticated(false);
-      localStorage.setItem('isAuthenticated' , 'false');
+      setToken('');
     }
   };
 
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated') === 'true';
     setIsAuthenticated(authStatus);
+    const storedToken = localStorage.getItem('authToken');
+    if (storedToken) {
+      setToken(storedToken);
+    }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

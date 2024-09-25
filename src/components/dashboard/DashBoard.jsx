@@ -4,80 +4,67 @@ import colorUsers from '../../assests/colorUsers.svg';
 import Chart from '../../assests/Chart 1.png';
 import Table from '../Table/Table';
 import Rating from '../ratingBar/Rating';
+import { useTranslation } from 'react-i18next'; // Import useTranslation hook
 import "./dashboard.css";
 
 function DashBoard() {
-    return (
-      <>
-      
-    
-<div className="DashBoard px-4 col-m-10">
-      <div className="container">
-      <div className="d-flex  nowrap">
-  <div className="dashBoardCard d-flex col-md-4 ">
-  <div className="circle">
-    <img src={dr} alt="" />
-  </div>
-  <div className='titles'>
-    <h4>الاطباء</h4>
-    <span>100</span>
+  const { t } = useTranslation(); // Initialize t function for translations
 
-    <p><span className='number'>+5</span> تم الانضمام خلال هدا الاسبوع
+  return (
+    <>
+      <div className="DashBoard px-4 col-m-10">
+        <div className="container">
+          <div className="d-flex nowrap">
+            <div className="dashBoardCard d-flex col-md-4">
+              <div className="circle">
+                <img src={dr} alt={t("alt.doctorsIcon")} />
+              </div>
+              <div className='titles'>
+                <h4>{t("dashboard.doctors")}</h4>
+                <span>{t("dashboard.doctorsCount")}</span>
+                <p>
+                  <span className='number'>{t("dashboard.newDoctorsCount")}</span> {t("dashboard.joinedThisWeek")}
+                </p>
+              </div>
+            </div>
 
-    </p>
-  </div>
-</div>
+            <div className="dashBoardCard d-flex col-md-4">
+              <div className="circle">
+                <img src={patient} alt={t("alt.patientsIcon")} />
+              </div>
+              <div className='titles'>
+                <h4>{t("dashboard.patients")}</h4>
+                <span>{t("dashboard.patientsCount")}</span>
+                <p>
+                  <span className='number'>{t("dashboard.newPatientsCount")}</span> {t("dashboard.joinedThisWeek")}
+                </p>
+              </div>
+            </div>
 
+            <div className="dashBoardCard d-flex col-md-4">
+              <div className="circle">
+                <img src={colorUsers} alt={t("alt.staffIcon")} />
+              </div>
+              <div className='titles'>
+                <h4>{t("dashboard.staff")}</h4>
+                <span>{t("dashboard.staffCount")}</span>
+                <p>
+                  <span className='number'>{t("dashboard.newStaffCount")}</span> {t("dashboard.joinedThisWeek")}
+                </p>
+              </div>
+            </div>
+          </div>
 
+          <div className="Chart">
+            <img src={Chart} alt={t("alt.chartIcon")} />
+          </div>
 
-  <div className="dashBoardCard d-flex col-md-4  ">
-  <div className="circle">
-    <img src={patient} alt="" />
-  </div>
-  <div className='titles'>
-    <h4>المرضى </h4>
-    <span>100k</span>
-
-    <p><span className='number'>3</span> تم الانضمام خلال هدا الاسبوع
-
-    </p>
-  </div>
-</div>
-  <div className="dashBoardCard d-flex col-md-4 ">
-  <div className="circle">
-    <img src={colorUsers} alt="" />
-  </div>
-  <div className='titles'>
-    <h4>طاقم العمل</h4>
-    <span>+150</span>
-
-    <p><span className='number'>3</span> تم الانضمام خلال هدا الاسبوع
-
-    </p>
-  </div>
-</div>
-
-
-
-    </div>
-    <div className="Chart">
-  <img src={Chart} alt="" />
-  </div>
-
-<Table/>
-<Rating/>
-
+          <Table />
+          <Rating />
+        </div>
       </div>
- 
-  </div>
-  
-   
-      </>
+    </>
+  );
+}
 
- 
-   
-  
-    );
-  }
-  
-  export default DashBoard;
+export default DashBoard;

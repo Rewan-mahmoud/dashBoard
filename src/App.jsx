@@ -41,12 +41,11 @@ import UpdateServices from './components/services/UpdateServices';
 
 function AppContent() {
   const location = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth(); 
   const isLoginPage = location.pathname === '/Login';
-
   return (
     <div className="App">
-      {!isLoginPage && isAuthenticated && <Header />}
+    {!isLoginPage && isAuthenticated && <Header />}
       <div className="container-fluid">
         <div className="row">
           {!isLoginPage && isAuthenticated && <SideNavbar />}

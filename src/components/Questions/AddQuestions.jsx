@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Plusss from '../../assests/Plusss.svg';
-
+import { useAuth } from '../../AuthContext';
 const AddQuestions = ({ onSave }) => {
   const navigate = useNavigate();
   const location = useLocation(); // Get the passed row data
@@ -11,7 +11,7 @@ const AddQuestions = ({ onSave }) => {
   const [nameEn, setNameEn] = useState('');
   const [items, setItems] = useState([{ name_ar: '', name_en: '' }]);
   const [error, setError] = useState(null);
-
+  const { token } = useAuth();
   // Populate the form fields with question and answers data when editing
   useEffect(() => {
     if (rowToEdit) {
@@ -27,35 +27,39 @@ const AddQuestions = ({ onSave }) => {
       name_en: nameEn,
       items: items,
     };
-
-    const token = "your_token_here"; // Replace with your actual token
-
+  
+    console.log('Data to send:', newQuestion); // Debugging line to inspect the data
+  
+    // Proceed to the fetch request
     try {
       const url = rowToEdit
         ? `https://naql.nozzm.com/api/update_questions/${rowToEdit.id}` // Update if editing
         : 'https://naql.nozzm.com/api/add_questions'; // Create new if adding
-
+  
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Accept: 'application/json',
           'Content-Type': 'application/json',
-          'lang': 'en',
+          Authorization: `Bearer ${token}`,
+          lang: 'en',
         },
         body: JSON.stringify(newQuestion),
       });
-
+  
       const result = await response.json();
+      console.log('Response:', result); // Check the API response
       if (result?.status) {
         onSave(result.status); // Call parent save function if successful
         navigate('/Questions'); // Navigate back to the questions page
+      } else {
+        setError(result?.message || 'Failed to save the question. Please try again.');
       }
     } catch (error) {
+      console.error('Error:', error);
       setError('Failed to save the question. Please try again.');
     }
   };
-
   // Handle change in the answers input fields
   const handleAnswerChange = (index, field, value) => {
     const newItems = items.map((item, i) =>
@@ -67,7 +71,12 @@ const AddQuestions = ({ onSave }) => {
   const handleAddAnswer = () => {
     setItems([...items, { name_ar: '', name_en: '' }]);
   };
-
+  const newQuestion = {
+    name_ar: nameAr,
+    name_en: nameEn,
+    items: items.length ? items : null, // Ensure items is not empty
+  };
+  
   return (
     <>
       <div className="container tables bg-white mt-5">
@@ -118,10 +127,9 @@ const AddQuestions = ({ onSave }) => {
               <img className="mt-2" src={Plusss} alt="Add" />
             </span>
           </div>
-          {error && <div className="alert alert-danger">{error}</div>}
           <div className="BottomButtons">
             <button className="save" onClick={handleSave}>
-              <span>{rowToEdit ? 'تعديل' : 'حفظ'}</span>
+              <span onClick={() => navigate('/Questions')} >{rowToEdit ? 'تعديل' : 'حفظ'}</span>
             </button>
             <button className="cancel" onClick={() => navigate('/Questions')}>
               <span>الغاء</span>

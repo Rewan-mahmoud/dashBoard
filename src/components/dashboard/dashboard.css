@@ -28,7 +28,7 @@
     /* height: 140px; */
     margin-top: 20px;
     border-radius: 20px;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-left: 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
   }

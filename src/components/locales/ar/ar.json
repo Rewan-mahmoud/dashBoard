@@ -1,0 +1,55 @@
+{
+  "dashboard": {
+    "doctors": "الأطباء",
+    "patients": "المرضى",
+    "staff": "طاقم العمل",
+    "doctorsCount": "100",
+    "patientsCount": "100k",
+    "staffCount": "+150",
+    "newDoctorsCount": "+5",
+    "newPatientsCount": "3",
+    "newStaffCount": "3",
+    "joinedThisWeek": "تم الانضمام خلال هذا الأسبوع"
+  },
+  "alt": {
+    "doctorsIcon": "أيقونة الأطباء",
+    "patientsIcon": "أيقونة المرضى",
+    "staffIcon": "أيقونة طاقم العمل",
+    "chartIcon": "مخطط"
+  },
+  
+    "sidebar": {
+      "dashboard": "لوحة التحكم",
+      "doctor": "الدكتور",
+      "patients": "المرضى",
+      "categories": "الفئات",
+      "subcategories": "الفئات الفرعية",
+      "slider": "السليدر",
+      "services": "الخدمات",
+      "reservation": "الحجوزات",
+      "meetings": "اللقائات",
+      "treatmentPlans": "الخطط العلاجية",
+      "discountCoupons": "كوبونات الخصم",
+      "permissions": "الصلاحيات",
+      "users": "المستخدمين",
+      "loyaltyProgram": "برنامج الولاء",
+      "faq": "أسئلة وأجوبة",
+      "generalSettings": "إعدادات عامة",
+      "welcomeBack": "أهلا بعودتك",
+      "userName": "أحمد"
+    },
+    
+      "doctorTable": {
+        "title": "بيانات الأطباء والمعالجون",
+        "addDoctor": "إضافة طبيب",
+        "id": "الرقم",
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "mobile": "رقم الجوال",
+        "status": "الحالة",
+        "control": "التحكم"
+      }
+    
+    
+  }
+

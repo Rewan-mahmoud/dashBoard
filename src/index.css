@@ -2,10 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@400;500;600;700;800&display=swap');
 
 body {
-
+overflow-x: hidden;
     font-family: "Cairo", sans-serif;
-    direction: rtl;
 
+
+}
+
+.rtl {
+  direction: rtl;
+}
+
+.ltr {
+  direction: ltr;
 }
 
 code {

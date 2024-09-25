@@ -1,0 +1,54 @@
+{
+  "dashboard": {
+    "doctors": "Doctors",
+    "patients": "Patients",
+    "staff": "Staff",
+    "doctorsCount": "100",
+    "patientsCount": "100k",
+    "staffCount": "+150",
+    "newDoctorsCount": "+5",
+    "newPatientsCount": "3",
+    "newStaffCount": "3",
+    "joinedThisWeek": "Joined this week"
+  },
+  "alt": {
+    "doctorsIcon": "Doctors Icon",
+    "patientsIcon": "Patients Icon",
+    "staffIcon": "Staff Icon",
+    "chartIcon": "Chart"
+  },
+
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "doctor": "Doctor",
+    "patients": "Patients",
+    "categories": "Categories",
+    "subcategories": "Subcategories",
+    "slider": "Slider",
+    "services": "Services",
+    "reservation": "Reservations",
+    "meetings": "Meetings",
+    "treatmentPlans": "Treatment Plans",
+    "discountCoupons": "Discount Coupons",
+    "permissions": "Permissions",
+    "users": "Users",
+    "loyaltyProgram": "Loyalty Program",
+    "faq": "FAQ",
+    "generalSettings": "General Settings",
+    "welcomeBack": "Welcome back",
+    "userName": "Ahmed"
+  }
+  ,
+    "doctorTable": {
+      "title": "Doctor and Therapist Data",
+      "addDoctor": "Add Doctor",
+      "id": "ID",
+      "name": "Name",
+      "email": "Email",
+      "mobile": "Mobile Number",
+      "status": "Status",
+      "control": "Control"
+    
+  }
+  
+}
