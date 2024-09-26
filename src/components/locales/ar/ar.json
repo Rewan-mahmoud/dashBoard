@@ -17,39 +17,65 @@
     "staffIcon": "أيقونة طاقم العمل",
     "chartIcon": "مخطط"
   },
-  
-    "sidebar": {
-      "dashboard": "لوحة التحكم",
-      "doctor": "الدكتور",
-      "patients": "المرضى",
-      "categories": "الفئات",
-      "subcategories": "الفئات الفرعية",
-      "slider": "السليدر",
-      "services": "الخدمات",
-      "reservation": "الحجوزات",
-      "meetings": "اللقائات",
-      "treatmentPlans": "الخطط العلاجية",
-      "discountCoupons": "كوبونات الخصم",
-      "permissions": "الصلاحيات",
-      "users": "المستخدمين",
-      "loyaltyProgram": "برنامج الولاء",
-      "faq": "أسئلة وأجوبة",
-      "generalSettings": "إعدادات عامة",
-      "welcomeBack": "أهلا بعودتك",
-      "userName": "أحمد"
-    },
-    
-      "doctorTable": {
-        "title": "بيانات الأطباء والمعالجون",
-        "addDoctor": "إضافة طبيب",
-        "id": "الرقم",
-        "name": "الاسم",
-        "email": "البريد الإلكتروني",
-        "mobile": "رقم الجوال",
-        "status": "الحالة",
-        "control": "التحكم"
-      }
-    
-    
-  }
 
+  "sidebar": {
+    "dashboard": "لوحة التحكم",
+    "doctor": "الدكتور",
+    "patients": "المرضى",
+    "categories": "الفئات",
+    "subcategories": "الفئات الفرعية",
+    "slider": "السليدر",
+    "services": "الخدمات",
+    "reservation": "الحجوزات",
+    "meetings": "اللقائات",
+    "treatmentPlans": "الخطط العلاجية",
+    "discountCoupons": "كوبونات الخصم",
+    "permissions": "الصلاحيات",
+    "users": "المستخدمين",
+    "loyaltyProgram": "برنامج الولاء",
+    "faq": "أسئلة وأجوبة",
+    "generalSettings": "إعدادات عامة",
+    "welcomeBack": "أهلا بعودتك",
+    "userName": "أحمد"
+  },
+
+  "doctorTable": {
+    "title": "بيانات الأطباء والمعالجون",
+    "addDoctor": "إضافة طبيب",
+    "id": "الرقم",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "mobile": "رقم الجوال",
+    "status": "الحالة",
+    "control": "التحكم"
+  },
+
+  "patients": "المرضى",
+  "error": "خطأ",
+  "number": "الرقم",
+  "name_in_arabic": "الاسم باللغة العربية",
+  "gender": "الجنس",
+  "mobile_number": "رقم الجوال",
+  "email": "الايميل",
+  "status": "الحالة",
+  "settings": "الاعدادات",
+  "categories": "الفئات",
+  "add": "اضافة",
+  "icon": "الايقون",
+  "name_ar": "الاسم بالعربي",
+  "name_en": "الاسم",
+  "details_ar": "التفاصيل بالعربي",
+  "details_en": "التفاصيل",
+  "controls": "التحكم",
+  "edit": "تعديل",
+  "delete": "حذف",
+  "cancel": "الغاء",
+  "selected_icon": "الايقون المختار",
+  "image": "الصورة",
+  "save": "حفظ",
+  "slider": "السليدر",
+  "subcategories": "الفئات الفرعية",
+  "main_category": "الفئة الاساسية"
+ 
+
+}

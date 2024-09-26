@@ -109,7 +109,8 @@ textarea{
   .arrow-icon {
     position: absolute;
     top: 50%;
-    left: 10px; /* Adjust as needed */
+    font-size: 12px;
+    left: -15px;
     transform: translateY(-50%);
   }
   

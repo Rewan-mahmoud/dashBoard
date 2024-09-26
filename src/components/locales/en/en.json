@@ -37,18 +37,43 @@
     "generalSettings": "General Settings",
     "welcomeBack": "Welcome back",
     "userName": "Ahmed"
-  }
-  ,
-    "doctorTable": {
-      "title": "Doctor and Therapist Data",
-      "addDoctor": "Add Doctor",
-      "id": "ID",
-      "name": "Name",
-      "email": "Email",
-      "mobile": "Mobile Number",
-      "status": "Status",
-      "control": "Control"
-    
-  }
-  
+  },
+  "doctorTable": {
+    "title": "Doctor and Therapist Data",
+    "addDoctor": "Add Doctor",
+    "id": "ID",
+    "name": "Name",
+    "email": "Email",
+    "mobile": "Mobile Number",
+    "status": "Status",
+    "control": "Control"
+  },
+
+  "patients": "Patients",
+  "error": "Error",
+  "number": "Number",
+  "name_in_arabic": "Name in Arabic",
+  "gender": "Gender",
+  "mobile_number": "Mobile Number",
+  "email": "Email",
+  "status": "Status",
+  "settings": "Settings",
+  "categories": "Categories",
+  "add": "Add",
+  "icon": "Icon",
+  "name_ar": "Name (Arabic)",
+  "name_en": "Name",
+  "details_ar": "Details (Arabic)",
+  "details_en": "Details",
+  "controls": "Controls",
+  "edit": "Edit",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "selected_icon": "Selected Icon",
+  "image": "Image",
+  "save": "Save",
+  "slider": "Slider",
+  "subcategories": "Subcategories",
+  "main_category": "Main Category"
+
 }

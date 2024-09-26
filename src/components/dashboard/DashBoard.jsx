@@ -14,8 +14,8 @@ function DashBoard() {
     <>
       <div className="DashBoard px-4 col-m-10">
         <div className="container">
-          <div className="d-flex nowrap">
-            <div className="dashBoardCard d-flex col-md-4">
+          <div className="row cardContainer">
+            <div className="dashBoardCard d-flex ">
               <div className="circle">
                 <img src={dr} alt={t("alt.doctorsIcon")} />
               </div>
@@ -28,7 +28,7 @@ function DashBoard() {
               </div>
             </div>
 
-            <div className="dashBoardCard d-flex col-md-4">
+            <div className="dashBoardCard d-flex ">
               <div className="circle">
                 <img src={patient} alt={t("alt.patientsIcon")} />
               </div>
@@ -41,7 +41,7 @@ function DashBoard() {
               </div>
             </div>
 
-            <div className="dashBoardCard d-flex col-md-4">
+            <div className="dashBoardCard d-flex ">
               <div className="circle">
                 <img src={colorUsers} alt={t("alt.staffIcon")} />
               </div>

@@ -5,13 +5,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useAuth } from '../../AuthContext';
+import { useTranslation } from 'react-i18next'; // Import useTranslation for dynamic language handling
+
 const Patients = () => {
   const [data, setData] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newRowData, setNewRowData] = useState({});
   const [error, setError] = useState(null);
-
+  const { t } = useTranslation(); // Use the useTranslation hook
   const { token } = useAuth();
+  const { i18n } = useTranslation(); // Use the i18n instance to get the current language
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +24,7 @@ const Patients = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-            lang: "ar",
+            lang: i18n.language, // Dynamically set the language
           },
           body: JSON.stringify({}),
         });
@@ -39,7 +42,7 @@ const Patients = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, i18n.language]); // Include i18n.language to refetch if the language changes
 
   const handleEdit = (id) => {
     setEditingId(id);
@@ -56,7 +59,7 @@ const Patients = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-            lang: "ar",
+            lang: i18n.language, // Dynamically set the language
           },
         }
       );
@@ -90,7 +93,7 @@ const Patients = () => {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
-            lang: "ar",
+            lang: i18n.language, // Dynamically set the language
             Accept: "application/json",
           },
           body: JSON.stringify(newRowData),
@@ -126,7 +129,7 @@ const Patients = () => {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
             "Content-Type": "application/json",
-            lang: "ar",
+            lang: i18n.language, // Dynamically set the language
           },
           body: JSON.stringify({ stauts: newStatus }), // Ensure the parameter name is correct
         }
@@ -153,22 +156,23 @@ const Patients = () => {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle">
-        <h3>المرضى</h3>
+      <h3>{t('patients')}</h3> {/* Translate 'المرضى' */}
       </div>
 
       {error && <p className="text-danger">Error: {error}</p>}
 
       <table className="table borderless TableDr text-center">
         <thead>
-          <tr>
-            <th scope="col">الرقم</th>
-            <th scope="col">الاسم باللغة العربية</th>
-            <th scope="col">الجنس</th>
-            <th scope="col">رقم الجوال</th>
-            <th scope="col">الايميل</th>
-            <th scope="col">الحالة</th>
-            <th scope="col">الاعدادات</th>
+        <tr>
+            <th scope="col">{t('number')}</th> {/* Translate 'الرقم' */}
+            <th scope="col">{t('name_in_arabic')}</th> {/* Translate 'الاسم باللغة العربية' */}
+            <th scope="col">{t('gender')}</th> {/* Translate 'الجنس' */}
+            <th scope="col">{t('mobile_number')}</th> {/* Translate 'رقم الجوال' */}
+            <th scope="col">{t('email')}</th> {/* Translate 'الايميل' */}
+            <th scope="col">{t('status')}</th> {/* Translate 'الحالة' */}
+            <th scope="col">{t('settings')}</th> {/* Translate 'الاعدادات' */}
           </tr>
+
         </thead>
         <tbody className="text-center">
           {data.map((row) => (
@@ -177,6 +181,7 @@ const Patients = () => {
               <td>
                 {editingId === row.id ? (
                   <input
+                    className="form-control"
                     type="text"
                     value={newRowData.name}
                     onChange={(e) => handleChange(e, "name")}
@@ -188,6 +193,7 @@ const Patients = () => {
               <td>
                 {editingId === row.id ? (
                   <input
+                    className="form-control"
                     type="text"
                     value={newRowData.gender}
                     onChange={(e) => handleChange(e, "gender")}
@@ -199,6 +205,7 @@ const Patients = () => {
               <td>
                 {editingId === row.id ? (
                   <input
+                    className="form-control"
                     type="text"
                     value={newRowData.mobile}
                     onChange={(e) => handleChange(e, "mobile")}
@@ -210,6 +217,7 @@ const Patients = () => {
               <td>
                 {editingId === row.id ? (
                   <input
+                    className="form-control"
                     type="text"
                     value={newRowData.email}
                     onChange={(e) => handleChange(e, "email")}
@@ -221,9 +229,7 @@ const Patients = () => {
               <td>
                 <FontAwesomeIcon
                   icon={faCircleCheck}
-                  className={
-                    row.status === "active" ? "activeIcon" : "inactive"
-                  }
+                  className={row.status === "active" ? "activeIcon" : "inactive"}
                   onClick={() => toggleActive(row.id, row.status)}
                 />
               </td>

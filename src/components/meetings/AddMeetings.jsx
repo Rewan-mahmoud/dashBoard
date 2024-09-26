@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
+
 const AddMeetings = ({ onSave }) => {
     const location = useLocation();
     const meeting = location.state?.meeting || {};
+    const { token } = useAuth();
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         name_ar: meeting.name_ar || '',
         name_en: meeting.name_en || '',
@@ -12,7 +16,7 @@ const AddMeetings = ({ onSave }) => {
         seats_num: meeting.seats_num || '',
         price: meeting.price || '',
         date: meeting.date || '',
-        time: meeting.time || '',
+        time: '', // Handle the time separately
         details_ar: meeting.details_ar || '',
         details_en: meeting.details_en || '',
         objectives_ar: meeting.objectives_ar || '',
@@ -23,7 +27,36 @@ const AddMeetings = ({ onSave }) => {
     const [encounterTypes, setEncounterTypes] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const { token } = useAuth();    const navigate = useNavigate();
+
+    useEffect(() => {
+        // Function to convert 12-hour format to 24-hour format
+        const convertTo24HourFormat = (time12h) => {
+            const [time, modifier] = time12h.split(' ');
+            let [hours, minutes] = time.split(':');
+            
+            if (hours === '12') {
+                hours = '00';
+            }
+
+            if (modifier === 'PM' || modifier === 'pm') {
+                hours = parseInt(hours, 10) + 12;
+            }
+
+            return `${String(hours).padStart(2, '0')}:${minutes}`;
+        };
+
+        // Set the time field when the component is mounted
+        if (meeting.time) {
+            const formattedTime = meeting.time.includes('AM') || meeting.time.includes('PM') 
+                ? convertTo24HourFormat(meeting.time) 
+                : meeting.time; // If already in 24-hour format, use as is
+
+            setFormData((prevData) => ({
+                ...prevData,
+                time: formattedTime,
+            }));
+        }
+    }, [meeting]);
 
     useEffect(() => {
         // Fetch doctors

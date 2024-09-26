@@ -5,11 +5,13 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import deletee from "../../assests/delete.svg";
-import { useAuth } from '../../AuthContext';
+import { useAuth } from "../../AuthContext";
 export default function AddServices() {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const [data, setData] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
   const [dynamicInputs, setDynamicInputs] = useState([
     {
       specialist: "",
@@ -65,7 +67,82 @@ export default function AddServices() {
         setError(error.message);
       }
     };
-
+    const fetchSubcategories = async () => {
+      try {
+        const response = await fetch(
+          "https://naql.nozzm.com/api/subcategories",
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+              lang: "ar",
+            },
+          }
+        );
+        const result = await response.json();
+        if (result.status) {
+          setSubcategories(result.data.data); // Store subcategories in state
+        } else {
+          console.error("Failed to fetch subcategories:", result.message);
+          setError(result.message);
+        }
+      } catch (error) {
+        console.error("Error fetching subcategories:", error);
+        setError(error.message);
+      }
+    };
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("https://naql.nozzm.com/api/categories", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            lang: "ar",
+          },
+        });
+        const result = await response.json();
+        if (result.status) {
+          setCategories(result.data.data); // Store categories in state
+        } else {
+          console.error("Failed to fetch categories:", result.message);
+          setError(result.message);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setError(error.message);
+      }
+    };
+    const fetchDoctors = async () => {
+      try {
+        const response = await fetch(
+          "https://naql.nozzm.com/api/show_doctores",
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+              lang: "ar",
+            },
+            body: JSON.stringify({}),
+          }
+        );
+        const result = await response.json();
+        if (result.status) {
+          setDoctors(result.data);
+        } else {
+          console.error("Failed to fetch doctors:", result.message);
+          setError(result.message);
+        }
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+        setError(error.message);
+      }
+    };
+    fetchDoctors();
+    fetchCategories();
+    fetchSubcategories();
     fetchData();
   }, [token]);
 
@@ -113,27 +190,69 @@ export default function AddServices() {
       setDynamicInputs(updatedDynamicInputs);
     }
   };
-
   const handleSaveAll = async () => {
     const selectedCategory = categories.find(
-      (category) => category[0] === fixedInputs.category
+      (category) => category.id === parseInt(fixedInputs.category)
     );
-    const selectedSubCategory = subCategories.find(
-      (subCategory) => subCategory[0] === fixedInputs.subCategory
+    const selectedSubCategory = subcategories.find(
+      (subcategory) => subcategory.id === parseInt(fixedInputs.subCategory)
     );
 
-    if (!selectedCategory || !selectedSubCategory) {
-      alert("Please make sure all fields are selected");
+    // Ensure category and subcategory are selected
+    if (!selectedCategory) {
+      alert("Please select a valid main category.");
       return;
     }
 
+    if (!selectedSubCategory) {
+      alert("Please select a valid subcategory.");
+      return;
+    }
+
+    // Validate dynamic inputs to ensure all fields are filled
+    const invalidInput = dynamicInputs.some((input) => {
+      const selectedDoctor = doctors.find(
+        (doctor) => doctor.id === parseInt(input.specialist)
+      );
+
+      // Ensure a valid doctor is selected
+      if (!selectedDoctor) {
+        alert("Please select a valid doctor.");
+        return true; // return true to flag this input as invalid
+      }
+
+      // Check if any session details are missing
+      const sessionInvalid = input.details.some((detail) => {
+        return (
+          !detail.sessions_kind ||
+          !detail.sessions_num ||
+          !detail.sessions_time ||
+          !detail.price
+        );
+      });
+
+      if (sessionInvalid) {
+        alert("Please fill in all session details.");
+        return true; // return true to flag this input as invalid
+      }
+
+      return false; // return false if everything is valid
+    });
+
+    // If there's invalid input, stop the process
+    if (invalidInput) {
+      return;
+    }
+
+    // Create payload based on inputs
     const payload = dynamicInputs
       .map((input) => {
         const selectedDoctor = doctors.find(
-          (doctor) => doctor[0] === input.specialist
+          (doctor) => doctor.id === parseInt(input.specialist)
         );
+
         return input.details.map((detail) => ({
-          doctors_id: selectedDoctor[1],
+          doctors_id: selectedDoctor?.id || 0, // use doctor ID or 0 if not found
           sessions_kind: detail.sessions_kind,
           sessions_num: detail.sessions_num,
           sessions_time: detail.sessions_time,
@@ -143,9 +262,11 @@ export default function AddServices() {
       .flat();
 
     const servicePayload = {
-      cat_id: selectedCategory[1],
-      sub_id: selectedSubCategory[1],
-      items: payload.map((item) => ({ doctors_id: item.doctors_id })),
+      cat_id: selectedCategory.id, // Category ID
+      sub_id: selectedSubCategory.id, // Subcategory ID
+      items: payload.map((item) => ({
+        doctors_id: item.doctors_id,
+      })),
       servicetimes: payload.map((item) => ({
         sessions_kind: item.sessions_kind,
         sessions_num: item.sessions_num,
@@ -191,10 +312,10 @@ export default function AddServices() {
                   handleFixedInputChange("category", e.target.value)
                 }
               >
-                <option value="">الفئه الاساسية</option>
-                {categories.map((category, index) => (
-                  <option key={index} value={category[0]}>
-                    {category[0]}
+                <option value="">الفئات الاساسية</option>
+                {categories.map((category, id) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
                   </option>
                 ))}
               </select>
@@ -207,15 +328,18 @@ export default function AddServices() {
             <div className="custom-select">
               <select
                 className="form-control"
-                value={fixedInputs.subCategory}
+                value={fixedInputs.subCategory} // This should hold the subcategory ID
                 onChange={(e) =>
                   handleFixedInputChange("subCategory", e.target.value)
                 }
               >
                 <option value="">الفئات الفرعية</option>
-                {subCategories.map((subCategory, index) => (
-                  <option key={index} value={subCategory[0]}>
-                    {subCategory[0]}
+                {subcategories.map((subcategory) => (
+                  <option key={subcategory.id} value={subcategory.id}>
+                    {" "}
+                    {/* Use `id` here as the value */}
+                    {subcategory.name_ar}{" "}
+                    {/* Display the name_ar for readability */}
                   </option>
                 ))}
               </select>
@@ -251,9 +375,9 @@ export default function AddServices() {
                     }
                   >
                     <option value="">المختصون</option>
-                    {doctors.map((doctor, docIndex) => (
-                      <option key={docIndex} value={doctor[0]}>
-                        {doctor[0]}
+                    {doctors.map((doctor, id) => (
+                      <option key={doctor.id} value={doctor.id}>
+                        {doctor.name}
                       </option>
                     ))}
                   </select>
@@ -331,13 +455,13 @@ export default function AddServices() {
                 </div>
                 <div className="col-md-3 mt-3">
                   <button
-                    className="btn "
+                    className="btn"
                     onClick={() => handleAddDetail(inputIndex)}
                   >
                     <FontAwesomeIcon icon={faPlus} />
                   </button>
                   <button
-                    className="btn "
+                    className="btn"
                     onClick={() => handleDeleteDetail(inputIndex, detailIndex)}
                   >
                     <img src={deletee} alt="" />

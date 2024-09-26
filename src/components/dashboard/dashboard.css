@@ -22,7 +22,7 @@
   }
 
   .dashBoardCard{
-    /* width:368px ; */
+    width: 388px;
     background-color: white;
     padding: 20px 45px;
     /* height: 140px; */
@@ -55,4 +55,7 @@ font-weight: bold;
   {
     width: 100%;
     margin-top: 50px;
+  }
+  .cardContainer{
+    flex-wrap: nowrap;
   }

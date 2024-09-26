@@ -5,8 +5,11 @@ import plus from "../../assests/plus.svg";
 import add from "../../assests/add.jpeg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next';
+
 import { useAuth } from '../../AuthContext';
 const Categories = () => {
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newRowData, setNewRowData] = useState({});
@@ -33,7 +36,7 @@ const Categories = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-            lang: "ar",
+            lang: i18n.language, 
           },
           body: JSON.stringify({}),
         });
@@ -51,7 +54,7 @@ const Categories = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, i18n.language]);
 
   const toggleActive = async (id, currentStatus) => {
     try {
@@ -64,7 +67,7 @@ const Categories = () => {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
             "Content-Type": "application/json",
-            lang: "ar",
+            lang: i18n.language,
           },
           body: JSON.stringify({ stauts: newStatus }), // Ensure the parameter name is correct
         }
@@ -106,7 +109,7 @@ const Categories = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-            lang: "en",
+            lang: i18n.language,
           },
         }
       );
@@ -151,7 +154,7 @@ const Categories = () => {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
-            lang: "ar",
+            lang: i18n.language,
             accept: "application/json",
           },
           body: formData,
@@ -224,7 +227,7 @@ const Categories = () => {
         method: "POST",
         headers: {
           Accept: "application/json",
-          lang: "ar",
+          lang: i18n.language,
           Authorization: `Bearer ${token}`,
         },
         body: formData,
@@ -254,25 +257,25 @@ const Categories = () => {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle d-flex justify-content-between">
-        <h3>الفئات</h3>
+        <h3>{t('categories')}</h3> {/* Translate static 'الفئات' */}
         <button onClick={handleAdd}>
           <img src={plus} alt="" />
-          <span className="pe-3">اضافة</span>
+          <span className="pe-3">{t('add')}</span> {/* Translate static 'اضافة' */}
         </button>
       </div>
 
-      {error && <p className="text-danger">Error: {error}</p>}
+      {error && <p className="text-danger">{t('error')}: {error}</p>} {/* Translate 'Error' */}
 
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">الرقم</th>
-            <th scope="col">الايقون</th>
-            <th scope="col"> الاسم بالعربي </th>
-            <th scope="col"> الاسم </th>
-            <th scope="col">التفاصيل بالعربي </th>
-            <th scope="col">التفاصيل </th>
-            <th scope="col">التحكم</th>
+            <th scope="col">{t('number')}</th> {/* Translate 'الرقم' */}
+            <th scope="col">{t('icon')}</th> {/* Translate 'الايقون' */}
+            <th scope="col">{t('name_ar')}</th> {/* Translate 'الاسم بالعربي' */}
+            <th scope="col">{t('name_en')}</th> {/* Translate 'الاسم' */}
+            <th scope="col">{t('details_ar')}</th> {/* Translate 'التفاصيل بالعربي' */}
+            <th scope="col">{t('details_en')}</th> {/* Translate 'التفاصيل' */}
+            <th scope="col">{t('controls')}</th> {/* Translate 'التحكم' */}
           </tr>
         </thead>
         <tbody className="text-center">
@@ -284,7 +287,7 @@ const Categories = () => {
                   selectedIcon ? (
                     <img
                       src={URL.createObjectURL(selectedIcon)}
-                      alt="Selected Icon"
+                      alt={t('selected_icon')} // Translate static 'Selected Icon'
                       style={{
                         width: "50px",
                         height: "50px",
@@ -302,7 +305,7 @@ const Categories = () => {
                 ) : (
                   <img
                     src={row.image}
-                    alt="Icon"
+                    alt={t('icon')} // Translate static 'Icon'
                     style={{
                       width: "50px",
                       height: "50px",
@@ -364,7 +367,7 @@ const Categories = () => {
                 {editingId === row.id ? (
                   <React.Fragment>
                     <button className="btn  btn-sm ml-2" onClick={handleSave}>
-                      <img src={add} alt="add" style={{ width: "20px" }} />
+                      <img src={add} alt={t('add')} style={{ width: "20px" }} />
                     </button>
                     <button
                       className="btn  btn-sm"
@@ -373,22 +376,20 @@ const Categories = () => {
                         setSelectedIcon(null);
                       }}
                     >
-                      <img src={deletee} alt="delete" />
+                      <img src={deletee} alt={t('delete')} />
                     </button>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
                     <FontAwesomeIcon
                       icon={faCircleCheck}
-                      className={
-                        row.status === "active" ? "activeIcon" : "inactive"
-                      }
+                      className={row.status === "active" ? "activeIcon" : "inactive"}
                       onClick={() => toggleActive(row.id, row.status)}
                     />
                     <div className="drTableIcon">
                       <img
                         src={edit}
-                        alt="edit"
+                        alt={t('edit')} // Translate static 'edit'
                         onClick={() => {
                           setEditingId(row.id);
                           setNewRowData(row);
@@ -396,7 +397,7 @@ const Categories = () => {
                       />
                       <img
                         src={deletee}
-                        alt="delete"
+                        alt={t('delete')} // Translate static 'delete'
                         onClick={() => handleDelete(row.id)}
                       />
                     </div>
@@ -405,60 +406,59 @@ const Categories = () => {
               </td>
             </tr>
           ))}
-      {isAdding && (
-  <tr>
-    <td>{newData.id}</td>
-    <td>
-      <input
-        type="file"
-        className="form-control"
-        onChange={handleIconChanges}
-        accept="image/*"
-      />
-    </td>
-    <td>
-      <input
-        type="text"
-        className="form-control"
-        value={newData.name_ar}
-        onChange={(e) => handleAddChange(e, "name_ar")}
-      />
-    </td>
-    <td>
-      <input
-        type="text"
-        className="form-control"
-        value={newData.name_en}
-        onChange={(e) => handleAddChange(e, "name_en")}
-      />
-    </td>
-    <td>
-      <input
-        type="text"
-        className="form-control"
-        value={newData.details_ar}
-        onChange={(e) => handleAddChange(e, "details_ar")}
-      />
-    </td>
-    <td>
-      <input
-        type="text"
-        className="form-control"
-        value={newData.details_en}
-        onChange={(e) => handleAddChange(e, "details_en")}
-      />
-    </td>
-    <td>
-      <button className="btn btn-sm" onClick={handleAddSave}>
-        <img src={add} alt="add" style={{ width: "20px" }} />
-      </button>
-      <button className="btn btn-sm" onClick={() => setIsAdding(false)}>
-        <img src={deletee} alt="delete" />
-      </button>
-    </td>
-  </tr>
-)}
-
+          {isAdding && (
+            <tr>
+              <td>{newData.id}</td>
+              <td>
+                <input
+                  type="file"
+                  className="form-control"
+                  onChange={handleIconChanges}
+                  accept="image/*"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={newData.name_ar}
+                  onChange={(e) => handleAddChange(e, "name_ar")}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={newData.name_en}
+                  onChange={(e) => handleAddChange(e, "name_en")}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={newData.details_ar}
+                  onChange={(e) => handleAddChange(e, "details_ar")}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={newData.details_en}
+                  onChange={(e) => handleAddChange(e, "details_en")}
+                />
+              </td>
+              <td>
+                <button className="btn btn-sm" onClick={handleAddSave}>
+                  <img src={add} alt={t('add')} style={{ width: "20px" }} />
+                </button>
+                <button className="btn btn-sm" onClick={() => setIsAdding(false)}>
+                  <img src={deletee} alt={t('cancel')} />
+                </button>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

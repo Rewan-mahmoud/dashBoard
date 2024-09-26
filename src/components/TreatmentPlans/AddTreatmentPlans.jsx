@@ -1,6 +1,8 @@
-import React, { useState, useRef , useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from '../../AuthContext';
+import { useAuth } from "../../AuthContext";
+import deletee from "../../assests/delete.svg";
+import add from "../../assests/add.jpeg";
 const AddTreatmentPlans = ({ onSave }) => {
   const location = useLocation();
   const plan = location.state?.plan || {};
@@ -340,15 +342,24 @@ const AddTreatmentPlans = ({ onSave }) => {
 
           {/* Image File Input and Display */}
           <div className="col-md-6">
-          <label htmlFor="file">الصورة:</label>
-          {/* Display existing image if editing and image exists */}
-          {plan.file && (
-            <div className="mb-3">
-              <img src={plan.file} alt="Plan Image" style={{ maxWidth: '100px', maxHeight: '100px' }} />
-            </div>
-          )}
-          <input type="file" name="file" ref={imageRef} className="form-control" />
-        </div>
+            <label htmlFor="file">الصورة:</label>
+            {/* Display existing image if editing and image exists */}
+            {plan.file && (
+              <div className="mb-3">
+                <img
+                  src={plan.file}
+                  alt="Plan Image"
+                  style={{ maxWidth: "100px", maxHeight: "100px" }}
+                />
+              </div>
+            )}
+            <input
+              type="file"
+              name="file"
+              ref={imageRef}
+              className="form-control"
+            />
+          </div>
           <div className="col-md-6">
             <label htmlFor="type">نوع الملف:</label>
             <select
@@ -412,25 +423,17 @@ const AddTreatmentPlans = ({ onSave }) => {
                   />
                 </div>
                 {formData.items.length > 1 && (
-                  <div className="col-md-12 text-end">
-                    <button
-                      type="button"
-                      className="btn btn-danger"
-                      onClick={() => handleRemoveItem(index)}
-                    >
-                      حذف المرحلة
+                  <div className="col-md-12 text-end mb-4">
+                    <button onClick={() => handleRemoveItem(index)}>
+                      <img src={deletee} alt="" />
                     </button>
                   </div>
                 )}
               </div>
             ))}
-            <div className="col-md-12 text-end">
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={handleAddItem}
-              >
-                إضافة مرحلة
+            <div className="col-md-12 text-end mb-4">
+              <button className="btn btn-sm" onClick={handleAddItem}>
+                <img src={add} style={{ width: "20px" }} />
               </button>
             </div>
           </div>
@@ -475,22 +478,19 @@ const AddTreatmentPlans = ({ onSave }) => {
                   <div className="col-md-12 text-end">
                     <button
                       type="button"
-                      className="btn btn-danger"
+                      className="btn "
                       onClick={() => handleRemoveSessionType(index)}
                     >
-                      حذف نوع الجلسة
+                      <img src={deletee} alt="" />
                     </button>
                   </div>
                 )}
               </div>
             ))}
-            <div className="col-md-12 text-end">
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={handleAddSessionType}
-              >
-                إضافة نوع جلسة
+
+            <div className="col-md-12 text-end mb-4">
+              <button className="btn btn-sm" onClick={handleAddSessionType}>
+                <img src={add} style={{ width: "20px" }} />
               </button>
             </div>
           </div>
@@ -542,22 +542,18 @@ const AddTreatmentPlans = ({ onSave }) => {
                   <div className="col-md-12 text-end">
                     <button
                       type="button"
-                      className="btn btn-danger"
+                      className="btn "
                       onClick={() => handleRemoveDoctor(index)}
                     >
-                      حذف المختص
+                      <img src={deletee} alt="" />
                     </button>
                   </div>
                 )}
               </div>
             ))}
-            <div className="col-md-12 text-end">
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={handleAddDoctor}
-              >
-                إضافة مختص
+           <div className="col-md-12 text-end mb-4">
+              <button className="btn btn-sm" onClick={handleAddDoctor}>
+                <img src={add} style={{ width: "20px" }} />
               </button>
             </div>
           </div>

@@ -4,8 +4,11 @@ import deletee from "../../assests/delete.svg";
 import plus from "../../assests/plus.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next'; // Import the hook
 import { useAuth } from '../../AuthContext';
+
 const Slider = () => {
+  const { t, i18n } = useTranslation(); // Use the hook
   const [data, setData] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newRowData, setNewRowData] = useState({});
@@ -27,7 +30,7 @@ const Slider = () => {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
-            lang: "ar",
+            lang: i18n.language, // Use the language from i18n dynamically
           },
           body: JSON.stringify({}),
         });
@@ -45,7 +48,7 @@ const Slider = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, i18n.language]); // Re-fetch data when language changes
 
   const toggleActive = (id) => {
     const newData = data.map((row) => {
@@ -66,7 +69,7 @@ const Slider = () => {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
-            lang: "en",
+            lang: i18n.language, // Set the language dynamically
           },
         }
       );
@@ -120,7 +123,7 @@ const Slider = () => {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
-            lang: "ar",
+            lang: i18n.language, // Set the language dynamically
             accept: "application/json",
           },
           body: formData,
@@ -221,19 +224,19 @@ const Slider = () => {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle d-flex justify-content-between">
-        <h3>السليدر</h3>
+        <h3>{t('slider')}</h3> 
         <button onClick={handleAdd}>
           <img src={plus} alt="" />
-          <span className="pe-3">اضافة</span>
+          <span className="pe-3">{t('add')}</span> {/* Translate 'اضافة' */}
         </button>
       </div>
 
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">الرقم</th>
-            <th scope="col">الصورة</th>
-            <th scope="col">التحكم</th>
+            <th scope="col">{t('number')}</th> 
+            <th scope="col">{t('image')}</th>
+            <th scope="col">{t('controls')}</th> 
           </tr>
         </thead>
         <tbody className="text-center">
@@ -267,13 +270,13 @@ const Slider = () => {
                 {editingId === row.id ? (
                   <>
                     <button className="save-btn" onClick={handleSave}>
-                      حفظ
+                      {t('save')} 
                     </button>
                     <button
                       className="cancel-btn"
                       onClick={() => setEditingId(null)}
                     >
-                     الغاء
+                      {t('cancel')} 
                     </button>
                   </>
                 ) : (
@@ -285,12 +288,12 @@ const Slider = () => {
                     />
                     <img
                       src={edit}
-                      alt="Edit"
+                      alt={t('edit')}
                       onClick={() => setEditingId(row.id)}
                     />
                     <img
                       src={deletee}
-                      alt="Delete"
+                      alt={t('delete')} 
                       onClick={() => handleDelete(row.id)}
                     />
                   </div>
@@ -315,14 +318,14 @@ const Slider = () => {
                 )}
               </td>
               <td>
-                <button onClick={handleAddSave}>Add</button>
-                <button onClick={() => setIsAdding(false)}>Cancel</button>
+                <button onClick={handleAddSave}>{t('add')}</button> {/* Translate 'Add' */}
+                <button onClick={() => setIsAdding(false)}>{t('cancel')}</button> {/* Translate 'Cancel' */}
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      {error && <div>Error: {error}</div>}
+      {error && <div>{t('error')}: {error}</div>} {/* Translate 'Error' */}
     </div>
   );
 };

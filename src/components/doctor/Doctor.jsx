@@ -4,11 +4,14 @@ import edit from '../../assests/edit.svg';
 import deletee from '../../assests/delete.svg';
 import plus from '../../assests/plus.svg';
 import Groupppp from '../../assests/Groupppp.svg';
-import "./doctor.css";
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'; // Import active/inactive icon
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../AuthContext';
+import './doctor.css';
+
 const Doctor = () => {
-  const { t, i18n } = useTranslation(); // Initialize the translation and i18n instance
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -22,7 +25,7 @@ const Doctor = () => {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
-            'lang': i18n.language, // Use i18n.language to set the language dynamically
+            'lang': i18n.language,
           },
           body: JSON.stringify({}),
         });
@@ -43,10 +46,45 @@ const Doctor = () => {
     if (token) {
       fetchData();
     }
-  }, [token, i18n.language]); // Re-fetch data when the language changes
+  }, [token, i18n.language]);
 
+  // Function to toggle active status of a doctor
+  const toggleActive = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === "active" ? 0 : 1;
+      const response = await fetch(
+        `https://naql.nozzm.com/api/active_doctores/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            lang: i18n.language,
+          },
+          body: JSON.stringify({ stauts: newStatus }), // Ensure the parameter name is correct
+        }
+      );
+      const result = await response.json();
+      if (result.status) {
+        setData((prevData) =>
+          prevData.map((row) =>
+            row.id === id
+              ? { ...row, status: newStatus === 1 ? "active" : "inactive" }
+              : row
+          )
+        );
+      } else {
+        console.error("Failed to toggle active status:", result.message);
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error("Error toggling active status:", error);
+      setError(error.message);
+    }
+  };
   const handleDelete = (id) => {
-    const newData = data.filter(row => row.id !== id);
+    const newData = data.filter((row) => row.id !== id);
     setData(newData);
   };
 
@@ -57,7 +95,7 @@ const Doctor = () => {
         <Link to="/DoctorData">
           <button>
             <img src={plus} alt="" />
-            <span className='pe-3'>{t('doctorTable.addDoctor')}</span>
+            <span className="pe-3">{t('doctorTable.addDoctor')}</span>
           </button>
         </Link>
       </div>
@@ -73,23 +111,39 @@ const Doctor = () => {
             <th scope="col">{t('doctorTable.control')}</th>
           </tr>
         </thead>
-        <tbody className='text-center'>
-          {data.map(row => (
+        <tbody className="text-center">
+          {data.map((row) => (
             <tr key={row.id}>
               <td>{row.id}</td>
               <td>{row.name}</td>
               <td>{row.email}</td>
               <td>{row.mobile}</td>
-              <td>{row.stauts === 1 ? t('doctorTable.active') : t('doctorTable.inactive')}</td>
+
+              {/* Status Icon - Active/Inactive */}
               <td>
-                <div className='drTableIcon'>
-                  <Link to={`/DoctorsProfile/${row.id}`}><img src={Groupppp} alt="" /></Link>
-                  <button className='editbutton' onClick={() => navigate('/DoctorData', { state: { doctor: row } })}>
+              <FontAwesomeIcon
+                      icon={faCircleCheck}
+                      className={row.status === "active" ? "activeIcon" : "inactive"}
+                      onClick={() => toggleActive(row.id, row.status)}
+                    />
+              </td>
+
+              <td>
+                <div className="drTableIcon">
+                  <Link to={`/DoctorsProfile/${row.id}`}>
+                    <img src={Groupppp} alt="" />
+                  </Link>
+                  <button
+                    className="editbutton"
+                    onClick={() => navigate('/DoctorData', { state: { doctor: row } })}
+                  >
                     <img src={edit} alt="" />
                   </button>
                   <img
-                    src={deletee} alt={t('doctorTable.deleteIcon')}
-                    onClick={() => handleDelete(row.id)} />
+                    src={deletee}
+                    alt={t('doctorTable.deleteIcon')}
+                    onClick={() => handleDelete(row.id)}
+                  />
                 </div>
               </td>
             </tr>
