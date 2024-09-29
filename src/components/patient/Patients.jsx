@@ -4,6 +4,7 @@ import deletee from "../../assests/delete.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import add from "../../assests/add.jpeg";
 import { useAuth } from '../../AuthContext';
 import { useTranslation } from 'react-i18next'; // Import useTranslation for dynamic language handling
 
@@ -15,7 +16,7 @@ const Patients = () => {
   const { t } = useTranslation(); // Use the useTranslation hook
   const { token } = useAuth();
   const { i18n } = useTranslation(); // Use the i18n instance to get the current language
-
+  const [selectedIcon, setSelectedIcon] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -235,17 +236,47 @@ const Patients = () => {
               </td>
               <td>
                 {editingId === row.id ? (
-                  <React.Fragment>
-                    <button className="save-btn" onClick={handleSave}>
-                      حفظ
-                    </button>
-                    <button
-                      className="cancel-btn"
-                      onClick={() => setEditingId(null)}
-                    >
-                      الغاء
-                    </button>
-                  </React.Fragment>
+           <td>
+           {editingId === row.id ? (
+             <React.Fragment>
+               <button className="btn  btn-sm ml-2" onClick={handleSave}>
+                 <img src={add} alt={t('add')} style={{ width: "20px" }} />
+               </button>
+               <button
+                 className="btn  btn-sm"
+                 onClick={() => {
+                   setEditingId(null);
+                   setSelectedIcon(null);
+                 }}
+               >
+                 <img src={deletee} alt={t('delete')} />
+               </button>
+             </React.Fragment>
+           ) : (
+             <React.Fragment>
+               <FontAwesomeIcon
+                 icon={faCircleCheck}
+                 className={row.status === "active" ? "activeIcon" : "inactive"}
+                 onClick={() => toggleActive(row.id, row.status)}
+               />
+               <div className="drTableIcon">
+                 <img
+                   src={edit}
+                   alt={t('edit')} // Translate static 'edit'
+                   onClick={() => {
+                     setEditingId(row.id);
+                     setNewRowData(row);
+                   }}
+                 />
+                 <img
+                   src={deletee}
+                   alt={t('delete')} // Translate static 'delete'
+                   onClick={() => handleDelete(row.id)}
+                 />
+               </div>
+             </React.Fragment>
+           )}
+         </td>
                 ) : (
                   <React.Fragment>
                     <div className="drTableIcon">

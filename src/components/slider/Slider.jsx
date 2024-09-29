@@ -4,9 +4,9 @@ import deletee from "../../assests/delete.svg";
 import plus from "../../assests/plus.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { useTranslation } from 'react-i18next'; // Import the hook
-import { useAuth } from '../../AuthContext';
-
+import { useTranslation } from "react-i18next"; // Import the hook
+import { useAuth } from "../../AuthContext";
+import add from "../../assests/add.jpeg";
 const Slider = () => {
   const { t, i18n } = useTranslation(); // Use the hook
   const [data, setData] = useState([]);
@@ -224,19 +224,18 @@ const Slider = () => {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle d-flex justify-content-between">
-        <h3>{t('slider')}</h3> 
+        <h3>{t("slider")}</h3>
         <button onClick={handleAdd}>
           <img src={plus} alt="" />
-          <span className="pe-3">{t('add')}</span> {/* Translate 'اضافة' */}
+          <span className="pe-3">{t("add")}</span> {/* Translate 'اضافة' */}
         </button>
       </div>
-
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">{t('number')}</th> 
-            <th scope="col">{t('image')}</th>
-            <th scope="col">{t('controls')}</th> 
+            <th scope="col">{t("number")}</th>
+            <th scope="col">{t("image")}</th>
+            <th scope="col">{t("controls")}</th>
           </tr>
         </thead>
         <tbody className="text-center">
@@ -245,19 +244,20 @@ const Slider = () => {
               <td>{row.id}</td>
               <td>
                 {editingId === row.id ? (
-                  <>
-                    <input
-                      type="file"
-                      onChange={(e) => handleEditChange(e, "image")}
-                    />
-                    {newRowData.imagePreview && (
-                      <img
-                        src={newRowData.imagePreview}
-                        alt="Preview"
-                        style={{ width: "50px", height: "50px" }}
-                      />
-                    )}
-                  </>
+                  <React.Fragment>
+                    <button className="btn  btn-sm ml-2" onClick={handleSave}>
+                      <img src={add} alt={t("add")} style={{ width: "20px" }} />
+                    </button>
+                    <button
+                      className="btn  btn-sm"
+                      onClick={() => {
+                        setEditingId(null);
+                        setSelectedIcon(null);
+                      }}
+                    >
+                      <img src={deletee} alt={t("delete")} />
+                    </button>
+                  </React.Fragment>
                 ) : (
                   <img
                     src={row.image}
@@ -270,13 +270,13 @@ const Slider = () => {
                 {editingId === row.id ? (
                   <>
                     <button className="save-btn" onClick={handleSave}>
-                      {t('save')} 
+                      {t("save")}
                     </button>
                     <button
                       className="cancel-btn"
                       onClick={() => setEditingId(null)}
                     >
-                      {t('cancel')} 
+                      {t("cancel")}
                     </button>
                   </>
                 ) : (
@@ -288,12 +288,12 @@ const Slider = () => {
                     />
                     <img
                       src={edit}
-                      alt={t('edit')}
+                      alt={t("edit")}
                       onClick={() => setEditingId(row.id)}
                     />
                     <img
                       src={deletee}
-                      alt={t('delete')} 
+                      alt={t("delete")}
                       onClick={() => handleDelete(row.id)}
                     />
                   </div>
@@ -318,14 +318,23 @@ const Slider = () => {
                 )}
               </td>
               <td>
-                <button onClick={handleAddSave}>{t('add')}</button> {/* Translate 'Add' */}
-                <button onClick={() => setIsAdding(false)}>{t('cancel')}</button> {/* Translate 'Cancel' */}
+                <button onClick={handleAddSave}>{t("add")}</button>{" "}
+                {/* Translate 'Add' */}
+                <button onClick={() => setIsAdding(false)}>
+                  {t("cancel")}
+                </button>{" "}
+                {/* Translate 'Cancel' */}
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      {error && <div>{t('error')}: {error}</div>} {/* Translate 'Error' */}
+      {error && (
+        <div>
+          {t("error")}: {error}
+        </div>
+      )}{" "}
+      {/* Translate 'Error' */}
     </div>
   );
 };
