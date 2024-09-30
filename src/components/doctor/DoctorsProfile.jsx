@@ -5,11 +5,13 @@ import doctorPhoto from '../../assests/doctotph.png';
 import seal from '../../assests/seal.svg';
 import signature from '../../assests/signature.svg';
 import { useAuth } from '../../AuthContext';
+
 const DoctorsProfile = () => {
   const { id } = useParams();
   const [doctor, setDoctor] = useState({});
   const [error, setError] = useState(null);
   const { token } = useAuth();
+
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
@@ -49,22 +51,33 @@ const DoctorsProfile = () => {
         </div>
         <div className='doctorProfileInfo'>
           <h2>{doctor.name}</h2>
-          <p className='mt-4'>{doctor.details} <span>4.5 <img src={starFilled} alt="" /></span></p>
+          <p className='mt-4'>{doctor.specialties} <span>4.5 <img src={starFilled} alt="" /></span></p>
           <p className='me-3'>{doctor.mobile}</p>
         </div>
       </div>
+      
       <div className='work DoctorsProfileTitle'>
         <h2>الدوام</h2>
-        <div className="d-flex align-items-center mt-5">
-          <div className='time'><span> 7 ص</span></div>
-          <p>الي</p>
-          <div className='time'><span> 7 م</span></div>
-        </div>
-   
+        {doctor.Attendance && doctor.Attendance.length > 0 ? (
+          doctor.Attendance.map((attendance, index) => (
+            <div className="d-flex align-items-center mt-5" key={index}>
+              <div className='time'>
+                <span>{attendance.start_time} صباحا</span>
+              </div>
+              <p>الي</p>
+              <div className='time'>
+                <span>{attendance.end_time} مساء</span>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>لا يوجد دوام مسجل.</p>
+        )}
       </div>
+
       <div className='pref DoctorsProfileTitle'>
         <h2>االسيرة الشخصية</h2>
-        <p>{doctor.specialties}</p>
+        <p>{doctor.details}</p>
       </div>
       <div className='special DoctorsProfileTitle'>
         <h2>التخصصات </h2>
@@ -81,7 +94,7 @@ const DoctorsProfile = () => {
       <div className='special DoctorsProfileTitle'>
         <h2>المهارات </h2>
         <div className='description d-flex flex-wrap'>
-          {doctor.skiles?.split(',').map((skill, index) => (
+          {doctor.skills?.split(',').map((skill, index) => (
             <p key={index}>{skill}</p>
           ))}
         </div>

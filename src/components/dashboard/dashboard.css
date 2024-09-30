@@ -1,61 +1,96 @@
-
 .card {
-    border-radius: 20px;
-    background-color: #FDFDFD;
-    margin-top: 30px;
+  border-radius: 20px;
+  background-color: #fdfdfd;
+  margin-top: 30px;
 }
 .circle {
-    width: 70px; 
-    height: 70px; 
-    background-color: #EEEFFF; 
-    border-radius: 50%;
-    display: flex;
-   justify-content: center;
-   align-items: center;
-  }
-  .circle img{
-    width: 25px;
-  }
-  
-  .icon {
-    font-size: 24px;
-  }
+  width: 70px;
+  height: 70px;
+  background-color: #eeefff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.circle img {
+  width: 25px;
+}
 
-  .dashBoardCard{
-    width: 388px;
-    background-color: white;
-    padding: 20px 45px;
-    /* height: 140px; */
-    margin-top: 20px;
-    border-radius: 20px;
-    justify-content: space-around;
-    margin-left: 20px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+.icon {
+  font-size: 24px;
+}
+
+/* Parent container should be flexible for different screen sizes */
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap; /* Allows cards to wrap on smaller screens */
+  justify-content: space-between;
+}
+
+/* Responsive dashboard card */
+.dashBoardCard {
+  background-color: white;
+  padding: 20px;
+  border-radius: 20px;
+  margin: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1 1 30%; /* Flexible width for larger screens */
+  min-width: 300px; /* Minimum width to avoid shrinking too much */
+  max-width: 100%; /* Avoid exceeding the container width */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Adjust the inner elements for responsiveness */
+.circle {
+  flex-shrink: 0;
+  margin-left: 40px;
+}
+
+.titles {
+  flex-grow: 1;
+}
+
+.number {
+  font-weight: bold;
+}
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+  .dashBoardCard {
+    flex: 1 1 45%; /* Adjust the width for tablets */
   }
-  .titles h4 {
-font-size: 20px !important;
-font-family: "Cairo", sans-serif;
-font-weight: bold;
+}
+
+@media (max-width: 576px) {
+  .dashBoardCard {
+    flex: 1 1 100%; /* Full width for mobile screens */
+    margin: 10px 0;
   }
-  .titles span {
-    color: #ACACAC;
-   font-size: 18px;
-  }
-  .titles p{
-    font-size: 12px;
-    font-family: "Cairo", sans-serif;
-    color: #292D32;
-  }
-  .titles .number{
-    color: #239EC2;
-    font-size: 18px;
-    font-weight: 800;
-  }
-  .Chart img 
-  {
-    width: 100%;
-    margin-top: 50px;
-  }
-  .cardContainer{
-    flex-wrap: nowrap;
-  }
+}
+
+.titles h4 {
+  font-size: 20px !important;
+  font-family: "Cairo", sans-serif;
+  font-weight: bold;
+}
+.titles span {
+  color: #acacac;
+  font-size: 18px;
+}
+.titles p {
+  font-size: 12px;
+  font-family: "Cairo", sans-serif;
+  color: #292d32;
+}
+.titles .number {
+  color: #239ec2;
+  font-size: 18px;
+  font-weight: 800;
+}
+.Chart img {
+  width: 100%;
+  margin-top: 50px;
+}
+

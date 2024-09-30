@@ -6,11 +6,15 @@ import plus from '../../assests/plus.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../AuthContext';
+import { useTranslation } from 'react-i18next'; // Import translation hook
+
 const Meetings = () => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const { token } = useAuth();
+    const { t, i18n } = useTranslation(); // Use the translation hook
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -19,7 +23,7 @@ const Meetings = () => {
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`,
-                        'lang': 'ar',
+                        'lang': i18n.language, // Send the language dynamically
                     }
                 });
                 const result = await response.json();
@@ -36,7 +40,7 @@ const Meetings = () => {
         };
 
         fetchData();
-    }, []);
+    }, [token, i18n.language]); // Reload data when the language changes
 
     const handleDelete = async (id) => {
         try {
@@ -46,7 +50,7 @@ const Meetings = () => {
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
-                    'lang': 'ar',
+                    'lang': i18n.language,
                 }
             });
             const result = await response.json();
@@ -83,7 +87,7 @@ const Meetings = () => {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
-                    'lang': 'ar',
+                    'lang': i18n.language,
                 },
                 body: JSON.stringify({ stauts: active ? 1 : 0 })
             });
@@ -100,25 +104,25 @@ const Meetings = () => {
     return (
         <div className="container tables bg-white mt-5">
             <div className="tableTitle d-flex justify-content-between ">
-                <h3>اللقائات</h3>
+                <h3>{t('meetings')}</h3> {/* Translated title */}
                 <Link to="/AddMeetings">
                     <button>
-                        <img src={plus} alt="" />
-                        <span className='pe-3'>اضافة</span>
+                        <img src={plus} alt={t('addMeetingIcon')} /> {/* Translated alt */}
+                        <span className='pe-3'>{t('addMeeting')}</span> {/* Translated button text */}
                     </button>
                 </Link>
             </div>
             <table className="table borderless TableDr text-center">
                 <thead>
                     <tr>
-                        <th scope="col">الرقم</th>
-                        <th scope="col">اسم اللقاء</th>
-                        <th scope="col">المضيف</th>
-                        <th scope="col">السعر</th>
-                        <th scope="col">نوع اللقاء</th>
-                        <th scope="col">عدد المقاعد المتاحة</th>
-                        <th scope="col">عدد المقاعد المحجوزة</th>
-                        <th scope="col">الاعدادات</th>
+                        <th scope="col">{t('id')}</th>
+                        <th scope="col">{t('name')}</th>
+                        <th scope="col">{t('host')}</th>
+                        <th scope="col">{t('price')}</th>
+                        <th scope="col">{t('type')}</th>
+                        <th scope="col">{t('availableSeats')}</th>
+                        <th scope="col">{t('reservedSeats')}</th>
+                        <th scope="col">{t('controls')}</th>
                     </tr>
                 </thead>
                 <tbody className='text-center'>
@@ -130,21 +134,21 @@ const Meetings = () => {
                             <td>{row.price}</td>
                             <td>{row.encounters_type.name}</td>
                             <td>{row.seats_num}</td>
-                            <td>{row.reserved_seats || 'N/A'}</td>
+                            <td>{row.reserved_seats || t('noData')}</td> {/* Translated no data */}
                             <td>
                                 <div className='drTableIcon'>
                                     <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
                                     <button className='editbutton' onClick={() => navigate('/AddMeetings', { state: { meeting: row } })}>
-                                        <img src={edit} alt="edit" />
+                                        <img src={edit} alt={t('editIcon')} /> {/* Translated alt */}
                                     </button>
-                                    <img src={deletee} alt="delete" onClick={() => handleDelete(row.id)} />
+                                    <img src={deletee} alt={t('deleteIcon')} onClick={() => handleDelete(row.id)} /> {/* Translated alt */}
                                 </div>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            {error && <p className="error">Error: {error}</p>}
+            {error && <p className="error">{t('meetings.error')}: {error}</p>} {/* Translated error message */}
         </div>
     );
 };

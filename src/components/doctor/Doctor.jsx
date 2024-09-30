@@ -83,10 +83,36 @@ const Doctor = () => {
       setError(error.message);
     }
   };
-  const handleDelete = (id) => {
-    const newData = data.filter((row) => row.id !== id);
-    setData(newData);
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(
+        `https://naql.nozzm.com/api/destroy_doctores/${id}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            lang: i18n.language,
+          },
+        }
+      );
+  
+      const result = await response.json();
+      if (result.status) {
+        // Remove the doctor from the local state after successful deletion
+        const newData = data.filter((row) => row.id !== id);
+        setData(newData);
+      } else {
+        console.error('Failed to delete doctor:', result.message);
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error('Error deleting doctor:', error);
+      setError(error.message);
+    }
   };
+  
 
   return (
     <div className="container tables bg-white mt-5">
@@ -103,12 +129,12 @@ const Doctor = () => {
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">{t('doctorTable.id')}</th>
-            <th scope="col">{t('doctorTable.name')}</th>
-            <th scope="col">{t('doctorTable.email')}</th>
-            <th scope="col">{t('doctorTable.mobile')}</th>
-            <th scope="col">{t('doctorTable.status')}</th>
-            <th scope="col">{t('doctorTable.control')}</th>
+            <th scope="col">{t('id')}</th>
+            <th scope="col">{t('name')}</th>
+            <th scope="col">{t('email')}</th>
+            <th scope="col">{t('mobile')}</th>
+            <th scope="col">{t('status')}</th>
+            <th scope="col">{t('control')}</th>
           </tr>
         </thead>
         <tbody className="text-center">

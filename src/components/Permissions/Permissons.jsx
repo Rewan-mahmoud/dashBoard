@@ -5,8 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import plus from "../../assests/plus.svg";
-
+import { useTranslation } from "react-i18next";
 const Permissions = () => {
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState([
     {
       id: 1,
@@ -68,7 +69,7 @@ const Permissions = () => {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle d-flex justify-content-between ">
-        <h3> الصلاحيات </h3>
+        <h3> {t('permission')} </h3>
         <Link to="/AddPermissions">
           <button>
             <img src={plus} alt="" />
@@ -80,11 +81,11 @@ const Permissions = () => {
       <table className=" table borderless TableDr text-center ">
         <thead>
           <tr>
-            <th scope="col ">الرقم</th>
-            <th scope="col ">الاسم باللغة العربية</th>
-            <th scope="col ">الاسم باللغة الانجليزية </th>
-            <th scope="col ">التصريح </th>
-            <th scope="col ">التحكم </th>
+          <th scope="col">{t('number')}</th>
+            <th scope="col">{t('name_ar')}</th>
+            <th scope="col">{t('name_en')}</th>
+            <th scope="col">{t('permission')}</th>
+            <th scope="col">{t('controls')}</th>
           </tr>
         </thead>
         <tbody className="text-center">

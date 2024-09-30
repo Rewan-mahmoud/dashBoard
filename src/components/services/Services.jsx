@@ -6,13 +6,16 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import plus from "../../assests/plus.svg";
 import { useAuth } from "../../AuthContext";
+import { useTranslation } from "react-i18next"; // Import translation hook
+
 const Services = () => {
   const [data, setData] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newRowData, setNewRowData] = useState({});
   const [error, setError] = useState(null);
-
+  const { t, i18n } = useTranslation(); // Use the hook
   const { token } = useAuth();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -21,7 +24,7 @@ const Services = () => {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
-            lang: "ar",
+            lang: i18n.language, 
           },
         });
         const result = await response.json();
@@ -62,7 +65,7 @@ const Services = () => {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
-            lang: "ar",
+            lang: i18n.language, 
           },
         }
       );
@@ -96,7 +99,7 @@ const Services = () => {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
-            lang: "ar",
+            lang: i18n.language, 
             Accept: "application/json",
           },
           body: JSON.stringify(newRowData),
@@ -120,6 +123,7 @@ const Services = () => {
       setError(error.message);
     }
   };
+
   const updateStatus = async (id, active) => {
     try {
       const response = await fetch(
@@ -131,7 +135,7 @@ const Services = () => {
             Authorization: `Bearer ${token}`,
             lang: "ar",
           },
-          body: JSON.stringify({ status: active ? 1 : 0 }), // Correct: sending 'status'
+          body: JSON.stringify({ status: active ? 1 : 0 }),
         }
       );
       const result = await response.json();
@@ -143,44 +147,41 @@ const Services = () => {
       setError(error.message);
     }
   };
-  
+
   const toggleActive = async (id, currentStatus) => {
-    const newStatus = currentStatus === 1 ? 0 : 1; // Toggle between 1 (active) and 0 (inactive)
-  
+    const newStatus = currentStatus === 1 ? 0 : 1;
     const newData = data.map((row) => {
       if (row.id === id) {
-        updateStatus(id, newStatus); // Update the status in the backend
-        return { ...row, status: newStatus }; // Update the status locally in the state
+        updateStatus(id, newStatus);
+        return { ...row, status: newStatus };
       }
       return row;
     });
-  
+
     setData(newData);
   };
-  
 
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle d-flex justify-content-between">
-        <h3>الخدمات</h3>
+        <h3>{t("services.title")}</h3> {/* Translation key for the title */}
         <Link to="/AddServices">
           <button>
-            <img src={plus} alt="" />
-            <span className="pe-3"> اضافة </span>
+            <img src={plus} alt={t("services.addServiceIcon")} />
+            <span className="pe-3">{t("services.addService")}</span>
           </button>
         </Link>
       </div>
 
-      {error && <p className="text-danger">Error: {error}</p>}
+      {error && <p className="text-danger">{t("services.errorMessage")}: {error}</p>}
 
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">الرقم</th>
-            <th scope="col">اسم الفئة الاساسية</th>
-            <th scope="col">الاسم الفئة الفرعية</th>
-
-            <th scope="col">التحكم</th>
+            <th scope="col">{t("services.id")}</th>
+            <th scope="col">{t("services.mainCategory")}</th>
+            <th scope="col">{t("services.subCategory")}</th>
+            <th scope="col">{t("services.controls")}</th>
           </tr>
         </thead>
         <tbody className="text-center">
@@ -209,28 +210,26 @@ const Services = () => {
                   row.Subcategory
                 )}
               </td>
-
               <td>
                 {editingId === row.id ? (
                   <React.Fragment>
-                    <button onClick={handleSave}>Save</button>
-                    <button onClick={() => setEditingId(null)}>Cancel</button>
+                    <button onClick={handleSave}>{t("services.saveButton")}</button>
+                    <button onClick={() => setEditingId(null)}>{t("services.cancelButton")}</button>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
                     <div className="drTableIcon">
                       <FontAwesomeIcon
                         icon={faCircleCheck}
-                        className={row.status === 1 ? "activeIcon" : "inactive"} // Handle boolean/numeric status values
-                        onClick={() => toggleActive(row.id, row.status)} // Pass the row ID and current status
+                        className={row.status === 1 ? "activeIcon" : "inactive"}
+                        onClick={() => toggleActive(row.id, row.status)}
                       />
-
                       <Link to="/UpdateServices">
-                        <img src={edit} alt="edit" />
+                        <img src={edit} alt={t("services.editIcon")} />
                       </Link>
                       <img
                         src={deletee}
-                        alt="delete"
+                        alt={t("services.deleteIcon")}
                         onClick={() => handleDelete(row.id)}
                       />
                     </div>

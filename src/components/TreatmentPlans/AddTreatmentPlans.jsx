@@ -3,7 +3,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../AuthContext";
 import deletee from "../../assests/delete.svg";
 import add from "../../assests/add.jpeg";
+import { useTranslation } from "react-i18next"; // Import translation hook
+
 const AddTreatmentPlans = ({ onSave }) => {
+  const { t } = useTranslation(); // Use translation hook
   const location = useLocation();
   const plan = location.state?.plan || {};
 
@@ -36,6 +39,7 @@ const AddTreatmentPlans = ({ onSave }) => {
 
   const navigate = useNavigate();
   const imageRef = useRef(null); // Reference for image upload
+
   // Fetch doctors and session types from the API
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -244,13 +248,13 @@ const AddTreatmentPlans = ({ onSave }) => {
   return (
     <div className="container DoctorsProfile tables bg-white">
       <div className="tableTitle d-flex justify-content-between">
-        <h3>اضافة خطة علاجية</h3>
+        <h3>{t("addTreatmentPlanTitle")}</h3>
       </div>
       <form onSubmit={handleSave}>
         <div className="row settingForm justify-content-around">
           {/* Form fields */}
           <div className="col-md-6">
-            <label htmlFor="name_ar">الاسم باللغة العربية:</label>
+            <label htmlFor="name_ar">{t("name_ar")}:</label>
             <input
               type="text"
               className="form-control"
@@ -260,7 +264,7 @@ const AddTreatmentPlans = ({ onSave }) => {
             />
           </div>
           <div className="col-md-6">
-            <label htmlFor="name_en">الاسم باللغة الانجليزية:</label>
+            <label htmlFor="name_en">{t("name_en")}:</label>
             <input
               type="text"
               className="form-control"
@@ -270,7 +274,7 @@ const AddTreatmentPlans = ({ onSave }) => {
             />
           </div>
           <div className="col-md-6">
-            <label htmlFor="levels_num">عدد المراحل:</label>
+            <label htmlFor="levels_num">{t("levels_num")}:</label>
             <input
               type="text"
               className="form-control"
@@ -280,7 +284,7 @@ const AddTreatmentPlans = ({ onSave }) => {
             />
           </div>
           <div className="col-md-6">
-            <label htmlFor="price">السعر:</label>
+            <label htmlFor="price">{t("price")}:</label>
             <input
               type="text"
               className="form-control"
@@ -290,7 +294,7 @@ const AddTreatmentPlans = ({ onSave }) => {
             />
           </div>
           <div className="col-md-12">
-            <label htmlFor="discount">الخصم:</label>
+            <label htmlFor="discount">{t("discount")}:</label>
             <input
               type="text"
               className="form-control"
@@ -300,7 +304,7 @@ const AddTreatmentPlans = ({ onSave }) => {
             />
           </div>
           <div className="col-md-12">
-            <label htmlFor="details_ar">التفاصيل بالعربية:</label>
+            <label htmlFor="details_ar">{t("details_ar")}:</label>
             <input
               type="text"
               className="form-control py-5"
@@ -310,7 +314,7 @@ const AddTreatmentPlans = ({ onSave }) => {
             />
           </div>
           <div className="col-md-12">
-            <label htmlFor="details_en">التفاصيل بالانجليزية:</label>
+            <label htmlFor="details_en">{t("details_en")}:</label>
             <input
               type="text"
               className="form-control py-5"
@@ -320,7 +324,7 @@ const AddTreatmentPlans = ({ onSave }) => {
             />
           </div>
           <div className="col-md-12">
-            <label htmlFor="objectives_ar">الأهداف بالعربية:</label>
+            <label htmlFor="objectives_ar">{t("objectives_ar")}:</label>
             <input
               type="text"
               className="form-control py-5"
@@ -330,7 +334,7 @@ const AddTreatmentPlans = ({ onSave }) => {
             />
           </div>
           <div className="col-md-12">
-            <label htmlFor="objectives_en">الأهداف بالانجليزية:</label>
+            <label htmlFor="objectives_en">{t("objectives_en")}:</label>
             <input
               type="text"
               className="form-control py-5"
@@ -342,7 +346,7 @@ const AddTreatmentPlans = ({ onSave }) => {
 
           {/* Image File Input and Display */}
           <div className="col-md-6">
-            <label htmlFor="file">الصورة:</label>
+            <label htmlFor="file">{t("file")}:</label>
             {/* Display existing image if editing and image exists */}
             {plan.file && (
               <div className="mb-3">
@@ -361,22 +365,22 @@ const AddTreatmentPlans = ({ onSave }) => {
             />
           </div>
           <div className="col-md-6">
-            <label htmlFor="type">نوع الملف:</label>
+            <label htmlFor="type">{t("select_file_type")}:</label>
             <select
               className="form-control"
               name="type"
               value={formData.type}
               onChange={handleChange}
             >
-              <option value="">اختر نوع الملف</option>
-              <option value="picture">صورة</option>
-              <option value="video">فيديو</option>
+              <option value="">{t("select_file_type")}</option>
+              <option value="picture">{t("picture")}</option>
+              <option value="video">{t("video")}</option>
             </select>
           </div>
 
           {/* Treatment Phases */}
           <div className="col-md-12">
-            <label>مراحل العلاج:</label>
+            <label>{t("treatment_phases")}:</label>
             {formData.items.map((item, index) => (
               <div key={index} className="row mb-3">
                 <div className="col-md-4">
@@ -387,7 +391,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                       handleItemChange(index, "name_ar", e.target.value)
                     }
                   >
-                    <option value="">اختر المرحلة بالعربية</option>
+                    <option value="">{t("select_phase_ar")}</option>
                     {levelsList.map((level) => (
                       <option key={level.id} value={level.name_ar}>
                         {level.name_ar}
@@ -403,7 +407,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                       handleItemChange(index, "name_en", e.target.value)
                     }
                   >
-                    <option value="">اختر المرحلة بالانجليزية</option>
+                    <option value="">{t("select_phase_en")}</option>
                     {levelsList.map((level) => (
                       <option key={level.id} value={level.name_en}>
                         {level.name_en}
@@ -415,7 +419,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="عدد الجلسات"
+                    placeholder={t("session_num")}
                     value={item.session_num}
                     onChange={(e) =>
                       handleItemChange(index, "session_num", e.target.value)
@@ -440,7 +444,7 @@ const AddTreatmentPlans = ({ onSave }) => {
 
           {/* Session Types */}
           <div className="col-md-12">
-            <label>أنواع الجلسات:</label>
+            <label>{t("session_types")}:</label>
             {formData.sessionstypes.map((sessionType, index) => (
               <div key={index} className="row mb-3">
                 <div className="col-md-6">
@@ -455,7 +459,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                       )
                     }
                   >
-                    <option value="">اختر نوع الجلسات</option>
+                    <option value="">{t("select_session_type")}</option>
                     {sessionTypes.map((type) => (
                       <option key={type.id} value={type.type}>
                         {type.type}
@@ -467,7 +471,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="عدد الجلسات"
+                    placeholder={t("num_sessions")}
                     value={sessionType.num}
                     onChange={(e) =>
                       handleSessionTypeChange(index, "num", e.target.value)
@@ -497,7 +501,7 @@ const AddTreatmentPlans = ({ onSave }) => {
 
           {/* Doctors */}
           <div className="col-md-12">
-            <label>المختصون:</label>
+            <label>{t("doctors")}:</label>
             {formData.plandoctores.map((doctor, index) => (
               <div key={index} className="row mb-3">
                 <div className="col-md-4">
@@ -508,7 +512,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                       handleDoctorChange(index, "doctor_id", e.target.value)
                     }
                   >
-                    <option value="">اختر المختص</option>
+                    <option value="">{t("select_doctor")}</option>
                     {doctors.map((doc) => (
                       <option key={doc.id} value={doc.id}>
                         {doc.name}
@@ -520,7 +524,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                   <input
                     type="time"
                     className="form-control"
-                    placeholder="الوقت المتاح"
+                    placeholder={t("available_time")}
                     value={doctor.avalible_time}
                     onChange={(e) =>
                       handleDoctorChange(index, "avalible_time", e.target.value)
@@ -531,7 +535,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                   <input
                     type="date"
                     className="form-control"
-                    placeholder="التاريخ المتاح"
+                    placeholder={t("available_date")}
                     value={doctor.avalible_date}
                     onChange={(e) =>
                       handleDoctorChange(index, "avalible_date", e.target.value)
@@ -560,14 +564,14 @@ const AddTreatmentPlans = ({ onSave }) => {
 
           <div className="BottomButtons">
             <button className="save" type="submit" disabled={isLoading}>
-              <span>{isLoading ? "جاري الحفظ..." : "حفظ"}</span>
+              <span>{isLoading ? t("saving") : t("save")}</span>
             </button>
             <button
               type="button"
               className="cancel"
               onClick={() => navigate("/TreatmentPlans")}
             >
-              <span>الغاء</span>
+              <span>{t("cancel")}</span>
             </button>
           </div>
         </div>

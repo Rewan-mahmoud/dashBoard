@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next'; // Import translation hook
 import { useAuth } from '../../AuthContext';
+
 export default function ReturnPolicy() {
+  const { t } = useTranslation(); // Initialize the translation function
   const [detailsAr, setDetailsAr] = useState('');
   const [detailsEn, setDetailsEn] = useState('');
   const { token } = useAuth();
+
   const handleSave = async () => {
     try {
       console.log('Sending data:', { details_ar: detailsAr, details_en: detailsEn });
@@ -39,10 +43,10 @@ export default function ReturnPolicy() {
   return (
     <>
       <div className="tableTitle d-flex justify-content-between">
-        <h3>سياسة الاسترجاع</h3>
+        <h3>{t('returnPolicy.title')}</h3> {/* Translated title */}
       </div>
       <div className="mb-5">
-        <label htmlFor="detailsAr" className="form-label">سياسة الاسترجاع باللغة العربية :</label>
+        <label htmlFor="detailsAr" className="form-label">{t('returnPolicy.detailsAr')}</label> {/* Arabic label */}
         <textarea
           className="form-control"
           id="detailsAr"
@@ -52,7 +56,7 @@ export default function ReturnPolicy() {
         ></textarea>
       </div>
       <div className="mb-3">
-        <label htmlFor="detailsEn" className="form-label">سياسة الاسترجاع باللغة الانجليزية :</label>
+        <label htmlFor="detailsEn" className="form-label">{t('returnPolicy.detailsEn')}</label> {/* English label */}
         <textarea
           className="form-control"
           id="detailsEn"
@@ -63,10 +67,10 @@ export default function ReturnPolicy() {
       </div>
       <div className="BottomButtons">
         <button className="save" onClick={handleSave}>
-          <span>حفظ</span>
+          <span>{t('returnPolicy.save')}</span> {/* Translated save button */}
         </button>
         <button className="cancel">
-          <span>الغاء</span>
+          <span>{t('returnPolicy.cancel')}</span> {/* Translated cancel button */}
         </button>
       </div>
     </>

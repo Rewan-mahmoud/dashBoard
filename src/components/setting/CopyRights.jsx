@@ -1,10 +1,14 @@
-
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next'; // Import translation hook
 import { useAuth } from '../../AuthContext';
+
 export default function CopyRights() {
+  const { t } = useTranslation(); // Initialize the translation function
   const [detailsAr, setDetailsAr] = useState('');
   const [detailsEn, setDetailsEn] = useState('');
-  const { token } = useAuth();  const handleSave = async () => {
+  const { token } = useAuth();
+
+  const handleSave = async () => {
     try {
       console.log('Sending data:', { details_ar: detailsAr, details_en: detailsEn });
 
@@ -36,43 +40,39 @@ export default function CopyRights() {
     }
   };
 
-    return (
+  return (
     <>
-    <div className="tableTitle d-flex justify-content-between">
-    
-    <h3> حقوق الملكية </h3>    
-    </div>
-    <div class="mb-5">
-      <label for="exampleFormControlTextarea1" className="form-label"> حقوق الملكية  باللغة العربية :</label>
-      <textarea
+      <div className="tableTitle d-flex justify-content-between">
+        <h3>{t('copyRights.title')}</h3> {/* Translated title */}
+      </div>
+      <div className="mb-5">
+        <label htmlFor="detailsAr" className="form-label">{t('copyRights.detailsAr')}</label> {/* Arabic details label */}
+        <textarea
           className="form-control"
           id="detailsAr"
           rows="4"
           value={detailsAr}
           onChange={(e) => setDetailsAr(e.target.value)}
-        ></textarea>    </div>
-    <div className="mb-3">
-      <label for="exampleFormControlTextarea1" className="form-label"> حقوق الملكية  باللغة الانجليزية :</label>
-      <textarea
+        ></textarea>
+      </div>
+      <div className="mb-3">
+        <label htmlFor="detailsEn" className="form-label">{t('copyRights.detailsEn')}</label> {/* English details label */}
+        <textarea
           className="form-control"
           id="detailsEn"
           rows="4"
           value={detailsEn}
           onChange={(e) => setDetailsEn(e.target.value)}
-        ></textarea>    </div>
-    <div className="BottomButtons">
+        ></textarea>
+      </div>
+      <div className="BottomButtons">
         <button className="save" onClick={handleSave}>
-          <span>حفظ</span>
+          <span>{t('copyRights.save')}</span> {/* Translated save button */}
         </button>
         <button className="cancel">
-          <span>الغاء</span>
+          <span>{t('copyRights.cancel')}</span> {/* Translated cancel button */}
         </button>
       </div>
     </>
-    
-    ) 
-    
-    
-    
-    
-    }
+  );
+}

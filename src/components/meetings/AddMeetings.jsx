@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
+import { useTranslation } from 'react-i18next'; // Import translation hook
 
 const AddMeetings = ({ onSave }) => {
+    const { t, i18n } = useTranslation(); // Use translation hook
     const location = useLocation();
     const meeting = location.state?.meeting || {};
     const { token } = useAuth();
@@ -29,7 +31,6 @@ const AddMeetings = ({ onSave }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        // Function to convert 12-hour format to 24-hour format
         const convertTo24HourFormat = (time12h) => {
             const [time, modifier] = time12h.split(' ');
             let [hours, minutes] = time.split(':');
@@ -45,11 +46,10 @@ const AddMeetings = ({ onSave }) => {
             return `${String(hours).padStart(2, '0')}:${minutes}`;
         };
 
-        // Set the time field when the component is mounted
         if (meeting.time) {
             const formattedTime = meeting.time.includes('AM') || meeting.time.includes('PM') 
                 ? convertTo24HourFormat(meeting.time) 
-                : meeting.time; // If already in 24-hour format, use as is
+                : meeting.time;
 
             setFormData((prevData) => ({
                 ...prevData,
@@ -59,7 +59,6 @@ const AddMeetings = ({ onSave }) => {
     }, [meeting]);
 
     useEffect(() => {
-        // Fetch doctors
         const fetchDoctors = async () => {
             try {
                 const response = await fetch('https://naql.nozzm.com/api/show_doctores', {
@@ -67,7 +66,7 @@ const AddMeetings = ({ onSave }) => {
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`,
-                        'lang': 'ar',
+                        'lang': i18n.language, // Use the language dynamically
                     },
                     body: JSON.stringify({}),
                 });
@@ -84,7 +83,6 @@ const AddMeetings = ({ onSave }) => {
             }
         };
 
-        // Fetch encounter types
         const fetchEncounterTypes = async () => {
             try {
                 const response = await fetch('https://naql.nozzm.com/api/encountertype', {
@@ -92,7 +90,7 @@ const AddMeetings = ({ onSave }) => {
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`,
-                        'lang': 'ar',
+                        'lang': i18n.language, // Use the language dynamically
                     },
                     body: JSON.stringify({}),
                 });
@@ -111,7 +109,7 @@ const AddMeetings = ({ onSave }) => {
 
         fetchDoctors();
         fetchEncounterTypes();
-    }, [token]);
+    }, [token, i18n.language]);
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -127,12 +125,11 @@ const AddMeetings = ({ onSave }) => {
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
-                    'lang': 'ar',
+                    'lang': i18n.language, // Use the language dynamically
                 },
                 body: JSON.stringify(formData),
             });
             const result = await response.json();
-            console.log('Response:', result);
             if (result.status) {
                 onSave(result.data);
                 navigate('/Meetings');
@@ -141,7 +138,7 @@ const AddMeetings = ({ onSave }) => {
             }
         } catch (error) {
             console.error('Error:', error);
-            setError('Failed to save the meeting. Please try again.');
+            setError(t('addMeetings.saveError'));
         } finally {
             setIsLoading(false);
         }
@@ -162,7 +159,7 @@ const AddMeetings = ({ onSave }) => {
             reader.onloadend = () => {
                 setFormData(prevData => ({
                     ...prevData,
-                    image: reader.result // Update image with the new file content
+                    image: reader.result
                 }));
             };
             reader.readAsDataURL(file);
@@ -172,87 +169,85 @@ const AddMeetings = ({ onSave }) => {
     return (
         <div className='container DoctorsProfile tables bg-white'>
             <div className="tableTitle d-flex justify-content-between">
-                <h3>اضافة لقاء</h3>
+                <h3>{t('addMeeting')}</h3> {/* Translated title */}
             </div>
             <form onSubmit={handleSave}>
                 <div className="row settingForm justify-content-around">
                     <div className="col-md-6">
-                        <label htmlFor="name_ar">الاسم باللغة العربية :</label>
+                        <label htmlFor="name_ar">{t('name_ar')}:</label> {/* Translated label */}
                         <input type="text" className="form-control" name="name_ar" value={formData.name_ar} onChange={handleChange} />
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="name_en">الاسم باللغة بالانجليزية :</label>
+                        <label htmlFor="name_en">{t('name_en')}:</label> {/* Translated label */}
                         <input type="text" className="form-control" name="name_en" value={formData.name_en} onChange={handleChange} />
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="doctor_id">المضيف:</label>
+                        <label htmlFor="doctor_id">{t('host')}:</label> {/* Translated label */}
                         <select className="form-control" name="doctor_id" value={formData.doctor_id} onChange={handleChange}>
-                            <option value="">اختر المضيف</option>
+                            <option value="">{t('selectHost')}</option> {/* Translated placeholder */}
                             {doctors.map(doctor => (
                                 <option key={doctor.id} value={doctor.id}>{doctor.name}</option>
                             ))}
                         </select>
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="encounters_types_id">نوع اللقاء:</label>
+                        <label htmlFor="encounters_types_id">{t('meetingType')}:</label> {/* Translated label */}
                         <select className="form-control" name="encounters_types_id" value={formData.encounters_types_id} onChange={handleChange}>
-                            <option value="">اختر نوع اللقاء</option>
+                            <option value="">{t('selectType')}</option> {/* Translated placeholder */}
                             {encounterTypes.map(type => (
                                 <option key={type.id} value={type.id}>{type.name}</option>
                             ))}
                         </select>
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="seats_num">عدد المقاعد:</label>
+                        <label htmlFor="seats_num">{t('seats')}:</label> {/* Translated label */}
                         <input type="text" className="form-control" name="seats_num" value={formData.seats_num} onChange={handleChange} />
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="price">السعر:</label>
+                        <label htmlFor="price">{t('price')}:</label> {/* Translated label */}
                         <input type="text" className="form-control" name="price" value={formData.price} onChange={handleChange} />
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="date">التاريخ:</label>
+                        <label htmlFor="date">{t('date')}:</label> {/* Translated label */}
                         <input type="date" className="form-control" name="date" value={formData.date} onChange={handleChange} />
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="time">الوقت:</label>
+                        <label htmlFor="time">{t('time')}:</label> {/* Translated label */}
                         <input type="time" className="form-control" name="time" value={formData.time} onChange={handleChange} />
                     </div>
                     <div className="col-md-12">
-                        <label htmlFor="details_ar">التفاصيل:</label>
+                        <label htmlFor="details_ar">{t('details_ar')}:</label> {/* Translated label */}
                         <input type="text" className="form-control py-5" name="details_ar" value={formData.details_ar} onChange={handleChange} />
                     </div>
                     <div className="col-md-12">
-                        <label htmlFor="details_en">التفاصيل باللغة الانجليزية:</label>
+                        <label htmlFor="details_en">{t('details_en')}:</label> {/* Translated label */}
                         <input type="text" className="form-control py-5" name="details_en" value={formData.details_en} onChange={handleChange} />
                     </div>
                     <div className="col-md-12">
-                        <label htmlFor="objectives_ar">الأهداف:</label>
+                        <label htmlFor="objectives_ar">{t('objectives_ar')}:</label> {/* Translated label */}
                         <input type="text" className="form-control py-5" name="objectives_ar" value={formData.objectives_ar} onChange={handleChange} />
                     </div>
                     <div className="col-md-12">
-                        <label htmlFor="objectives_en">الأهداف باللغة الانجليزية:</label>
+                        <label htmlFor="objectives_en">{t('objectives_en')}:</label> {/* Translated label */}
                         <input type="text" className="form-control py-5" name="objectives_en" value={formData.objectives_en} onChange={handleChange} />
                     </div>
                     <div className="col-md-12">
-                        <label htmlFor="image">الصورة:</label>
+                        <label htmlFor="image">{t('image')}:</label> {/* Translated label */}
 
-                        {/* Display existing image */}
                         {formData.image && (
                             <div className="mb-3">
-                                <img src={formData.image} alt="Meeting" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
+                                <img src={formData.image} alt={t('imageAlt')} style={{ width: '100px', height: '100px', objectFit: 'contain' }} /> {/* Translated alt */}
                             </div>
                         )}
 
-                        {/* File input for uploading new image */}
                         <input type="file" className="form-control py-5" onChange={handleImageChange} />
                     </div>
                     <div className='BottomButtons'>
                         <button className='save' type="submit" disabled={isLoading}>
-                            <span>{isLoading ? 'جاري الحفظ...' : 'حفظ'}</span>
+                            <span>{isLoading ? t('saving') : t('save')}</span> {/* Translated button text */}
                         </button>
                         <button type="button" className='cancel'>
-                            <Link to='/Meetings'><span>الغاء</span></Link>
+                            <Link to='/Meetings'><span>{t('cancel')}</span></Link> {/* Translated button text */}
                         </button>
                     </div>
                 </div>

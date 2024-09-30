@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import './setting.css'; 
 import upload from '../../assests/uploaddd.svg';
 import { useAuth } from '../../AuthContext';
+import { useTranslation } from 'react-i18next'; // Import translation hook
+
 function PublicSettings() {
+  const { t } = useTranslation(); // Initialize translation hook
   const [taxNumber, setTaxNumber] = useState('');
   const [supportNumber, setSupportNumber] = useState('');
   const [pharmacistWhatsapp, setPharmacistWhatsapp] = useState('');
@@ -17,6 +20,7 @@ function PublicSettings() {
   const [successMessage, setSuccessMessage] = useState(''); // State for success message
   
   const { token } = useAuth();
+
   const handleFileChange = (e) => {
     setLogoFile(e.target.files[0]);
   };
@@ -53,21 +57,21 @@ function PublicSettings() {
       const result = await response.json();
 
       if (response.ok) {
-        setSuccessMessage('تم ارسال البيانات بنجاح'); // Set success message on success
+        setSuccessMessage(t('successMessage')); // Set success message on success
       } else {
-        setSuccessMessage(result.message || 'Failed to update settings.');
+        setSuccessMessage(result.message || t('errorMessage'));
       }
     } catch (error) {
       console.error('Error:', error);
-      setSuccessMessage('An error occurred. Please try again.');
+      setSuccessMessage(t('networkError'));
     }
   };
 
   return (
     <>
       <div className="tableTitle d-flex justify-content-between">
-        <h3>اعدادات عامة</h3>    
-        <span className='text-align'>الشعار</span>
+        <h3>{t('settings')}</h3>    
+        <span className='text-align'>{t('logo')}</span>
       </div>
 
       <div className="container">
@@ -77,7 +81,7 @@ function PublicSettings() {
               <div className="form-group files">
                 <img className='upload' src={upload} alt="" />
                 <div className='fileUpload'>
-                  اسقط او اسحب,او <span> اختار</span>  ملفا للتحميل
+                  {t('uploadInstruction')} <span>{t('chooseFile')}</span>
                 </div>
                 <input 
                   type="file" 
@@ -94,51 +98,43 @@ function PublicSettings() {
       <form onSubmit={handleSave}>
         <div className="row settingForm mt-5">
           <div className="col-md-6">
-            <label for="formGroupExampleInput"> العنوان</label>
+            <label htmlFor="formGroupExampleInput">{t('taxNumber')}</label>
             <input type="text" className="form-control" onChange={(e) => setTaxNumber(e.target.value)} />
           </div>
           <div className="col-md-6">
-            <label for="formGroupExampleInput"> رقم الجوال للدعم الفني</label>
+            <label htmlFor="formGroupExampleInput">{t('supportNumber')}</label>
             <input type="text" className="form-control" onChange={(e) => setSupportNumber(e.target.value)} />
           </div>
           <div className="col-md-6">
-            <label for="formGroupExampleInput"> رقم واتساب الصيدلية</label>
+            <label htmlFor="formGroupExampleInput">{t('pharmacistWhatsapp')}</label>
             <input type="text" className="form-control" onChange={(e) => setPharmacistWhatsapp(e.target.value)} />
           </div>
           <div className="col-md-6">
-            <label for="formGroupExampleInput"> رقم الصيدلي</label>
+            <label htmlFor="formGroupExampleInput">{t('pharmacistPhone')}</label>
             <input type="text" className="form-control" onChange={(e) => setPharmacistPhone(e.target.value)} />
           </div>
           <div className="col-md-6">
-            <label for="formGroupExampleInput"> الرقم الضريبي</label>
-            <input type="text" className="form-control" onChange={(e) => setTaxNumber(e.target.value)} />
-          </div>
-          <div className="col-md-6">
-            <label for="formGroupExampleInput"> الوقت</label>
+            <label htmlFor="formGroupExampleInput">{t('onboardingOneAr')}</label>
             <input type="text" className="form-control" onChange={(e) => setOnboardingOneAr(e.target.value)} />
           </div>
           <div className="col-md-6">
-            <label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة العربية</label>
-            <input type="text" className="form-control" onChange={(e) => setOnboardingOneAr(e.target.value)} />
-          </div>
-          <div className="col-md-6">
-            <label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة الانجليزية</label>
+            <label htmlFor="formGroupExampleInput">{t('onboardingOneEn')}</label>
             <input type="text" className="form-control" onChange={(e) => setOnboardingOneEn(e.target.value)} />
           </div>
           <div className="col-md-6">
-            <label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة العربية</label>
+            <label htmlFor="formGroupExampleInput">{t('onboardingTwoAr')}</label>
             <input type="text" className="form-control" onChange={(e) => setOnboardingTwoAr(e.target.value)} />
           </div>
           <div className="col-md-6">
-            <label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة الانجليزية</label>
+            <label htmlFor="formGroupExampleInput">{t('onboardingTwoEn')}</label>
             <input type="text" className="form-control" onChange={(e) => setOnboardingTwoEn(e.target.value)} />
           </div>
           <div className="col-md-6">
-            <label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة العربية</label>
+            <label htmlFor="formGroupExampleInput">{t('onboardingThreeAr')}</label>
             <input type="text" className="form-control" onChange={(e) => setOnboardingThreeAr(e.target.value)} />
           </div>
           <div className="col-md-6">
-            <label for="formGroupExampleInput">تعديل تفاصيل صفحة on boarding باللغة الانجليزية</label>
+            <label htmlFor="formGroupExampleInput">{t('onboardingThreeEn')}</label>
             <input type="text" className="form-control" onChange={(e) => setOnboardingThreeEn(e.target.value)} />
           </div>
 
@@ -154,10 +150,10 @@ function PublicSettings() {
 
         <div className="BottomButtons">
           <button type="submit" className="save">
-            <span> حفظ</span>
+            <span>{t('save')}</span>
           </button>
           <button type="button" className="cancel">
-            <span> الغاء</span>
+            <span>{t('cancel')}</span>
           </button>
         </div>
       </form>    

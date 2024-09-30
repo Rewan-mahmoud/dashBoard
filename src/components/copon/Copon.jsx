@@ -5,13 +5,17 @@ import plus from "../../assests/plus.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useAuth } from '../../AuthContext';
+import { useAuth } from "../../AuthContext";
+import add from "../../assests/add.jpeg";
+import { useTranslation } from "react-i18next";
+
 const Coupons = () => {
   const [data, setData] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newRowData, setNewRowData] = useState({});
   const [error, setError] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const { t, i18n } = useTranslation();
   const [newData, setNewData] = useState({
     id: data.length + 1,
     code: "",
@@ -209,26 +213,30 @@ const Coupons = () => {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle d-flex justify-content-between ">
-        <h3> كوبونات الخصم </h3>
+        <h3>{t("coupons.title")}</h3>
         <button onClick={handleAdd}>
           <img src={plus} alt="" />
-          <span className="pe-3"> اضافة </span>
+          <span className="pe-3">{t("coupons.add")}</span>
         </button>
       </div>
 
-      {error && <p className="text-danger">Error: {error}</p>}
+      {error && (
+        <p className="text-danger">
+          {t("error")}: {error}
+        </p>
+      )}
 
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">الرقم</th>
-            <th scope="col">الكود</th>
-            <th scope="col">تاريخ البداية</th>
-            <th scope="col">تاريخ الانتهاء</th>
-            <th scope="col">نسبة الخصم</th>
-            <th scope="col">عدد مستخدمين الخصم</th>
-            <th scope="col">الحالة</th>
-            <th scope="col">الاعدادات</th>
+            <th scope="col">{t("coupons.number")}</th>
+            <th scope="col">{t("coupons.code")}</th>
+            <th scope="col">{t("coupons.start_date")}</th>
+            <th scope="col">{t("coupons.end_date")}</th>
+            <th scope="col">{t("coupons.discount")}</th>
+            <th scope="col">{t("coupons.user_num")}</th>
+            <th scope="col">{t("coupons.status")}</th>
+            <th scope="col">{t("coupons.actions")}</th>
           </tr>
         </thead>
         <tbody className="text-center">
@@ -239,6 +247,7 @@ const Coupons = () => {
                 {editingId === row.id ? (
                   <input
                     type="text"
+                    className="form-control"
                     value={newRowData.code}
                     onChange={(e) => handleChange(e, "code")}
                   />
@@ -250,6 +259,7 @@ const Coupons = () => {
                 {editingId === row.id ? (
                   <input
                     type="text"
+                    className="form-control"
                     value={newRowData.start_date}
                     onChange={(e) => handleChange(e, "start_date")}
                   />
@@ -261,6 +271,7 @@ const Coupons = () => {
                 {editingId === row.id ? (
                   <input
                     type="text"
+                    className="form-control"
                     value={newRowData.end_date}
                     onChange={(e) => handleChange(e, "end_date")}
                   />
@@ -272,6 +283,7 @@ const Coupons = () => {
                 {editingId === row.id ? (
                   <input
                     type="text"
+                    className="form-control"
                     value={newRowData.discount}
                     onChange={(e) => handleChange(e, "discount")}
                   />
@@ -282,6 +294,7 @@ const Coupons = () => {
               <td>
                 {editingId === row.id ? (
                   <input
+                    className="form-control"
                     type="text"
                     value={newRowData.user_num}
                     onChange={(e) => handleChange(e, "user_num")}
@@ -302,14 +315,16 @@ const Coupons = () => {
               <td>
                 {editingId === row.id ? (
                   <React.Fragment>
-                    <button className="save-btn" onClick={handleSave}>
-                      حفظ
+                    <button className="btn  btn-sm ml-2" onClick={handleSave}>
+                      <img src={add} alt={t("add")} style={{ width: "20px" }} />
                     </button>
                     <button
-                      className="cancel-btn"
-                      onClick={() => setEditingId(null)}
+                      className="btn  btn-sm"
+                      onClick={() => {
+                        setEditingId(null);
+                      }}
                     >
-                      الغاء
+                      <img src={deletee} alt={t("delete")} />
                     </button>
                   </React.Fragment>
                 ) : (
@@ -336,6 +351,7 @@ const Coupons = () => {
               <td>{newData.id}</td>
               <td>
                 <input
+                  className="form-control"
                   type="text"
                   value={newData.code}
                   onChange={(e) => handleAddChange(e, "code")}
@@ -343,6 +359,7 @@ const Coupons = () => {
               </td>
               <td>
                 <input
+                  className="form-control"
                   type="text"
                   value={newData.start_date}
                   onChange={(e) => handleAddChange(e, "start_date")}
@@ -350,6 +367,7 @@ const Coupons = () => {
               </td>
               <td>
                 <input
+                  className="form-control"
                   type="text"
                   value={newData.end_date}
                   onChange={(e) => handleAddChange(e, "end_date")}
@@ -357,6 +375,7 @@ const Coupons = () => {
               </td>
               <td>
                 <input
+                  className="form-control"
                   type="text"
                   value={newData.discount}
                   onChange={(e) => handleAddChange(e, "discount")}
@@ -365,13 +384,16 @@ const Coupons = () => {
               <td>
                 <input
                   type="text"
+                  className="form-control"
                   value={newData.user_num}
                   onChange={(e) => handleAddChange(e, "user_num")}
                 />
               </td>
-              <td>
-                <button onClick={handleAddSave}>Add</button>
-                <button onClick={() => setIsAdding(false)}>Cancel</button>
+              <td className="d-flex">
+                <button className="btn  btn-success" onClick={handleAddSave}>{t("coupons.add")}</button>
+                <button className="btn me-3 btn-danger" onClick={() => setIsAdding(false)}>
+                  {t("cancel")}
+                </button>
               </td>
             </tr>
           )}

@@ -6,13 +6,14 @@ import plus from '../../assests/plus.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../AuthContext'; // Import useAuth to get the token
+import { useTranslation } from 'react-i18next'; // Import useTranslation hook
 
 const Questions = () => {
+  const { t } = useTranslation(); // Initialize translation function
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { token } = useAuth();
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,13 +45,11 @@ const Questions = () => {
       fetchData(); 
     }
   }, [token]); 
-  
 
   const handleEdit = (row) => {
     navigate('/AddQuestions', { state: { row } }); // Pass row data to AddQuestions page
   };
 
-  
   const handleDelete = async (id) => {
     try {
       const response = await fetch(`https://naql.nozzm.com/api/destroy_questions/${id}`, {
@@ -112,11 +111,11 @@ const Questions = () => {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle d-flex justify-content-between">
-        <h3>الاسئلة والاجوبة</h3>
+        <h3>{t('questions')}</h3>
         <Link to="/AddQuestions">
           <button>
             <img src={plus} alt="" />
-            <span className="pe-3">اضافة</span>
+            <span className="pe-3">{t('add')}</span>
           </button>
         </Link>
       </div>
@@ -124,11 +123,11 @@ const Questions = () => {
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">الرقم</th>
-            <th scope="col">السؤال باللغة العربية</th>
-            <th scope="col">السؤال باللغة الانجليزية</th>
-            <th scope="col">الحالة</th>
-            <th scope="col">التحكم</th>
+            <th scope="col">{t('number')}</th>
+            <th scope="col">{t('question_ar')}</th>
+            <th scope="col">{t('question_en')}</th>
+            <th scope="col">{t('status')}</th>
+            <th scope="col">{t('controls')}</th>
           </tr>
         </thead>
         <tbody className="text-center">
@@ -148,12 +147,12 @@ const Questions = () => {
                 <div className="drTableIcon">
                   <img
                     src={edit}
-                    alt="edit"
+                    alt={t('edit')}
                     onClick={() => handleEdit(row)} // Pass the whole row
                   />
                   <img
                     src={deletee}
-                    alt="delete"
+                    alt={t('delete')}
                     onClick={() => handleDelete(row.id)}
                   />
                 </div>

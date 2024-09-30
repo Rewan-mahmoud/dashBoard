@@ -6,11 +6,15 @@ import plus from '../../assests/plus.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../AuthContext';
+import { useTranslation } from 'react-i18next'; // Import translation hook
+
 const TreatmentPlans = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { token } = useAuth();
+  const { t ,i18n } = useTranslation(); // Use the translation hook
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,7 +23,7 @@ const TreatmentPlans = () => {
           headers: {
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`,
-            'lang': 'ar',
+            lang: i18n.language, 
           }
         });
         const result = await response.json();
@@ -34,7 +38,7 @@ const TreatmentPlans = () => {
     };
 
     fetchData();
-  }, []);
+  }, [token ,i18n ]);
 
   const handleDelete = async (id) => {
     try {
@@ -80,7 +84,7 @@ const TreatmentPlans = () => {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
-          'lang': 'ar',
+          lang: i18n.language, 
         },
         body: JSON.stringify({ stauts: active ? 1 : 0 })
       });
@@ -97,23 +101,23 @@ const TreatmentPlans = () => {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle d-flex justify-content-between ">
-        <h3>الخطط العلاجية</h3>
+        <h3>{t('treatmentPlans')}</h3> {/* Translated title */}
         <Link to="/AddTreatmentPlans">
           <button>
-            <img src={plus} alt="" />
-            <span className='pe-3'>اضافة</span>
+            <img src={plus} alt={t('addTreatmentPlanIcon')} /> {/* Translated icon */}
+            <span className='pe-3'>{t('addTreatmentPlan')}</span> {/* Translated button text */}
           </button>
         </Link>
       </div>
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">الرقم</th>
-            <th scope="col">الاسم باللغة العربية</th>
-            <th scope="col">الاسم باللغة الانجليزية</th>
-            <th scope="col">عدد المراحل</th>
-            <th scope="col">نوع المرحلة</th>
-            <th scope="col">الاعدادات</th>
+            <th scope="col">{t('id')}</th> {/* Translated label */}
+            <th scope="col">{t('name_ar')}</th> {/* Translated label */}
+            <th scope="col">{t('name_en')}</th> {/* Translated label */}
+            <th scope="col">{t('levels_num')}</th> {/* Translated label */}
+            <th scope="col">{t('session_type')}</th> {/* Translated label */}
+            <th scope="col">{t('controls')}</th> {/* Translated label */}
           </tr>
         </thead>
         <tbody className='text-center'>
@@ -128,9 +132,9 @@ const TreatmentPlans = () => {
                 <div className='drTableIcon'>
                   <FontAwesomeIcon icon={faCircleCheck} className={row.active ? 'activeIcon' : 'inactive'} onClick={() => toggleActive(row.id)} />
                   <button className='editbutton' onClick={() => navigate('/AddTreatmentPlans', { state: { plan: row } })}>
-                    <img src={edit} alt="edit" />
+                    <img src={edit} alt={t('editIcon')} /> {/* Translated icon */}
                   </button>
-                  <img src={deletee} alt="delete" onClick={() => handleDelete(row.id)} />
+                  <img src={deletee} alt={t('deleteIcon')} onClick={() => handleDelete(row.id)} /> {/* Translated icon */}
                 </div>
               </td>
             </tr>

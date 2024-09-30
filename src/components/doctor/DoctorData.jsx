@@ -19,6 +19,7 @@ export default function DoctorData() {
     skillsEnglish: doctor.skillsEnglish || '',
     specialties: doctor.specialties || '',
     specialtiesEnglish: doctor.specialtiesEnglish || '',
+    work_times: doctor.work_times || [{ id: 1, start: '', end: '' }] 
   });
   const [works, setWorks] = useState(doctor.work_times || [{ id: 1, start: '', end: '' }]);
   const [error, setError] = useState('');
@@ -47,6 +48,7 @@ export default function DoctorData() {
         skillsEnglish: doctor.skillsEnglish || '',
         specialties: doctor.specialties || '',
         specialtiesEnglish: doctor.specialtiesEnglish || '',
+        work_times: doctor.work_times || [{ id: 1, start: '', end: '' }] // Preserve the work times
       });
       setWorks(doctor.work_times || [{ id: 1, start: '', end: '' }]);
     }
@@ -61,7 +63,6 @@ export default function DoctorData() {
       setWorks(works.filter(work => work.id !== id));
     }
   };
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -88,6 +89,7 @@ export default function DoctorData() {
         formDataToSend.append('email', formData.email || '');
         formDataToSend.append('mobile', formData.mobile || '');
         formDataToSend.append('work_times', JSON.stringify(works.map(({ start, end }) => ({ start, end }))));
+
 
         // Check if new images are uploaded; if not, use the existing URLs
         if (imageRef.current && imageRef.current.files[0]) {
