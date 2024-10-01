@@ -57,23 +57,24 @@ const DoctorsProfile = () => {
       </div>
       
       <div className='work DoctorsProfileTitle'>
-        <h2>الدوام</h2>
-        {doctor.Attendance && doctor.Attendance.length > 0 ? (
-          doctor.Attendance.map((attendance, index) => (
-            <div className="d-flex align-items-center mt-5" key={index}>
-              <div className='time'>
-                <span>{attendance.start_time} صباحا</span>
-              </div>
-              <p>الي</p>
-              <div className='time'>
-                <span>{attendance.end_time} مساء</span>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>لا يوجد دوام مسجل.</p>
-        )}
+  <h2>الدوام</h2>
+  {doctor.Attendance && doctor.Attendance.length > 0 ? (
+    doctor.Attendance.map((attendance, index) => (
+      <div className="d-flex align-items-center mt-5" key={index}>
+        <div className='time'>
+          <span>{attendance.start_time} صباحا</span>
+        </div>
+        <p>الي</p>
+        <div className='time'>
+          <span>{attendance.end_time} مساء</span>
+        </div>
       </div>
+    ))
+  ) : (
+    <p>لا يوجد دوام مسجل.</p>
+  )}
+</div>
+
 
       <div className='pref DoctorsProfileTitle'>
         <h2>االسيرة الشخصية</h2>

@@ -103,4 +103,61 @@
 
 .Header.ltr .searchContainer {
   margin-right: 20px;
+}@media (min-width: 992px) {
+  .Header {
+    padding: 15px 30px;
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+  .Header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .searchContainer {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .HeaderIcons {
+    margin-top: 10px;
+  }
+}
+
+/* Small screens (mobiles) */
+@media (max-width: 767px) {
+  .Header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .searchContainer {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .searchInput {
+    padding: 5px 40px;
+  }
+
+  .searchIcon {
+    right: 10px;
+  }
+
+  .HeaderIcons {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .HeaderIcons img {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
 }

@@ -30,3 +30,45 @@ color: #239EC2;
 .drPic span{
     color: black;
 }
+/* For the toggle button */
+.navbar-toggle {
+    display: none;
+    background-color: #239EC2;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  /* Show toggle button on small screens */
+  @media (max-width: 800px) {
+    .navbar-toggle {
+      display: block;
+      margin-bottom: 20px;
+    }
+  
+    .sideNavbar {
+      position: fixed;
+      left: -100%;
+      top: 0;
+      width: 200px;
+      height: 100%;
+      background-color: white;
+      z-index: 999;
+      transition: 0.3s ease;
+    }
+  
+    .sideNavbar.open {
+      left: 0;
+    }
+  
+    .NavTitle {
+      padding: 10px 15px;
+    }
+  
+    .drPic {
+      display: none;
+    }
+  }
+  

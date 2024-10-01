@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import i18n from "../i18n/i18n"; // Make sure i18n is correctly set up
+import i18n from "../i18n/i18n"; // Ensure i18n is set up properly
 import "./header.css";
 import img from "../../assests/logo.png";
 import Vector from "../../assests/Vector.svg";
@@ -18,13 +18,13 @@ function Header() {
   const location = useLocation();
   const [activeLink, setActiveLink] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState(i18n.language); // Track current language
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
 
   // Switch between Arabic and English
   const switchLanguage = () => {
     const newLanguage = currentLanguage === "en" ? "ar" : "en";
     i18n.changeLanguage(newLanguage);
-    setCurrentLanguage(newLanguage); // Update the current language state
+    setCurrentLanguage(newLanguage);
   };
 
   useEffect(() => {
@@ -58,12 +58,12 @@ function Header() {
   }, [currentLanguage]);
 
   return (
-    <div className={`Header ${currentLanguage === "ar" ? "rtl" : "ltr"}`}>
+    <div className={`Header ${isScrolled ? "scrolled" : ""} ${currentLanguage === "ar" ? "rtl" : "ltr"}`}>
       <nav className="d-flex align-items-center justify-content-between">
         <div>
           <img src={img} width="100" alt="logo" />
           <Link to="/Dashboard" className="title">
-            {t("خبراء النفس")}
+            {t("SelfExpert")}
           </Link>
         </div>
 
@@ -107,7 +107,7 @@ function Header() {
               <img src={mingcute} alt="Mingcute" />
             </a>
             <div className="dropdown-content logout">
-              <a href="/Login">{t("تسجيل خروج")}</a>
+              <a href="/Login">{t("logout")}</a>
             </div>
           </div>
         </div>
