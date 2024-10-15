@@ -11,6 +11,7 @@ export default function AddServices() {
   const [subCategories, setSubCategories] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [data, setData] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
   const [subcategories, setSubcategories] = useState([]);
   const [dynamicInputs, setDynamicInputs] = useState([
     {
@@ -28,45 +29,45 @@ export default function AddServices() {
   const { token } = useAuth();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://naql.nozzm.com/api/services", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            lang: "ar",
-          },
-        });
-        const result = await response.json();
-        if (result.status) {
-          const categoriesSet = new Map();
-          const subCategoriesSet = new Map();
-          const doctorsSet = new Map();
+ 
+    //   try {
+    //     const response = await fetch("https://naql.nozzm.com/api/services", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${token}`,
+    //         lang: "ar",
+    //       },
+    //     });
+    //     const result = await response.json();
+    //     if (result.status) {
+    //       const categoriesSet = new Map();
+    //       const subCategoriesSet = new Map();
+    //       const doctorsSet = new Map();
 
-          result.data.data.forEach((service) => {
-            categoriesSet.set(service?.category?.name, service?.category?.id);
-            subCategoriesSet.set(
-              service?.sub_category?.name,
-              service?.sub_category?.id
-            );
-            service.Service_doctors.forEach((doctor) => {
-              doctorsSet.set(doctor.doctors.name, doctor.doctors.id);
-            });
-          });
+    //       result.data.data.forEach((service) => {
+    //         categoriesSet.set(service?.category?.name, service?.category?.id);
+    //         subCategoriesSet.set(
+    //           service?.sub_category?.name,
+    //           service?.sub_category?.id
+    //         );
+    //         service.Service_doctors.forEach((doctor) => {
+    //           doctorsSet.set(doctor.doctors.name, doctor.doctors.id);
+    //         });
+    //       });
 
-          setCategories(Array.from(categoriesSet));
-          setSubCategories(Array.from(subCategoriesSet));
-          setDoctors(Array.from(doctorsSet));
-        } else {
-          console.error("Failed to fetch data:", result.message);
-          setError(result.message);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error.message);
-      }
-    };
+    //       // setCategories(Array.from(categoriesSet));
+    //       // setSubCategories(Array.from(subCategoriesSet));
+    //       // setDoctors(Array.from(doctorsSet));
+    //     } else {
+    //       console.error("Failed to fetch data:", result.message);
+    //       setError(result.message);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //     setError(error.message);
+    //   }
+    // };
     const fetchSubcategories = async () => {
       try {
         const response = await fetch(
@@ -94,17 +95,20 @@ export default function AddServices() {
     };
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://naql.nozzm.com/api/categories", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            lang: "ar",
-          },
-        });
+        const response = await fetch(
+          "https://naql.nozzm.com/api/categories",
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+              lang: "ar",
+            },
+          }
+        );
         const result = await response.json();
         if (result.status) {
-          setCategories(result.data.data); // Store categories in state
+          setCategories(result?.data?.data); // Store subcategories in state
         } else {
           console.error("Failed to fetch categories:", result.message);
           setError(result.message);
@@ -114,6 +118,7 @@ export default function AddServices() {
         setError(error.message);
       }
     };
+ 
     const fetchDoctors = async () => {
       try {
         const response = await fetch(
@@ -140,11 +145,11 @@ export default function AddServices() {
         setError(error.message);
       }
     };
+
     fetchDoctors();
     fetchCategories();
     fetchSubcategories();
-    fetchData();
-  }, [token]);
+  }, [token ]);
 
   const handleAddService = () => {
     setDynamicInputs([
@@ -157,7 +162,9 @@ export default function AddServices() {
       },
     ]);
   };
-
+  useEffect(() => {
+    console.log("categories", categories); // Check if categories are being set correctly
+  }, []);
   const handleFixedInputChange = (field, value) => {
     setFixedInputs({ ...fixedInputs, [field]: value });
   };
@@ -303,19 +310,22 @@ export default function AddServices() {
           <h3>الخدمات</h3>
         </div>
         <div className="row mb-3">
-          <div className="col-md-3">
+        <div className="col-md-3">
             <div className="custom-select">
               <select
                 className="form-control"
-                value={fixedInputs.category}
+                value={fixedInputs.category} // This should hold the subcategory ID
                 onChange={(e) =>
                   handleFixedInputChange("category", e.target.value)
                 }
               >
                 <option value="">الفئات الاساسية</option>
-                {categories.map((category, id) => (
+                {categories?.map((category) => (
                   <option key={category.id} value={category.id}>
-                    {category.name}
+                    {" "}
+                 
+                    {category.name_ar}{" "}
+                
                   </option>
                 ))}
               </select>
@@ -324,6 +334,7 @@ export default function AddServices() {
               </div>
             </div>
           </div>
+
           <div className="col-md-3">
             <div className="custom-select">
               <select
@@ -338,7 +349,7 @@ export default function AddServices() {
                   <option key={subcategory.id} value={subcategory.id}>
                     {" "}
                     {/* Use `id` here as the value */}
-                    {subcategory.name_ar}{" "}
+                    {subcategory?.name_ar}{" "}
                     {/* Display the name_ar for readability */}
                   </option>
                 ))}
@@ -377,7 +388,10 @@ export default function AddServices() {
                     <option value="">المختصون</option>
                     {doctors.map((doctor, id) => (
                       <option key={doctor.id} value={doctor.id}>
-                        {doctor.name}
+                        {" "}
+                        {/* Use `id` here as the value */}
+                        {doctor.name}{" "}
+                        {/* Display the name_ar for readability */}
                       </option>
                     ))}
                   </select>

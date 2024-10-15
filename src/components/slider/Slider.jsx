@@ -230,6 +230,7 @@ const Slider = () => {
           <span className="pe-3">{t("add")}</span> {/* Translate 'اضافة' */}
         </button>
       </div>
+
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
@@ -242,6 +243,29 @@ const Slider = () => {
           {data.map((row) => (
             <tr key={row.id}>
               <td>{row.id}</td>
+              <td>
+                {editingId === row.id ? (
+                  <>
+                    <input
+                      type="file"
+                      onChange={(e) => handleEditChange(e, "image")}
+                    />
+                    {newRowData.imagePreview && (
+                      <img
+                        src={newRowData.imagePreview}
+                        alt="Preview"
+                        style={{ width: "50px", height: "50px" }}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <img
+                    src={row.image}
+                    alt=""
+                    style={{ width: "287.68px", height: "127px" }}
+                  />
+                )}
+              </td>
               <td>
                 {editingId === row.id ? (
                   <React.Fragment>
@@ -258,27 +282,6 @@ const Slider = () => {
                       <img src={deletee} alt={t("delete")} />
                     </button>
                   </React.Fragment>
-                ) : (
-                  <img
-                    src={row.image}
-                    alt=""
-                    style={{ width: "287.68px", height: "127px" }}
-                  />
-                )}
-              </td>
-              <td>
-                {editingId === row.id ? (
-                  <>
-                    <button className="save-btn" onClick={handleSave}>
-                      {t("save")}
-                    </button>
-                    <button
-                      className="cancel-btn"
-                      onClick={() => setEditingId(null)}
-                    >
-                      {t("cancel")}
-                    </button>
-                  </>
                 ) : (
                   <div className="drTableIcon">
                     <FontAwesomeIcon
@@ -318,23 +321,21 @@ const Slider = () => {
                 )}
               </td>
               <td>
-                <button onClick={handleAddSave}>{t("add")}</button>{" "}
-                {/* Translate 'Add' */}
-                <button onClick={() => setIsAdding(false)}>
+                {/* Use a button tag instead of adding children to the img */}
+                <button className="btn save-btn btn-sm ml-2" onClick={handleAddSave}>
+               {t("add")}
+                </button>
+                <button
+                  className="btn cancel-btn btn-danger btn-sm ml-2"
+                  onClick={() => setIsAdding(false)}
+                >
                   {t("cancel")}
-                </button>{" "}
-                {/* Translate 'Cancel' */}
+                </button>
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      {error && (
-        <div>
-          {t("error")}: {error}
-        </div>
-      )}{" "}
-      {/* Translate 'Error' */}
     </div>
   );
 };

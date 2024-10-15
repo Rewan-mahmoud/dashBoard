@@ -23,7 +23,7 @@ const AddTreatmentPlans = ({ onSave }) => {
     file: plan.file || "", // This will hold the file data (URL or base64)
     type: plan.type || "",
     items: plan.level || [{ name_ar: "", name_en: "", session_num: "" }],
-    sessionstypes: plan.sessionstype || [{ type_name: "", num: "" }],
+    sessionstypes: plan.sessionstypes || [{ type_name: "", num: "" }],
     plandoctores: plan.plandoctores || [
       { doctor_id: "", avalible_time: "", avalible_date: "" },
     ],
@@ -83,7 +83,7 @@ const AddTreatmentPlans = ({ onSave }) => {
           setLevelsList(levels);
 
           const sessions = result.data.data
-            .map((plan) => plan.sessionstype)
+            .map((plan) => plan.sessionstype.level.name_ar)
             .flat();
           setSessionTypes(sessions);
         } else {
@@ -136,12 +136,6 @@ const AddTreatmentPlans = ({ onSave }) => {
     }));
   };
 
-  const handleRemoveDoctor = (index) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      plandoctores: prevData.plandoctores.filter((_, i) => i !== index),
-    }));
-  };
 
   const handleItemChange = (index, field, value) => {
     const newItems = formData.items.map((item, i) =>
@@ -174,24 +168,68 @@ const AddTreatmentPlans = ({ onSave }) => {
   };
 
   // Handle saving the form
+  // Handle saving the form
   const handleSave = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    e.preventDefault();
     const formDataToSend = new FormData();
 
-    // Add new image or use the existing one if no new image is selected
+    // Add file data
     if (imageRef.current && imageRef.current.files[0]) {
       formDataToSend.append("file", imageRef.current.files[0]);
-    } else if (plan.file) {
-      formDataToSend.append("file", plan.file); // Use existing file
+    } else if (plan.file && !imageRef.current.files[0]) {
+      formDataToSend.append("file", plan.file);
     }
 
-    // Add other form data
-    Object.keys(formData).forEach((key) => {
-      formDataToSend.append(key, formData[key]);
+    // Add basic form data
+    formDataToSend.append("name_ar", formData.name_ar);
+    formDataToSend.append("name_en", formData.name_en);
+    formDataToSend.append("details_ar", formData.details_ar);
+    formDataToSend.append("details_en", formData.details_en);
+    formDataToSend.append("levels_num", formData.levels_num);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("discount", formData.discount);
+    formDataToSend.append("objectives_ar", formData.objectives_ar);
+    formDataToSend.append("objectives_en", formData.objectives_en);
+    formDataToSend.append("type", formData.type);
+
+    // Add items array
+    formData.items.forEach((item, index) => {
+      formDataToSend.append(`items[${index}][name_ar]`, item.name_ar || "");
+      formDataToSend.append(`items[${index}][name_en]`, item.name_en || "");
+      formDataToSend.append(
+        `items[${index}][session_num]`,
+        item.session_num || 0
+      );
     });
+
+    // Add session types array
+    formData.sessionstypes.forEach((session, index) => {
+      formDataToSend.append(
+        `sessionstypes[${index}][type_name]`,
+        session.type_name || ""
+      );
+      formDataToSend.append(`sessionstypes[${index}][num]`, session.num || 0);
+    });
+
+    // Add plandoctores array
+    formData.plandoctores.forEach((doctor, index) => {
+      formDataToSend.append(
+        `plandoctores[${index}][doctor_id]`,
+        doctor.doctor_id || ""
+      );
+      formDataToSend.append(
+        `plandoctores[${index}][avalible_time]`,
+        doctor.avalible_time || ""
+      );
+      formDataToSend.append(
+        `plandoctores[${index}][avalible_date]`,
+        doctor.avalible_date || ""
+      );
+    });
+
     const endpoint = plan.id
       ? `https://naql.nozzm.com/api/update_planseeions/${plan.id}`
       : "https://naql.nozzm.com/api/add_planseeions";
@@ -202,15 +240,14 @@ const AddTreatmentPlans = ({ onSave }) => {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          lang: "ar",
         },
-        body: JSON.stringify(formData),
+        body: formDataToSend,
       });
+
       const result = await response.json();
       if (result.status) {
         onSave(result.data);
-        navigate("/treatment-plans");
+        navigate("/TreatmentPlans");
       } else {
         setError(result.message);
       }
@@ -244,7 +281,9 @@ const AddTreatmentPlans = ({ onSave }) => {
       [name]: value,
     }));
   };
-
+ React.useEffect(()=>{
+  console.log("item?.session_num" , formData)
+ },[formData])
   return (
     <div className="container DoctorsProfile tables bg-white">
       <div className="tableTitle d-flex justify-content-between">
@@ -384,43 +423,33 @@ const AddTreatmentPlans = ({ onSave }) => {
             {formData.items.map((item, index) => (
               <div key={index} className="row mb-3">
                 <div className="col-md-4">
-                  <select
+                  <input
+                    type="text"
                     className="form-control"
+                    placeholder={t("enter_phase_ar")}
                     value={item.name_ar}
                     onChange={(e) =>
                       handleItemChange(index, "name_ar", e.target.value)
                     }
-                  >
-                    <option value="">{t("select_phase_ar")}</option>
-                    {levelsList.map((level) => (
-                      <option key={level.id} value={level.name_ar}>
-                        {level.name_ar}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="col-md-4">
-                  <select
-                    className="form-control"
-                    value={item.name_en}
-                    onChange={(e) =>
-                      handleItemChange(index, "name_en", e.target.value)
-                    }
-                  >
-                    <option value="">{t("select_phase_en")}</option>
-                    {levelsList.map((level) => (
-                      <option key={level.id} value={level.name_en}>
-                        {level.name_en}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
                 <div className="col-md-4">
                   <input
                     type="text"
                     className="form-control"
+                    placeholder={t("enter_phase_en")}
+                    value={item.name_en}
+                    onChange={(e) =>
+                      handleItemChange(index, "name_en", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="col-md-4">
+                  <input
+                    type="number"
+                    className="form-control"
                     placeholder={t("session_num")}
-                    value={item.session_num}
+                    value={item?.session_num}
                     onChange={(e) =>
                       handleItemChange(index, "session_num", e.target.value)
                     }
@@ -450,7 +479,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                 <div className="col-md-6">
                   <select
                     className="form-control"
-                    value={sessionType.type_name}
+                    value={sessionType.type_name || ""} // Ensure value binding
                     onChange={(e) =>
                       handleSessionTypeChange(
                         index,
@@ -460,11 +489,8 @@ const AddTreatmentPlans = ({ onSave }) => {
                     }
                   >
                     <option value="">{t("select_session_type")}</option>
-                    {sessionTypes.map((type) => (
-                      <option key={type.id} value={type.type}>
-                        {type.type}
-                      </option>
-                    ))}
+                    <option value="تامل">تامل</option>
+                    <option value="عادي">عادي</option>
                   </select>
                 </div>
                 <div className="col-md-6">
@@ -472,33 +498,15 @@ const AddTreatmentPlans = ({ onSave }) => {
                     type="text"
                     className="form-control"
                     placeholder={t("num_sessions")}
-                    value={sessionType.num}
+                    value={sessionType?.num || ""}
                     onChange={(e) =>
                       handleSessionTypeChange(index, "num", e.target.value)
                     }
                   />
                 </div>
-                {formData.sessionstypes.length > 1 && (
-                  <div className="col-md-12 text-end">
-                    <button
-                      type="button"
-                      className="btn "
-                      onClick={() => handleRemoveSessionType(index)}
-                    >
-                      <img src={deletee} alt="" />
-                    </button>
-                  </div>
-                )}
               </div>
             ))}
-
-            <div className="col-md-12 text-end mb-4">
-              <button className="btn btn-sm" onClick={handleAddSessionType}>
-                <img src={add} style={{ width: "20px" }} />
-              </button>
-            </div>
           </div>
-
           {/* Doctors */}
           <div className="col-md-12">
             <label>{t("doctors")}:</label>
@@ -507,7 +515,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                 <div className="col-md-4">
                   <select
                     className="form-control"
-                    value={doctor.doctor_id}
+                    value={doctor.doctor_id || ""} // Ensure the value is correctly bound
                     onChange={(e) =>
                       handleDoctorChange(index, "doctor_id", e.target.value)
                     }
@@ -525,7 +533,7 @@ const AddTreatmentPlans = ({ onSave }) => {
                     type="time"
                     className="form-control"
                     placeholder={t("available_time")}
-                    value={doctor.avalible_time}
+                    value={doctor.avalible_time || ""}
                     onChange={(e) =>
                       handleDoctorChange(index, "avalible_time", e.target.value)
                     }
@@ -536,36 +544,21 @@ const AddTreatmentPlans = ({ onSave }) => {
                     type="date"
                     className="form-control"
                     placeholder={t("available_date")}
-                    value={doctor.avalible_date}
+                    value={doctor.avalible_date || ""}
                     onChange={(e) =>
                       handleDoctorChange(index, "avalible_date", e.target.value)
                     }
                   />
                 </div>
-                {formData.plandoctores.length > 1 && (
-                  <div className="col-md-12 text-end">
-                    <button
-                      type="button"
-                      className="btn "
-                      onClick={() => handleRemoveDoctor(index)}
-                    >
-                      <img src={deletee} alt="" />
-                    </button>
-                  </div>
-                )}
               </div>
             ))}
-           <div className="col-md-12 text-end mb-4">
-              <button className="btn btn-sm" onClick={handleAddDoctor}>
-                <img src={add} style={{ width: "20px" }} />
-              </button>
-            </div>
           </div>
 
           <div className="BottomButtons">
             <button className="save" type="submit" disabled={isLoading}>
               <span>{isLoading ? t("saving") : t("save")}</span>
             </button>
+
             <button
               type="button"
               className="cancel"
