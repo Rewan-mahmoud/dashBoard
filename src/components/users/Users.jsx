@@ -48,7 +48,7 @@ const Users = () => {
       const response = await fetch(`https://naql.nozzm.com/api/destroy_users/${id}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       });

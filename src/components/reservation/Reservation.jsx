@@ -21,8 +21,7 @@ const Reservation = () => {
   const [appointmentDetails, setAppointmentDetails] = useState(null);
   const [show, setShow] = useState(false);
 
-  const timeSlots = ["1:00 pm", "2:00 pm", "3:00 pm", "4:00 pm", "5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm"];
-
+  const timeSlots = ["1:00 ", "2:00 ", "3:00 ", "4:00 ", "5:00 ", "6:00 ", "7:00 ", "8:00 "];
   const [selectedHour, setSelectedHour] = useState('--');
   const [selectedMinute, setSelectedMinute] = useState('--');
 
@@ -110,18 +109,30 @@ const Reservation = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       const result = await response.json();
       if (result.status) {
-        setAppointmentDetails(result.data); // Store the fetched data in state
-        setSelectedDoctor(result.data.doctor_name); // Prefill doctor name
-        setSelectedPatient(result.data.patient_name); // Prefill patient name
-        setSelectedDate(result.data.date); // Prefill date
-        const [hour, minute] = result.data.time.split(':'); // Prefill hour and minute
-        setSelectedHour(hour);
-        setSelectedMinute(minute);
-        setSelectedTime(result.data.time); // Prefill time
-        setShow(true); // Show the modal
+        setAppointmentDetails(result.data);
+        setSelectedDoctor(result.data.doctor_name);
+        setSelectedPatient(result.data.patient_name);
+        setSelectedDate(result.data.date);
+  
+        const [hour, minute] = result.data.time.split(':');
+        let hour24 = parseInt(hour, 10);
+        
+        if (result.data.time.includes("pm") && hour24 < 12) {
+          hour24 += 12;
+        } else if (result.data.time.includes("am") && hour24 === 12) {
+          hour24 = 0;
+        }
+  
+        const formattedTime = `${String(hour24).padStart(2, '0')}:${minute.replace(' pm', '').replace(' am', '')}`;
+        
+        setSelectedTime(formattedTime); 
+        setSelectedHour(String(hour24).padStart(2, '0'));
+        setSelectedMinute(minute.replace(' pm', '').replace(' am', ''));
+        
+        setShow(true);
       } else {
         setError(result.message);
       }
@@ -130,6 +141,7 @@ const Reservation = () => {
       setError(error.message);
     }
   };
+  
 
   const handleDelete = (id) => {
     const newData = data.filter((row) => row.id !== id);
@@ -138,25 +150,72 @@ const Reservation = () => {
 
   const handleClose = () => {
     setShow(false);
-    setAppointmentDetails(null); // Reset appointment details when closing the modal
+    setAppointmentDetails(null);
   };
 
   const handleTimeSelection = (time) => {
-    setSelectedTime(time);
-    const [hour, minute] = time.split(':');
-    setSelectedHour(hour);
-    setSelectedMinute(minute.replace(' pm', '').replace(' am', '')); // Remove am/pm for display
-  };
+  const [hour, minute] = time.split(':');
+  let hour24 = parseInt(hour, 10);
+  
+  if (time.includes("pm") && hour24 < 12) {
+    hour24 += 12;
+  } else if (time.includes("am") && hour24 === 12) {
+    hour24 = 0;
+  }
 
-  const handleSave = () => {
-    // Perform save logic here (API call to save changes)
-    console.log("Save clicked");
-    handleClose(); // Close the modal after saving
-  };
+  const formattedTime = `${String(hour24).padStart(2, '0')}:${minute.replace(' pm', '').replace(' am', '')}`;
+  
+  setSelectedTime(formattedTime);
+  setSelectedHour(String(hour24).padStart(2, '0'));
+  setSelectedMinute(minute.replace(' pm', '').replace(' am', ''));
+};
 
+const handleSave = async () => {
+  const formData = new FormData();
+  formData.append('doctors_id', doctors.find(doc => doc.name === selectedDoctor)?.id); 
+  formData.append('date', selectedDate); 
+  formData.append('time', selectedTime); 
+  
+ 
+  if (!formData.get('doctors_id') || !formData.get('date') || !formData.get('time')) {
+    setError("Please ensure that all fields are filled.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`https://naql.nozzm.com/api/reschedule/${appointmentDetails.id}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      },
+      body: formData
+    });
+
+    const result = await response.json();
+    if (result.status) {
+      const updatedData = data.map(row =>
+        row.id === appointmentDetails.id
+          ? { ...row, doctor_name: selectedDoctor, date: selectedDate, time: selectedTime }
+          : row
+      );
+      setData(updatedData);
+      handleClose();
+    } else {
+      console.error("Failed to save changes:", result.message);
+      setError(result.message);
+    }
+  } catch (error) {
+    console.error("Error saving changes:", error);
+    setError(error.message);
+  }
+};
+
+  
+  
   return (
     <div className="container tables bg-white mt-5">
-      <div className=" tableTitle  d-flex justify-content-between">
+      <div className="tableTitle d-flex justify-content-between">
         <h3>الحجوزات</h3>
       </div>
 
@@ -191,7 +250,7 @@ const Reservation = () => {
                 <div className="icons">
                   <img
                     variant="primary"
-                    onClick={() => handleShow(row.id)} // Pass the row ID to handleShow
+                    onClick={() => handleShow(row.id)}
                     src={clock}
                     alt=""
                   />
@@ -217,7 +276,7 @@ const Reservation = () => {
                   id="patientSelect"
                   className="form-control reservationSelect"
                   value={selectedPatient}
-                  onChange={(e) => setSelectedPatient(e.target.value)} // Allow user to change patient
+                  onChange={(e) => setSelectedPatient(e.target.value)}
                 >
                   <option value="">{t("select_patient")}</option>
                   {patients.map((patient) => (
@@ -237,7 +296,7 @@ const Reservation = () => {
                   id="doctorSelect"
                   className="form-control reservationSelect"
                   value={selectedDoctor}
-                  onChange={(e) => setSelectedDoctor(e.target.value)} // Allow user to change doctor
+                  onChange={(e) => setSelectedDoctor(e.target.value)}
                 >
                   <option value="">{t("select_doctor")}</option>
                   {doctors.map((doc) => (
@@ -257,12 +316,11 @@ const Reservation = () => {
                   type="date"
                   id="dateSelect"
                   className="form-control reservationSelect"
-                  value={selectedDate} // Prefill date value
-                  onChange={(e) => setSelectedDate(e.target.value)} // Allow user to change date
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
                 />
               </div>
 
-              {/* Time display */}
               <div className="settingForm mb-3">
                 <label>تحديد موعد جديد:</label>
                 <div className="time-display d-flex justify-content-around">
@@ -277,7 +335,6 @@ const Reservation = () => {
                 </div>
               </div>
 
-              {/* Time selection using buttons */}
               <div className="settingForm mb-3">
                 <label>اختيار الوقت:</label>
                 <div className="d-flex flex-wrap">
@@ -298,6 +355,8 @@ const Reservation = () => {
             <p>Loading...</p>
           )}
         </Modal.Body>
+        
+       <span> {error}</span>
         <Modal.Footer>
           <Button variant="primary" onClick={handleSave}>
             حفظ

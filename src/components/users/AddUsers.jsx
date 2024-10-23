@@ -2,25 +2,26 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom"; // Use useLocation to get state
-import { useAuth } from '../../AuthContext'; 
+import { useAuth } from "../../AuthContext";
 
 export default function AddUsers() {
-  const { token } = useAuth(); 
+  const { token } = useAuth();
   const navigate = useNavigate();
   const location = useLocation(); // Use useLocation to access state
   const userId = location.state ? location.state.userId : null; // Get userId from state if available
 
   const [formData, setFormData] = useState({
     nameArabic: "",
-    phone: "",
+    mobile: "",
     email: "",
     password: "",
     passwordConfirmation: "",
     role: "", // Default role should be populated after fetching roles
   });
   const [isUpdating, setIsUpdating] = useState(false);
-  const [roles, setRoles] = useState([]); 
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [roles, setRoles] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // State for loading
 
   // Fetch user data if updating
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function AddUsers() {
           if (data.status) {
             setFormData({
               nameArabic: data.data.name || "",
-              phone: data.data.phone || "",
+              mobile: data.data.mobile || "",
               email: data.data.email || "",
               password: "", // Password is not included in response for security reasons
               passwordConfirmation: "",
@@ -60,7 +61,7 @@ export default function AddUsers() {
         });
         const result = await response.json();
         if (result.status) {
-          setRoles(result.data); 
+          setRoles(result.data);
         } else {
           console.error("Failed to fetch roles:", result.message);
         }
@@ -84,13 +85,14 @@ export default function AddUsers() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading to true when form is submitted
     const form = new FormData();
     form.append("name", formData.nameArabic || formData.nameEnglish);
     form.append("email", formData.email);
     form.append("password", formData.password);
     form.append("password_confirmation", formData.passwordConfirmation);
     form.append("role", formData.role);
-    form.append("phone", formData.phone);
+    form.append("mobile", formData.mobile);
 
     const url = isUpdating
       ? `https://naql.nozzm.com/api/update_users/${userId}`
@@ -100,6 +102,7 @@ export default function AddUsers() {
       const response = await fetch(url, {
         method: "POST",
         headers: {
+          Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: form,
@@ -107,13 +110,17 @@ export default function AddUsers() {
 
       const result = await response.json();
       if (result.status) {
-        alert(isUpdating ? "User updated successfully!" : "User added successfully!");
+        alert(
+          isUpdating ? "User updated successfully!" : "User added successfully!"
+        );
         navigate("/Users");
       } else {
         setErrorMessage(result.message);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+    } finally {
+      setIsLoading(false); // Set loading to false when submission finishes
     }
   };
 
@@ -125,7 +132,7 @@ export default function AddUsers() {
 
       <form onSubmit={handleSubmit}>
         <div className="settingForm justify-content-around">
-          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>} 
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
           <div className="row">
             <div className="col-md-4">
               <label htmlFor="nameArabic">الاسم باللغة العربية:</label>
@@ -137,14 +144,14 @@ export default function AddUsers() {
                 onChange={handleChange}
               />
             </div>
-       
+
             <div className="col-md-4">
-              <label htmlFor="phone">رقم الهاتف :</label>
+              <label htmlFor="mobile">رقم الهاتف :</label>
               <input
                 type="text"
                 className="form-control"
-                name="phone"
-                value={formData.phone}
+                name="mobile"
+                value={formData.mobile}
                 onChange={handleChange}
               />
             </div>
@@ -160,7 +167,6 @@ export default function AddUsers() {
             </div>
           </div>
           <div className="row">
-         
             <div className="col-md-4">
               <label htmlFor="password">كلمة المرور :</label>
               <input
@@ -190,12 +196,17 @@ export default function AddUsers() {
                   value={formData.role}
                   onChange={handleChange}
                 >
-                     <option value="">الصلاحيات</option>
                   {roles.map((role) => (
+                    
+                       <>
+                       <option key={role.id} value={role.name}>{role.name}</option>
                     <option key={role.id} value={role.name}>
-                     
+                          
+                   
+                   
                       {role.name}
                     </option>
+                       </>
                   ))}
                 </select>
                 <div className="arrow-icon">
@@ -206,8 +217,8 @@ export default function AddUsers() {
           </div>
 
           <div className="BottomButtons">
-            <button type="submit" className="save">
-              <span> {isUpdating ? "تحديث" : "حفظ"} </span>
+            <button type="submit" className="save" disabled={isLoading}>
+              <span>{isLoading ? "جاري الحفظ..." : isUpdating ? "تحديث" : "حفظ"}</span>
             </button>
             <button
               type="button"
