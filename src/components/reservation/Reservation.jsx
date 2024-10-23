@@ -1,230 +1,314 @@
-import React, { useState } from 'react';
-import deletee from '../../assests/delete.svg';
-import clock from '../../assests/clock-rewind.svg';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import plus from '../../assests/plus.svg';
-import calendar from '../../assests/calendar.svg';
-import { Button, Modal } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-// import "./table.css"
+import React, { useState, useEffect } from "react";
+import deletee from "../../assests/delete.svg";
+import clock from "../../assests/clock-rewind.svg";
+import { Button, Modal } from "react-bootstrap";
+import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from '../../AuthContext';
+
 const Reservation = () => {
-    const [data, setData] = useState([
-        { id: 1, first: 'نهي احمد', age: '35', gender: "انثي" , SessionName : 'ألاكتئاب' , DrName: "عبدالله احمد" , sessionPeriod:"30 دقيقة" , sessionType:"صوتية" , Date:"22/3/2022 5:00PM"},
-        { id: 2, first: 'نهي احمد', age: '35', gender: "انثي" , SessionName : 'ألاكتئاب' , DrName: "عبدالله احمد" , sessionPeriod:"30 دقيقة" , sessionType:"صوتية" , Date:"22/3/2022 5:00PM"},
-        { id: 3, first: 'نهي احمد', age: '35', gender: "انثي" , SessionName : 'ألاكتئاب' , DrName: "عبدالله احمد" , sessionPeriod:"30 دقيقة" , sessionType:"صوتية" , Date:"22/3/2022 5:00PM"},
-        { id: 4, first: 'نهي احمد', age: '35', gender: "انثي" , SessionName : 'ألاكتئاب' , DrName: "عبدالله احمد" , sessionPeriod:"30 دقيقة" , sessionType:"صوتية" , Date:"22/3/2022 5:00PM"},
+  const [data, setData] = useState([]);
+  const { t, i18n } = useTranslation();
+  const { token } = useAuth();
+  const [error, setError] = useState(null);
+  const [doctors, setDoctors] = useState([]);
+  const [patients, setPatients] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState("");
+  const [selectedPatient, setSelectedPatient] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState(""); 
+  const [appointmentDetails, setAppointmentDetails] = useState(null);
+  const [show, setShow] = useState(false);
 
-      ]);
-    
-      const [editingId, setEditingId] = useState(null);
-      const [newRowData, setNewRowData] = useState({});
-      const [show, setShow] = useState(false);
+  const timeSlots = ["1:00 pm", "2:00 pm", "3:00 pm", "4:00 pm", "5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm"];
 
-      const handleClose = () => setShow(false);
-      const handleShow = () => setShow(true);
+  const [selectedHour, setSelectedHour] = useState('--');
+  const [selectedMinute, setSelectedMinute] = useState('--');
 
-    
-      const handleDelete = (id) => {
-        const newData = data.filter(row => row.id !== id);
-        setData(newData);
-      };
-    
-      const handleChange = (e, key) => {
-        const { value } = e.target;
-        setNewRowData(prevData => ({
-          ...prevData,
-          [key]: value
-        }));
-      };
-    
-    
-
-  const handleDateChange = (date) => {
-    setNewRowData(prevData => ({
-      ...prevData,
-      Date: date
-    }));
-  };
-      const handleSave = () => {
-        const newData = data.map(row => {
-          if (row.id === editingId) {
-            return newRowData;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://naql.nozzm.com/api/appointment", {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+            Authorization: `Bearer ${token}`,
+            lang: i18n.language,
           }
-          return row;
         });
-        setData(newData);
-        setEditingId(null);
-        setNewRowData({});
-      };
-    
-      return (
-        <div className="container tables bg-white mt-5">
-          <div className=" tableTitle  d-flex justify-content-between">
-          <h3>الحجوزات </h3>
-          <button > 
-          <img src={plus} alt="" />
-        <span className='pe-3'> اضافة </span>   
-   
-          </button>
-          </div>
-       
-          <table className=" table  borderless">
-          <thead>
-            <tr>
-              <th scope="col">الرقم</th>
-              <th scope="col">اسم المريض</th>
-              <th scope="col">العمر</th>
-              <th scope="col">الجنس</th>
-              <th scope="col">اسم الجلسة</th>
-              <th scope="col">اسم الدكتور</th>
-              <th scope="col">مدة الجلسة</th>
-              <th scope="col">نوع الجلسة</th>
-              <th scope="col">الوقت و التاريخ</th>
-              <th scope="col">الاعدادات</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map(row => (
-              <tr key={row.id}>
-                <td>{row.id}</td>
-                <td>
-                  {editingId === row.id ? (
-                    <input type="text" value={newRowData.first} onChange={(e) => handleChange(e, 'first')} />
-                  ) : (
-                    row.first
-                  )}
-                </td>
-                <td>
-                  {editingId === row.id ? (
-                    <input type="text" value={newRowData.age} onChange={(e) => handleChange(e, 'age')} />
-                  ) : (
-                    row.age
-                  )}
-                </td>
-                <td>
-                  {editingId === row.id ? (
-                    <input type="text" value={newRowData.gender} onChange={(e) => handleChange(e, 'gender')} />
-                  ) : (
-                    row.gender
-                  )}
-                </td>
-                <td>
-                  {editingId === row.id ? (
-                    <input type="text" value={newRowData.SessionName} onChange={(e) => handleChange(e, 'SessionName')} />
-                  ) : (
-                    row.SessionName
-                  )}
-                </td>
-                <td>
-                  {editingId === row.id ? (
-                    <input type="text" value={newRowData.DrName} onChange={(e) => handleChange(e, 'DrName')} />
-                  ) : (
-                    row.DrName
-                  )}
-                </td>
-                <td>
-                  {editingId === row.id ? (
-                    <input type="text" value={newRowData.sessionPeeriod} onChange={(e) => handleChange(e, 'sessionPeriod')} />
-                  ) : (
-                    row.sessionPeriod
-                  )}
-                </td>
-                <td>
-                  {editingId === row.id ? (
-                    <input type="text" value={newRowData.sessionType} onChange={(e) => handleChange(e, 'sessionType')} />
-                  ) : (
-                    row.sessionType
-                  )}
-                </td>
-                <td>
-                  {editingId === row.id ? (
-                    <input type="text" value={newRowData.Date} onChange={(e) => handleChange(e, 'Date')} />
-                  ) : (
-                    row.Date
-                  )}
-                </td>
-                <td>
-                  {editingId === row.id ? (
-                    <React.Fragment>
-                      <button onClick={handleSave}>Save</button>
-                      <button onClick={() => setEditingId(null)}>Cancel</button>
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <div className='icons'>
-                        
-                      <img  variant="primary" onClick={handleShow} src={clock} alt="" />
-          
-                    <img 
-                    src={deletee} alt=""
-                    onClick={() => handleDelete(row.id)}/>
-                   </div>
-                    </React.Fragment>
-                  )}
-                </td>
-<div className='Modal '>
-<Modal show={show} onHide={handleClose}>
-                <Modal.Header>
-                    <Modal.Title> <p>اعادة جدولة المواعيد</p>  </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className='settingForm'>
-                  <label htmlFor="formGroupExampleInput">الطبيب المعالج  :</label>
-                  <br />
-                  <select className="form-control reservationSelect">
-  <option value="option1"> احمد عبدالله</option>
-  <option value="option2"> عصام مسعد</option>
-  <option value="option3"> روان محمود</option>
-</select>
-<div className="ReservationArrow-icon">
-  <FontAwesomeIcon icon={faChevronDown} />
-  </div>
-  </div>
-            
-               <div className=' settingForm'>
-               <label className='mb-4' htmlFor="formGroupExampleInput">تحديد تاريخ جديد:</label>
-        <br />
-               <DatePicker
-        className='reservationSelect form-control '
-                       selected={newRowData.Date}
-                       onChange={handleDateChange}
-                      //  showTimeSelect
-                      //  dateFormat="Pp"
-                     />
-                    <img className='Calender' src={calendar}/>
 
-               </div>
-        
-                 
-                </Modal.Body>
-                <Modal.Footer>
-                  
-                <div
-                
-            className='BottomButtons'>
-                <button onClick={handleClose} className='save'>
-                    <span> حفظ</span>
-                </button>
-                <button onClick={handleClose} className='cancel'>
-                    <span> الغاء</span>
-                </button>
-            </div>
-                </Modal.Footer>
-            </Modal>
-</div>
-              
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
-       
-      );
+        const result = await response.json();
+        if (result.status) {
+          setData(result.data.data);
+        } else {
+          console.error("Failed to fetch data:", result.message);
+          setError(result.message);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError(error.message);
+      }
     };
-    
-  
 
+    fetchData();
+  }, [token, i18n.language]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await fetch("https://naql.nozzm.com/api/doctores", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        if (result.status) {
+          setDoctors(result.data.data || []);
+        } else {
+          setError(result.message);
+        }
+      } catch (error) {
+        setError("Failed to fetch doctors");
+      }
+    };
+
+    fetchDoctors();
+  }, [token]);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await fetch("https://naql.nozzm.com/api/patients", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        if (result.status) {
+          setPatients(result.data.data || []);
+        } else {
+          setError(result.message);
+        }
+      } catch (error) {
+        setError("Failed to fetch patients");
+      }
+    };
+
+    fetchPatients();
+  }, [token]);
+
+  const handleShow = async (id) => {
+    try {
+      const response = await fetch(`https://naql.nozzm.com/api/show_appointment/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const result = await response.json();
+      if (result.status) {
+        setAppointmentDetails(result.data); // Store the fetched data in state
+        setSelectedDoctor(result.data.doctor_name); // Prefill doctor name
+        setSelectedPatient(result.data.patient_name); // Prefill patient name
+        setSelectedDate(result.data.date); // Prefill date
+        const [hour, minute] = result.data.time.split(':'); // Prefill hour and minute
+        setSelectedHour(hour);
+        setSelectedMinute(minute);
+        setSelectedTime(result.data.time); // Prefill time
+        setShow(true); // Show the modal
+      } else {
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error("Error fetching appointment details:", error);
+      setError(error.message);
+    }
+  };
+
+  const handleDelete = (id) => {
+    const newData = data.filter((row) => row.id !== id);
+    setData(newData);
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    setAppointmentDetails(null); // Reset appointment details when closing the modal
+  };
+
+  const handleTimeSelection = (time) => {
+    setSelectedTime(time);
+    const [hour, minute] = time.split(':');
+    setSelectedHour(hour);
+    setSelectedMinute(minute.replace(' pm', '').replace(' am', '')); // Remove am/pm for display
+  };
+
+  const handleSave = () => {
+    // Perform save logic here (API call to save changes)
+    console.log("Save clicked");
+    handleClose(); // Close the modal after saving
+  };
+
+  return (
+    <div className="container tables bg-white mt-5">
+      <div className=" tableTitle  d-flex justify-content-between">
+        <h3>الحجوزات</h3>
+      </div>
+
+      <table className="table borderless">
+        <thead>
+          <tr>
+            <th scope="col">الرقم</th>
+            <th scope="col">اسم المريض</th>
+            <th scope="col">العمر</th>
+            <th scope="col">الجنس</th>
+            <th scope="col">اسم الجلسة</th>
+            <th scope="col">اسم الدكتور</th>
+            <th scope="col">مدة الجلسة</th>
+            <th scope="col">نوع الجلسة</th>
+            <th scope="col">الوقت و التاريخ</th>
+            <th scope="col">الاعدادات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row) => (
+            <tr key={row.id}>
+              <td>{row.id}</td>
+              <td>{row.patient_name}</td>
+              <td>{row.age}</td>
+              <td>{row.gender}</td>
+              <td>{row.sessions_title}</td>
+              <td>{row.doctor_name}</td>
+              <td>{`${row.sessions_num} دقيقة`}</td>
+              <td>{row.sessions_kind}</td>
+              <td>{`${row.date} ${row.time}`}</td>
+              <td>
+                <div className="icons">
+                  <img
+                    variant="primary"
+                    onClick={() => handleShow(row.id)} // Pass the row ID to handleShow
+                    src={clock}
+                    alt=""
+                  />
+                  <img src={deletee} alt="" onClick={() => handleDelete(row.id)} />
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Reschedule Modal */}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>إعادة جدولة الموعد</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {appointmentDetails ? (
+            <>
+              <div className="settingForm mb-3">
+                <label htmlFor="patientSelect">اسم المريض:</label>
+                <select
+                  id="patientSelect"
+                  className="form-control reservationSelect"
+                  value={selectedPatient}
+                  onChange={(e) => setSelectedPatient(e.target.value)} // Allow user to change patient
+                >
+                  <option value="">{t("select_patient")}</option>
+                  {patients.map((patient) => (
+                    <option key={patient.id} value={patient.name}>
+                      {patient.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="ReservationArrow-icon">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </div>
+              </div>
+
+              <div className="settingForm mb-3">
+                <label htmlFor="doctorSelect">الطبيب المعالج:</label>
+                <select
+                  id="doctorSelect"
+                  className="form-control reservationSelect"
+                  value={selectedDoctor}
+                  onChange={(e) => setSelectedDoctor(e.target.value)} // Allow user to change doctor
+                >
+                  <option value="">{t("select_doctor")}</option>
+                  {doctors.map((doc) => (
+                    <option key={doc.id} value={doc.name}>
+                      {doc.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="ReservationArrow-icon">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </div>
+              </div>
+
+              <div className="settingForm mb-3">
+                <label htmlFor="dateSelect">تحديد تاريخ :</label>
+                <input
+                  type="date"
+                  id="dateSelect"
+                  className="form-control reservationSelect"
+                  value={selectedDate} // Prefill date value
+                  onChange={(e) => setSelectedDate(e.target.value)} // Allow user to change date
+                />
+              </div>
+
+              {/* Time display */}
+              <div className="settingForm mb-3">
+                <label>تحديد موعد جديد:</label>
+                <div className="time-display d-flex justify-content-around">
+                  <div className="time-box">
+                    <div className="time-label">الدقائق</div>
+                    <div className="time-placeholder">{selectedMinute || '--'}</div>
+                  </div>
+                  <div className="time-box">
+                    <div className="time-label">الساعة</div>
+                    <div className="time-placeholder">{selectedHour || '--'}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Time selection using buttons */}
+              <div className="settingForm mb-3">
+                <label>اختيار الوقت:</label>
+                <div className="d-flex flex-wrap">
+                  {timeSlots.map((time) => (
+                    <button
+                      key={time}
+                      type="button"
+                      className={`btn ${selectedTime === time ? 'btn-primary' : 'btn-secondary'} m-2`}
+                      onClick={() => handleTimeSelection(time)}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <p>Loading...</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleSave}>
+            حفظ
+          </Button>
+          <Button variant="secondary" onClick={handleClose}>
+            الغاء
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+};
 
 export default Reservation;

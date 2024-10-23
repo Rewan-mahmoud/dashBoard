@@ -5,13 +5,15 @@ import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import deletee from "../../assests/delete.svg";
 import { useAuth } from "../../AuthContext";
+import { useLocation } from "react-router-dom";
 
 export default function UpdateServices() {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [doctors, setDoctors] = useState([]);
-  const [data, setData] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const location = useLocation();
+  const { serviceId } = location.state;
   const [dynamicInputs, setDynamicInputs] = useState([
     {
       specialist: "",
@@ -40,31 +42,15 @@ export default function UpdateServices() {
         });
         const result = await response.json();
         if (result.status) {
-          const categoriesSet = new Map();
-          const subCategoriesSet = new Map();
-          const doctorsSet = new Map();
-
-          result.data.data.forEach((service) => {
-            categoriesSet.set(service?.category?.name, service?.category?.id);
-            subCategoriesSet.set(
-              service?.sub_category?.name,
-              service?.sub_category?.id
-            );
-            service.Service_doctors.forEach((doctor) => {
-              doctorsSet.set(doctor.doctors.name, doctor.doctors.id);
-            });
-          });
-
-  
+          setCategories(result.data.data);
         } else {
-          console.error("Failed to fetch data:", result.message);
           setError(result.message);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
         setError(error.message);
       }
     };
+
     const fetchSubcategories = async () => {
       try {
         const response = await fetch(
@@ -80,38 +66,15 @@ export default function UpdateServices() {
         );
         const result = await response.json();
         if (result.status) {
-          setSubcategories(result.data.data); // Store subcategories in state
+          setSubcategories(result.data.data);
         } else {
-          console.error("Failed to fetch subcategories:", result.message);
           setError(result.message);
         }
       } catch (error) {
-        console.error("Error fetching subcategories:", error);
         setError(error.message);
       }
     };
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch("https://naql.nozzm.com/api/categories", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            lang: "ar",
-          },
-        });
-        const result = await response.json();
-        if (result.status) {
-          setCategories(result.data.data); // Store categories in state
-        } else {
-          console.error("Failed to fetch categories:", result.message);
-          setError(result.message);
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        setError(error.message);
-      }
-    };
+
     const fetchDoctors = async () => {
       try {
         const response = await fetch(
@@ -123,26 +86,67 @@ export default function UpdateServices() {
               Authorization: `Bearer ${token}`,
               lang: "ar",
             },
-            body: JSON.stringify({}),
           }
         );
         const result = await response.json();
         if (result.status) {
           setDoctors(result.data);
         } else {
-          console.error("Failed to fetch doctors:", result.message);
           setError(result.message);
         }
       } catch (error) {
-        console.error("Error fetching doctors:", error);
         setError(error.message);
       }
     };
+
     fetchDoctors();
-    fetchCategories();
+    // fetchCategories();
     fetchSubcategories();
     fetchData();
   }, [token]);
+
+  useEffect(() => {
+    if (serviceId) {
+      const fetchServiceData = async () => {
+        try {
+          const response = await fetch(
+            `https://naql.nozzm.com/api/show_service/${serviceId}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+                lang: "ar",
+              },
+            }
+          );
+          const result = await response.json();
+          if (result.status) {
+            setFixedInputs({
+              category: result.data.category?.name_ar || "",
+              subCategory: result.data.sub_category?.name_ar || "",
+            });
+            setDynamicInputs(
+              result.data.Service_doctors.map((serviceDoctor) => ({
+                specialist: serviceDoctor.doctors?.name || "",
+                details: result.data.Service_time.map((detail) => ({
+                  sessions_kind: detail.sessions_kind || "",
+                  sessions_num: detail.sessions_num || "",
+                  sessions_time: detail.sessions_time || "",
+                  price: detail.price || "",
+                })),
+              }))
+            );
+          } else {
+            setError(result.message);
+          }
+        } catch (error) {
+          setError(error.message);
+        }
+      };
+      fetchServiceData();
+    }
+  }, [serviceId, token]);
 
   const handleAddService = () => {
     setDynamicInputs([
@@ -189,37 +193,36 @@ export default function UpdateServices() {
     }
   };
   const handleSaveAll = async () => {
+    // Find the selected category and subcategory by ID
     const selectedCategory = categories.find(
       (category) => category.id === parseInt(fixedInputs.category)
     );
     const selectedSubCategory = subcategories.find(
       (subcategory) => subcategory.id === parseInt(fixedInputs.subCategory)
     );
-
+  
     // Ensure category and subcategory are selected
     if (!selectedCategory) {
       alert("Please select a valid main category.");
       return;
     }
-
+  
     if (!selectedSubCategory) {
       alert("Please select a valid subcategory.");
       return;
     }
-
+  
     // Validate dynamic inputs to ensure all fields are filled
     const invalidInput = dynamicInputs.some((input) => {
       const selectedDoctor = doctors.find(
         (doctor) => doctor.id === parseInt(input.specialist)
       );
-
-      // Ensure a valid doctor is selected
+  
       if (!selectedDoctor) {
         alert("Please select a valid doctor.");
-        return true; // return true to flag this input as invalid
+        return true;
       }
-
-      // Check if any session details are missing
+  
       const sessionInvalid = input.details.some((detail) => {
         return (
           !detail.sessions_kind ||
@@ -228,29 +231,28 @@ export default function UpdateServices() {
           !detail.price
         );
       });
-
+  
       if (sessionInvalid) {
         alert("Please fill in all session details.");
-        return true; // return true to flag this input as invalid
+        return true;
       }
-
-      return false; // return false if everything is valid
+  
+      return false;
     });
-
-    // If there's invalid input, stop the process
+  
     if (invalidInput) {
       return;
     }
-
+  
     // Create payload based on inputs
     const payload = dynamicInputs
       .map((input) => {
         const selectedDoctor = doctors.find(
           (doctor) => doctor.id === parseInt(input.specialist)
         );
-
+  
         return input.details.map((detail) => ({
-          doctors_id: selectedDoctor?.id || 0, // use doctor ID or 0 if not found
+          doctors_id: selectedDoctor?.id || 0,
           sessions_kind: detail.sessions_kind,
           sessions_num: detail.sessions_num,
           sessions_time: detail.sessions_time,
@@ -258,7 +260,8 @@ export default function UpdateServices() {
         }));
       })
       .flat();
-
+  
+    // Build the final servicePayload
     const servicePayload = {
       cat_id: selectedCategory.id, // Category ID
       sub_id: selectedSubCategory.id, // Subcategory ID
@@ -272,10 +275,11 @@ export default function UpdateServices() {
         price: item.price,
       })),
     };
-
+  
     try {
+      // Make the POST request to the update endpoint
       const response = await fetch(
-        "https://naql.nozzm.com/api/update_service",
+        `https://naql.nozzm.com/api/update_service/${serviceId}`,
         {
           method: "POST",
           headers: {
@@ -287,6 +291,7 @@ export default function UpdateServices() {
         }
       );
       const result = await response.json();
+  
       if (result.status) {
         alert("Service updated successfully!");
       } else {
@@ -296,192 +301,173 @@ export default function UpdateServices() {
       alert("Error updating service: " + error.message);
     }
   };
-
+  
   return (
-    <>
-      <div className="container settingForm tables bg-white mt-5">
-        <div className="tableTitle">
-          <h3>الخدمات</h3>
-        </div>
-        <div className="row mb-3">
-          <div className="col-md-3">
-            <div className="custom-select">
-              <select
-                className="form-control"
-                value={fixedInputs.category}
-                onChange={(e) =>
-                  handleFixedInputChange("category", e.target.value)
-                }
-              >
-                <option value="">الفئات الاساسية</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {" "}
-                    {category.name_ar}{" "}
-                  </option>
-                ))}
-              </select>
-              <div className="arrow-icon">
-                <FontAwesomeIcon icon={faChevronDown} />
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="custom-select">
-              <select
-                className="form-control"
-                value={fixedInputs.subCategory} // This should hold the subcategory ID
-                onChange={(e) =>
-                  handleFixedInputChange("subCategory", e.target.value)
-                }
-              >
-                <option value="">الفئات الفرعية</option>
-                {subcategories.map((subcategory) => (
-                  <option key={subcategory.id} value={subcategory.id}>
-                    {" "}
-                    {subcategory.name_ar}{" "}
-                  </option>
-                ))}
-              </select>
-              <div className="arrow-icon">
-                <FontAwesomeIcon icon={faChevronDown} />
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="AddServicesButton">
-              <button onClick={handleAddService}>
-                <img src={plus} alt="" />
-                <span className="pe-3">اضافة</span>
-              </button>
+    <div className="container settingForm tables bg-white mt-5">
+      <div className="tableTitle">
+        <h3>الخدمات</h3>
+      </div>
+      <div className="row mb-3">
+        <div className="col-md-3">
+          <div className="custom-select">
+            <select
+              className="form-control"
+              value={fixedInputs.category}
+              onChange={(e) => handleFixedInputChange("category", e.target.value)}
+            >
+              <option value="">{fixedInputs.category}</option>
+              {subcategories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category?.name_ar}
+                </option>
+              ))}
+            </select>
+            <div className="arrow-icon">
+              <FontAwesomeIcon icon={faChevronDown} />
             </div>
           </div>
         </div>
-        {dynamicInputs.map((input, inputIndex) => (
-          <div key={inputIndex} className="dynamic-input-section mt-5">
-            <div className="row mb-3">
-              <div className="col-md-3">
-                <div className="custom-select">
-                  <select
-                    className="form-control"
-                    value={input.specialist}
-                    onChange={(e) =>
-                      handleInputChange(
-                        inputIndex,
-                        -1,
-                        "specialist",
-                        e.target.value
-                      )
-                    }
-                  >
-                    <option value="">المختصون</option>
-                    {doctors.map((doctor, id) => (
-                      <option key={doctor.id} value={doctor.id}>
-                        {doctor.name}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="arrow-icon">
-                    <FontAwesomeIcon icon={faChevronDown} />
-                  </div>
-                </div>
-              </div>
+        <div className="col-md-3">
+          <div className="custom-select">
+            <select
+              className="form-control"
+              value={fixedInputs.subCategory}
+              onChange={(e) =>
+                handleFixedInputChange("subCategory", e.target.value)
+              }
+            >
+              <option value="">{fixedInputs.subCategory}</option>
+              {subcategories.map((subcategory) => (
+                <option key={subcategory.id} value={subcategory.id}>
+                  {subcategory?.name_ar}
+                </option>
+              ))}
+            </select>
+            <div className="arrow-icon">
+              <FontAwesomeIcon icon={faChevronDown} />
             </div>
-            {input.details.map((detail, detailIndex) => (
-              <div key={detailIndex} className="row mb-3">
-                <div className="col-md-3 mt-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="نوع الجلسة"
-                    value={detail.sessions_kind}
-                    onChange={(e) =>
-                      handleInputChange(
-                        inputIndex,
-                        detailIndex,
-                        "sessions_kind",
-                        e.target.value
-                      )
-                    }
-                  />
-                </div>
-                <div className="col-md-3 mt-3">
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="عدد الجلسات"
-                    value={detail.sessions_num}
-                    onChange={(e) =>
-                      handleInputChange(
-                        inputIndex,
-                        detailIndex,
-                        "sessions_num",
-                        e.target.value
-                      )
-                    }
-                  />
-                </div>
-                <div className="col-md-3 mt-3">
-                  <input
-                    type="time"
-                    className="form-control"
-                    placeholder="مدة الجلسات"
-                    value={detail.sessions_time}
-                    onChange={(e) =>
-                      handleInputChange(
-                        inputIndex,
-                        detailIndex,
-                        "sessions_time",
-                        e.target.value
-                      )
-                    }
-                  />
-                </div>
-                <div className="col-md-3 mt-3">
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="السعر"
-                    value={detail.price}
-                    onChange={(e) =>
-                      handleInputChange(
-                        inputIndex,
-                        detailIndex,
-                        "price",
-                        e.target.value
-                      )
-                    }
-                  />
-                </div>
-                <div className="col-md-3 mt-3">
-                  <button
-                    className="btn"
-                    onClick={() => handleAddDetail(inputIndex)}
-                  >
-                    <FontAwesomeIcon icon={faPlus} />
-                  </button>
-                  <button
-                    className="btn"
-                    onClick={() => handleDeleteDetail(inputIndex, detailIndex)}
-                  >
-                    <img src={deletee} alt="" />
-                  </button>
-                </div>
-              </div>
-            ))}
           </div>
-        ))}
-        <div className="BottomButtons">
-          <button className="save" onClick={handleSaveAll}>
-            <span>حفظ</span>
-          </button>
-          <Link to="/Services">
-            <button className="cancel">
-              <span>الغاء</span>
+        </div>
+        <div className="col-md-3">
+          <div className="AddServicesButton">
+            <button onClick={handleAddService}>
+              <img src={plus} alt="" />
+              <span className="pe-3">اضافة</span>
             </button>
-          </Link>
+          </div>
         </div>
       </div>
-    </>
+      {dynamicInputs.map((input, inputIndex) => (
+        <div key={inputIndex} className="dynamic-input-section mt-5">
+          <div className="row mb-3">
+            <div className="col-md-3">
+              <div className="custom-select">
+                <select
+                  className="form-control"
+                  value={input.specialist}
+                  onChange={(e) =>
+                    handleInputChange(inputIndex, -1, "specialist", e.target.value)
+                  }
+                >
+                  <option value={input.specialist}>{input.specialist}</option>
+                  {doctors.map((doctor, id) => (
+                    <option key={doctor.id} value={doctor.id}>
+                      {doctor.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="arrow-icon">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </div>
+              </div>
+            </div>
+          </div>
+          {input.details.map((detail, detailIndex) => (
+            <div key={detailIndex} className="row mb-3">
+              <div className="col-md-3 mt-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="نوع الجلسة"
+                  value={detail.sessions_kind}
+                  onChange={(e) =>
+                    handleInputChange(
+                      inputIndex,
+                      detailIndex,
+                      "sessions_kind",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+              <div className="col-md-3 mt-3">
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="عدد الجلسات"
+                  value={detail.sessions_num}
+                  onChange={(e) =>
+                    handleInputChange(
+                      inputIndex,
+                      detailIndex,
+                      "sessions_num",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+              <div className="col-md-3 mt-3">
+                <input
+                  type="time"
+                  className="form-control"
+                  placeholder="مدة الجلسات"
+                  value={detail.sessions_time}
+                  onChange={(e) =>
+                    handleInputChange(
+                      inputIndex,
+                      detailIndex,
+                      "sessions_time",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+              <div className="col-md-3 mt-3">
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="السعر"
+                  value={detail.price}
+                  onChange={(e) =>
+                    handleInputChange(inputIndex, detailIndex, "price", e.target.value)
+                  }
+                />
+              </div>
+              <div className="col-md-3 mt-3">
+                <button className="btn" onClick={() => handleAddDetail(inputIndex)}>
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+                <button
+                  className="btn"
+                  onClick={() => handleDeleteDetail(inputIndex, detailIndex)}
+                >
+                  <img src={deletee} alt="" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+      <div className="BottomButtons">
+        <button className="save" onClick={handleSaveAll}>
+          <span>Save</span>
+        </button>
+        <Link to="/Services">
+          <button className="cancel">
+            <span>Cancel</span>
+          </button>
+        </Link>
+      </div>
+    </div>
   );
 }

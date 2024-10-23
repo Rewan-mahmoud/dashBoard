@@ -236,7 +236,8 @@
       "copyRights": "حقوق الملكية والنشر",
       "commonQuestions": "الأسئلة الشائعة"
     },
-   "SelfExpert": "خبراء النفس"
-  
+   "SelfExpert": "خبراء النفس",
+   "Phone" : "الهاتف",
+  "select_patient": "اسم المريض"
   
 }

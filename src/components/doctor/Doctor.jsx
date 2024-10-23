@@ -9,14 +9,14 @@ import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'; // Import act
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../AuthContext';
 import './doctor.css';
-
+import { useLocation } from "react-router-dom";
 const Doctor = () => {
   const { t, i18n } = useTranslation();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { token } = useAuth();
-
+  const location = useLocation(); 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,10 +43,14 @@ const Doctor = () => {
       }
     };
 
-    if (token) {
+    // Fetch data when the component mounts
+    fetchData();
+
+    // If there's a state indicating update, refetch the data
+    if (location.state?.updated) {
       fetchData();
     }
-  }, [token, i18n.language]);
+  }, [token, i18n.language, location.state?.updated]); 
 
   // Function to toggle active status of a doctor
   const toggleActive = async (id, currentStatus) => {

@@ -4,18 +4,19 @@ import deletee from "../../assests/delete.svg";
 import plus from "../../assests/plus.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { useAuth } from "../../AuthContext";
 import add from "../../assests/add.jpeg";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../AuthContext";
 
-const Coupons = () => {
+const Copon = () => {
   const [data, setData] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newRowData, setNewRowData] = useState({});
   const [error, setError] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { token } = useAuth();
+
   const [newData, setNewData] = useState({
     id: data.length + 1,
     code: "",
@@ -25,8 +26,7 @@ const Coupons = () => {
     user_num: "",
   });
 
-  const { token } = useAuth();
-
+  // Fetch data from API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,7 +41,7 @@ const Coupons = () => {
         });
         const result = await response.json();
         if (result.status) {
-          setData(result.data.data);
+          setData(result.data.data); // Fetching the coupons data
         } else {
           console.error("Failed to fetch data:", result.message);
           setError(result.message);
@@ -55,12 +55,23 @@ const Coupons = () => {
     fetchData();
   }, [token]);
 
+  // Edit a coupon
   const handleEdit = (id) => {
     setEditingId(id);
     const rowToEdit = data.find((row) => row.id === id);
-    setNewRowData({ ...rowToEdit });
+    setNewRowData({ ...rowToEdit }); // Make sure to copy all fields
   };
 
+  // Handle changes to the input fields when editing
+  const handleChange = (e, key) => {
+    const { value } = e.target;
+    setNewRowData((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
+
+  // Delete a coupon
   const handleDelete = async (id) => {
     try {
       const response = await fetch(
@@ -87,18 +98,11 @@ const Coupons = () => {
     }
   };
 
-  const handleChange = (e, key) => {
-    const { value } = e.target;
-    setNewRowData((prevData) => ({
-      ...prevData,
-      [key]: value,
-    }));
-  };
-
+  // Save the edited coupon
   const handleSave = async () => {
     try {
       const response = await fetch(
-        `https://naql.nozzm.com/api/update_coupons/${editingId}`,
+        `https://naql.nozzm.com/api/update_coupons/${editingId}`, // Update the coupon by ID
         {
           method: "POST",
           headers: {
@@ -107,7 +111,7 @@ const Coupons = () => {
             lang: "ar",
             Accept: "application/json",
           },
-          body: JSON.stringify(newRowData),
+          body: JSON.stringify(newRowData), // Send the edited data
         }
       );
       const result = await response.json();
@@ -117,8 +121,8 @@ const Coupons = () => {
             row.id === editingId ? { ...row, ...newRowData } : row
           )
         );
-        setEditingId(null);
-        setNewRowData({});
+        setEditingId(null); // Clear the editing mode after saving
+        setNewRowData({});  // Reset the form fields
       } else {
         console.error("Failed to save data:", result.message);
         setError(result.message);
@@ -129,41 +133,7 @@ const Coupons = () => {
     }
   };
 
-  const toggleActive = async (id, currentStatus) => {
-    try {
-      const newStatus = currentStatus === "active" ? 0 : 1;
-      const response = await fetch(
-        `https://naql.nozzm.com/api/active_coupons/${id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            lang: "ar",
-          },
-          body: JSON.stringify({ stauts: newStatus }), // Ensure the parameter name is correct
-        }
-      );
-      const result = await response.json();
-      if (result.status) {
-        setData((prevData) =>
-          prevData.map((row) =>
-            row.id === id
-              ? { ...row, status: newStatus === 1 ? "active" : "inactive" }
-              : row
-          )
-        );
-      } else {
-        console.error("Failed to toggle active status:", result.message);
-        setError(result.message);
-      }
-    } catch (error) {
-      console.error("Error toggling active status:", error);
-      setError(error.message);
-    }
-  };
-
+  // Add a new coupon
   const handleAdd = () => {
     setIsAdding(true);
   };
@@ -248,8 +218,8 @@ const Coupons = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={newRowData.code}
-                    onChange={(e) => handleChange(e, "code")}
+                    value={newRowData.code || ''}
+                    onChange={(e) => handleChange(e, "code")} // Use handleChange for editing
                   />
                 ) : (
                   row.code
@@ -260,8 +230,8 @@ const Coupons = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={newRowData.start_date}
-                    onChange={(e) => handleChange(e, "start_date")}
+                    value={newRowData.start_date || ''} 
+                    onChange={(e) => handleChange(e, "start_date")} // Use handleChange for editing
                   />
                 ) : (
                   row.start_date
@@ -272,8 +242,8 @@ const Coupons = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={newRowData.end_date}
-                    onChange={(e) => handleChange(e, "end_date")}
+                    value={newRowData.end_date || ''} 
+                    onChange={(e) => handleChange(e, "end_date")} // Use handleChange for editing
                   />
                 ) : (
                   row.end_date
@@ -284,8 +254,8 @@ const Coupons = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={newRowData.discount}
-                    onChange={(e) => handleChange(e, "discount")}
+                    value={newRowData.discount || ''}
+                    onChange={(e) => handleChange(e, "discount")} // Use handleChange for editing
                   />
                 ) : (
                   row.discount
@@ -294,10 +264,10 @@ const Coupons = () => {
               <td>
                 {editingId === row.id ? (
                   <input
-                    className="form-control"
                     type="text"
-                    value={newRowData.user_num}
-                    onChange={(e) => handleChange(e, "user_num")}
+                    className="form-control"
+                    value={newRowData.user_num || ''}
+                    onChange={(e) => handleChange(e, "user_num")} // Use handleChange for editing
                   />
                 ) : (
                   row.user_num
@@ -306,29 +276,25 @@ const Coupons = () => {
               <td>
                 <FontAwesomeIcon
                   icon={faCircleCheck}
-                  className={
-                    row.status === "active" ? "activeIcon" : "inactive"
-                  }
-                  onClick={() => toggleActive(row.id, row.status)}
+                  className={row.stauts === "active" ? "activeIcon" : "inactive"}
+                  onClick={() => toggleActive(row.id, row.stauts)}
                 />
               </td>
               <td>
                 {editingId === row.id ? (
-                  <React.Fragment>
+                  <>
                     <button className="btn  btn-sm ml-2" onClick={handleSave}>
                       <img src={add} alt={t("add")} style={{ width: "20px" }} />
                     </button>
                     <button
                       className="btn  btn-sm"
-                      onClick={() => {
-                        setEditingId(null);
-                      }}
+                      onClick={() => setEditingId(null)}
                     >
                       <img src={deletee} alt={t("delete")} />
                     </button>
-                  </React.Fragment>
+                  </>
                 ) : (
-                  <React.Fragment>
+                  <>
                     <div className="drTableIcon">
                       <img
                         src={edit}
@@ -341,7 +307,7 @@ const Coupons = () => {
                         onClick={() => handleDelete(row.id)}
                       />
                     </div>
-                  </React.Fragment>
+                  </>
                 )}
               </td>
             </tr>
@@ -390,8 +356,13 @@ const Coupons = () => {
                 />
               </td>
               <td className="d-flex">
-                <button className="btn  btn-success" onClick={handleAddSave}>{t("coupons.add")}</button>
-                <button className="btn me-3 btn-danger" onClick={() => setIsAdding(false)}>
+                <button className="btn btn-success" onClick={handleAddSave}>
+                  {t("coupons.add")}
+                </button>
+                <button
+                  className="btn me-3 btn-danger"
+                  onClick={() => setIsAdding(false)}
+                >
                   {t("cancel")}
                 </button>
               </td>
@@ -403,4 +374,4 @@ const Coupons = () => {
   );
 };
 
-export default Coupons;
+export default Copon;

@@ -73,7 +73,7 @@ html {
 }
 .ReservationArrow-icon{
     position: absolute;
-    top: 32%;
+    top: 12%;
     left: 299px;
     transform: translateY(-50%);
     color: #239EC2;
@@ -169,4 +169,51 @@ button {
     height: 50px;
     object-fit: contain; /* Ensures the aspect ratio is maintained */
   }
+  .time-selection-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
   
+  .time-box {
+    background-color: #f6f6f6;
+    border-radius: 10px;
+    width: 235px;
+    height: 120px;
+    text-align: center;
+    padding-top: 10px;
+    position: relative;
+  }
+  
+  .time-box.selected {
+    border: 1px solid #ccc;
+    background-color: white;
+  }
+  
+  .time-label {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  
+  .time-placeholder {
+    font-size: 24px;
+    color: #999;
+  }
+  
+  .time-pointer {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    margin-left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    transform: rotate(45deg);
+  }
+  
+  .settingForm button{
+margin-left: 15px;
+  }

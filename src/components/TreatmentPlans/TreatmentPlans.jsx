@@ -112,12 +112,12 @@ const TreatmentPlans = () => {
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">{t('id')}</th> {/* Translated label */}
-            <th scope="col">{t('name_ar')}</th> {/* Translated label */}
-            <th scope="col">{t('name_en')}</th> {/* Translated label */}
-            <th scope="col">{t('levels_num')}</th> {/* Translated label */}
-            <th scope="col">{t('session_type')}</th> {/* Translated label */}
-            <th scope="col">{t('controls')}</th> {/* Translated label */}
+            <th scope="col">{t('id')}</th> 
+            <th scope="col">{t('name_ar')}</th> 
+            <th scope="col">{t('name_en')}</th> 
+            <th scope="col">{t('levels_num')}</th> 
+            <th scope="col">{t('session_type')}</th> 
+            <th scope="col">{t('controls')}</th> 
           </tr>
         </thead>
         <tbody className='text-center'>

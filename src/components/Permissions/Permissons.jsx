@@ -3,10 +3,11 @@ import edit from "../../assests/edit.svg";
 import deletee from "../../assests/delete.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import plus from "../../assests/plus.svg";
 import { useTranslation } from "react-i18next";
 const Permissions = () => {
+
   const { t, i18n } = useTranslation();
   const [data, setData] = useState([
     {

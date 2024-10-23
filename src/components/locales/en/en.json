@@ -227,7 +227,10 @@
     
   },
   
-    "SelfExpert": "Self experts"
+    "SelfExpert": "Self experts",
+    
+    "Phone" : "Phone",
+    "select_patient" : "select_patient"
   
   
 

@@ -6,6 +6,7 @@ import Table from '../Table/Table';
 import Rating from '../ratingBar/Rating';
 import { useTranslation } from 'react-i18next'; // Import useTranslation hook
 import "./dashboard.css";
+import Reservation from '../../components/reservation/Reservation';
 
 function DashBoard() {
   const { t } = useTranslation(); // Initialize t function for translations
@@ -59,7 +60,7 @@ function DashBoard() {
             <img src={Chart} alt={t("alt.chartIcon")} />
           </div>
 
-          <Table />
+       <Reservation/>
           <Rating />
         </div>
       </div>

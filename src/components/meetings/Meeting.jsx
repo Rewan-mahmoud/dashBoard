@@ -7,14 +7,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../AuthContext';
 import { useTranslation } from 'react-i18next'; // Import translation hook
-
+import { useLocation } from "react-router-dom";
 const Meetings = () => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const { token } = useAuth();
-    const { t, i18n } = useTranslation(); // Use the translation hook
-
+    const { t, i18n } = useTranslation();
+    const location = useLocation();  // Use the translation hook
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -39,8 +39,15 @@ const Meetings = () => {
             }
         };
 
+        // Fetch data when the component mounts or when there's an update
         fetchData();
-    }, [token, i18n.language]); // Reload data when the language changes
+
+        // Refetch the data if location.state indicates an update
+        if (location.state?.updated) {
+            fetchData();
+        }
+
+    }, [token, i18n.language, location.state?.updated]);
 
     const handleDelete = async (id) => {
         try {

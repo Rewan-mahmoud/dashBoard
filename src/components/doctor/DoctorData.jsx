@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import trash from "../../assests/trash.svg";
 import { useAuth } from "../../AuthContext";
+import { useTranslation } from 'react-i18next';
 export default function DoctorData() {
+  const { t, i18n } = useTranslation();
   const location = useLocation();
   const doctor = location.state?.doctor || {};
   const [formData, setFormData] = useState({
@@ -66,6 +68,65 @@ export default function DoctorData() {
       );
     }
   }, [doctor]);
+  useEffect(() => {
+  const fetchDoctorDetails = async (id) => {
+    try {
+      const response = await fetch(`https://naql.nozzm.com/api/show_doctores/${id}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          'lang': i18n.language,
+        },
+      });
+
+      const result = await response.json();
+      if (result.status) {
+        const fetchedDoctor = result.data; // Assuming result.data contains doctor details
+
+        // Update the formData state with the fetched doctor details
+        setFormData({
+          nameArabic: fetchedDoctor.name || "",
+          nameEnglish: fetchedDoctor.nameEnglish || "",
+          mobile: fetchedDoctor.mobile || "",
+          gender: fetchedDoctor.gender || "",
+          email: fetchedDoctor.email || "",
+          country: fetchedDoctor.country || "",
+          experience: fetchedDoctor.exp_num || "",
+          bio: fetchedDoctor.details || "",
+          bioEnglish: fetchedDoctor.bioEnglish || "",
+          skills: fetchedDoctor.skills || "",
+          skillsEnglish: fetchedDoctor.skillsEnglish || "",
+          specialties: fetchedDoctor.specialties || "",
+          specialtiesEnglish: fetchedDoctor.specialtiesEnglish || "",
+          work_times: fetchedDoctor.Attendance?.map((attendance) => ({
+            id: attendance.id,
+            start: attendance.start_time,
+            end: attendance.end_time,
+          })) || [{ id: 1, start: "", end: "" }],
+        });
+
+        setWorks(
+          fetchedDoctor.Attendance?.map((attendance) => ({
+            id: attendance.id,
+            start: attendance.start_time,
+            end: attendance.end_time,
+          })) || [{ id: 1, start: "", end: "" }]
+        );
+      } else {
+        setError(result.message || "Failed to fetch doctor details");
+      }
+    } catch (error) {
+      setError("Failed to fetch doctor details. Please try again.");
+    }
+  };
+
+  if (doctor.id) {
+    // Fetch doctor details if doctor ID is available
+    fetchDoctorDetails(doctor.id);
+  }
+}, [doctor.id, token]);
 
   const addWork = () => {
     setWorks([...works, { id: works.length + 1, start: "", end: "" }]);
@@ -80,7 +141,6 @@ export default function DoctorData() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -110,8 +170,8 @@ export default function DoctorData() {
       // Append each work time as individual fields
       works.forEach((work, index) => {
         formDataToSend.append(`items[${index}][id]`, work.id);
-        formDataToSend.append(`items[${index}][start_time]`, work.start || ""); // Ensure start time is sent
-        formDataToSend.append(`items[${index}][end_time]`, work.end || ""); // Ensure end time is sent
+        formDataToSend.append(`items[${index}][start_time]`, work.start || "");
+        formDataToSend.append(`items[${index}][end_time]`, work.end || "");
       });
 
       // Append files if they are uploaded
@@ -144,7 +204,7 @@ export default function DoctorData() {
           Accept: "application/json",
           lang: "en",
         },
-        body: formDataToSend, // Use FormData to include files and data
+        body: formDataToSend,
       });
 
       const result = await response.json();
@@ -154,7 +214,8 @@ export default function DoctorData() {
         return;
       }
 
-      navigate("/Doctor");
+      // After successful submission, navigate back to the Doctor component and pass a state
+      navigate("/Doctor", { state: { updated: true } });
     } catch (error) {
       setError(
         "Failed to fetch. Please check your network connection and try again."
