@@ -7,14 +7,13 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import add from "../../assests/add.jpeg";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../AuthContext";
-
 const Copon = () => {
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newRowData, setNewRowData] = useState({});
   const [error, setError] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
-  const { t } = useTranslation();
   const { token } = useAuth();
 
   const [newData, setNewData] = useState({
@@ -60,6 +59,40 @@ const Copon = () => {
     setEditingId(id);
     const rowToEdit = data.find((row) => row.id === id);
     setNewRowData({ ...rowToEdit }); // Make sure to copy all fields
+  };
+  const toggleActive = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === "active" ? 0 : 1;
+      const response = await fetch(
+        `https://naql.nozzm.com/api/active_coupons/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            lang: i18n.language,
+          },
+          body: JSON.stringify({ stauts: newStatus }), // Ensure the parameter name is correct
+        }
+      );
+      const result = await response.json();
+      if (result.status) {
+        setData((prevData) =>
+          prevData.map((row) =>
+            row.id === id
+              ? { ...row, status: newStatus === 1 ? "active" : "inactive" }
+              : row
+          )
+        );
+      } else {
+        console.error("Failed to toggle active status:", result.message);
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error("Error toggling active status:", error);
+      setError(error.message);
+    }
   };
 
   // Handle changes to the input fields when editing
@@ -122,7 +155,7 @@ const Copon = () => {
           )
         );
         setEditingId(null); // Clear the editing mode after saving
-        setNewRowData({});  // Reset the form fields
+        setNewRowData({}); // Reset the form fields
       } else {
         console.error("Failed to save data:", result.message);
         setError(result.message);
@@ -218,7 +251,7 @@ const Copon = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={newRowData.code || ''}
+                    value={newRowData.code || ""}
                     onChange={(e) => handleChange(e, "code")} // Use handleChange for editing
                   />
                 ) : (
@@ -230,7 +263,7 @@ const Copon = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={newRowData.start_date || ''} 
+                    value={newRowData.start_date || ""}
                     onChange={(e) => handleChange(e, "start_date")} // Use handleChange for editing
                   />
                 ) : (
@@ -242,7 +275,7 @@ const Copon = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={newRowData.end_date || ''} 
+                    value={newRowData.end_date || ""}
                     onChange={(e) => handleChange(e, "end_date")} // Use handleChange for editing
                   />
                 ) : (
@@ -254,7 +287,7 @@ const Copon = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={newRowData.discount || ''}
+                    value={newRowData.discount || ""}
                     onChange={(e) => handleChange(e, "discount")} // Use handleChange for editing
                   />
                 ) : (
@@ -266,7 +299,7 @@ const Copon = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={newRowData.user_num || ''}
+                    value={newRowData.user_num || ""}
                     onChange={(e) => handleChange(e, "user_num")} // Use handleChange for editing
                   />
                 ) : (
@@ -276,8 +309,10 @@ const Copon = () => {
               <td>
                 <FontAwesomeIcon
                   icon={faCircleCheck}
-                  className={row.stauts === "active" ? "activeIcon" : "inactive"}
-                  onClick={() => toggleActive(row.id, row.stauts)}
+                  className={
+                    row.status === "active" ? "activeIcon" : "inactive"
+                  }
+                  onClick={() => toggleActive(row.id, row.status)}
                 />
               </td>
               <td>

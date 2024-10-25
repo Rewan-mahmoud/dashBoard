@@ -217,3 +217,28 @@ button {
   .settingForm button{
 margin-left: 15px;
   }
+  .BottomButtons{
+   
+    text-align: left;
+}
+  .BottomButtons .save{
+    width: 100px;
+    height: 45px;
+    background-color: #04A1DC;
+    border-radius: 18px;
+    color: white;
+    margin-left:15px;
+    font-family: "Cairo", sans-serif;
+    border: none;
+    
+  }
+.BottomButtons .cancel{
+    width: 100px;
+    height: 45px;
+    background-color: #FAFAFA;
+    border-radius: 18px;
+    color: #B3B3B3;
+    font-family: "Cairo", sans-serif;
+    border:2px #B3B3B3 solid !important;
+    
+  }

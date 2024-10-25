@@ -217,12 +217,12 @@ export default function AddUsers() {
           </div>
 
           <div className="BottomButtons">
-            <button type="submit" className="save" disabled={isLoading}>
+            <button type="submit" className="save-btn" disabled={isLoading}>
               <span>{isLoading ? "جاري الحفظ..." : isUpdating ? "تحديث" : "حفظ"}</span>
             </button>
             <button
               type="button"
-              className="cancel"
+              className="cancel-btn"
               onClick={() => navigate("/Users")}
             >
               <span> الغاء </span>
