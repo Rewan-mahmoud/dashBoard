@@ -44,7 +44,7 @@ function PublicSettings() {
     }
 
     try {
-      const response = await fetch(`https://naql.nozzm.com/api/update_setting/1`, {
+      const response = await fetch(`https://naql.nozzm.com/api/update_setting`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,  // Replace with your token

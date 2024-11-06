@@ -218,21 +218,29 @@
     "save": "Save",
     "cancel": "Cancel"
   },
-  
-    "Generalsettings": {
-      "general": "General Settings",
-      "returnPolicy": "Return Policy",
-      "copyRights": "Copyright and Publishing",
-      "commonQuestions": "Common Questions"
-    
-  },
-  
-    "SelfExpert": "Self experts",
-    
-    "Phone" : "Phone",
-    "select_patient" : "select_patient"
-  
-  
 
-  
+  "Generalsettings": {
+    "general": "General Settings",
+    "returnPolicy": "Return Policy",
+    "copyRights": "Copyright and Publishing",
+    "commonQuestions": "Common Questions"
+  },
+  "permissions": {
+    "addPermission": "Add Permission",
+    "nameInArabic": "Name in Arabic:",
+    "nameInEnglish": "Name in English:",
+    "number": "Number",
+    "unit": "Unit",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+
+  "SelfExpert": "Self experts",
+  "Manage": " Manage",
+  "Phone": "Phone",
+  "select_patient": "select_patient",
+  "send" : "send"
 }

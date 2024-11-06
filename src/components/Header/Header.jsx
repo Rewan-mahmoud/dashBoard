@@ -12,7 +12,6 @@ import mingcute from "../../assests/mingcute_more-2-fill.svg";
 import search from "../../assests/search-normal.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
-
 function Header() {
   const { t, i18n } = useTranslation();
   const location = useLocation();
@@ -78,18 +77,18 @@ function Header() {
         </div>
 
         <div className="HeaderIcons">
-          <a href="">
+          <Link to="/Chat">
             <img src={Vector} alt="Vector" />
-          </a>
-          <a href="/RatingPage">
+          </Link>
+          <Link to="/RatingPage">
             <img src={star} alt="Star" />
-          </a>
-          <a href="">
+          </Link>
+          <Link >
             <img src={person} alt="Person" />
-          </a>
-          <a href="">
+          </Link>
+          <Link >
             <img src={Verticalcontainer} alt="Vertical Container" />
-          </a>
+          </Link>
 
           {/* Language Switch Button */}
           <FontAwesomeIcon

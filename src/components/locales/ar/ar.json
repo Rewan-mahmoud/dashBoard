@@ -229,15 +229,29 @@
     "save": "حفظ",
     "cancel": "الغاء"
   },
-  
-    "Generalsettings": {
-      "general": "اعدادات عامة",
-      "returnPolicy": "سياسة الاسترجاع",
-      "copyRights": "حقوق الملكية والنشر",
-      "commonQuestions": "الأسئلة الشائعة"
-    },
-   "SelfExpert": "خبراء النفس",
-   "Phone" : "الهاتف",
-  "select_patient": "اسم المريض"
-  
+
+  "Generalsettings": {
+    "general": "اعدادات عامة",
+    "returnPolicy": "سياسة الاسترجاع",
+    "copyRights": "حقوق الملكية والنشر",
+    "commonQuestions": "الأسئلة الشائعة"
+  },
+
+  "SelfExpert": "خبراء النفس",
+  "Phone": "الهاتف",
+  "select_patient": "اسم المريض",
+  "send": "ارسال",
+  "permissions": {
+    "addPermission": "إضافة صلاحية",
+    "nameInArabic": "الاسم باللغة العربية:",
+    "nameInEnglish": "الاسم باللغة الإنجليزية:",
+    "number": "الرقم",
+    "unit": "الوحدة",
+    "create": "إنشاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "Manage": "ادارة"
+  }
 }
