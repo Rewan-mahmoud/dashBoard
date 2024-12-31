@@ -13,10 +13,9 @@ const Chat = () => {
   const { t } = useTranslation();
   return (
     <div className="chat-app">
-      {/* Sidebar */}
       <div className="sidebar">
         <div className="search-bar">
-          <input type="text" placeholder="Search messages or users" />
+        <input type="text" placeholder="Search messages or users" />
         </div>
         <div className="recent-chats">
           {recentChats.map((chat, index) => (

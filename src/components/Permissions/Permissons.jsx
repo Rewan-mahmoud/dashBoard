@@ -6,7 +6,7 @@ import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import plus from "../../assests/plus.svg";
 import { useTranslation } from "react-i18next";
-import { useAuth } from '../../AuthContext'; // Assuming you are using an AuthContext for authentication
+import { useAuth } from "../../AuthContext"; // Assuming you are using an AuthContext for authentication
 
 const Permissions = () => {
   const { t, i18n } = useTranslation();
@@ -29,9 +29,9 @@ const Permissions = () => {
         });
         const result = await response.json();
         if (result.status) {
-          setData(result.data); // Set the roles data in state
+          setData(result.data);
         } else {
-          setError(result.message); // Handle error if the request fails
+          setError(result.message);
         }
       } catch (error) {
         console.error("Error fetching roles:", error);
@@ -41,13 +41,6 @@ const Permissions = () => {
 
     fetchRoles();
   }, [token]);
-
-  const handleEdit = (id) => {
-    setEditingId(id);
-    const rowToEdit = data.find((row) => row.id === id);
-    const newRowDataCopy = { ...rowToEdit };
-    setNewRowData(newRowDataCopy);
-  };
 
   const handleDelete = (id) => {
     const newData = data.filter((row) => row.id !== id);
@@ -154,8 +147,8 @@ const Permissions = () => {
                         className={row.active ? "activeIcon" : "inactive"}
                         onClick={() => toggleActive(row.id)}
                       />
-                      <Link>
-                        <img src={edit} alt="Edit" onClick={() => handleEdit(row.id)} />
+                      <Link to={`/AddPermissions/${row.id}`}>
+                        <img src={edit} alt="Edit" />
                       </Link>
 
                       <img

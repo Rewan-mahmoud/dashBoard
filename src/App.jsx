@@ -54,7 +54,7 @@ function AppContent() {
   return (
     <div className="App">
       {!isLoginPage && isAuthenticated && <Header />}
-      <div className="container-fluid">
+      <div >
         <div className="row">
           {/* Render SideNavbar only if not on Chat page */}
           {!isLoginPage && isAuthenticated && !isChatPage && <SideNavbar />}
@@ -183,6 +183,7 @@ function AppContent() {
                 path="/AddPermissions"
                 element={<ProtectedRoute element={<AddPermissions />} />}
               />
+                <Route path="/AddPermissions/:id" element={<AddPermissions />} />
               <Route
                 path="/AddServices"
                 element={<ProtectedRoute element={<AddServices />} />}

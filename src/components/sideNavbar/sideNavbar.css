@@ -50,7 +50,7 @@ color: #239EC2;
   
     .sideNavbar {
       position: fixed;
-      left: -100%;
+      right: -100%;
       top: 0;
       width: 200px;
       height: 100%;
@@ -60,7 +60,7 @@ color: #239EC2;
     }
   
     .sideNavbar.open {
-      left: 0;
+      right: -13px;
     }
   
     .NavTitle {

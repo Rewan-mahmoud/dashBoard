@@ -4,14 +4,14 @@ import colorUsers from "../../assests/colorUsers.svg";
 import Chart from "../../assests/Chart 1.png";
 import Table from "../Table/Table";
 import Rating from "../ratingBar/Rating";
-import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import { useTranslation } from "react-i18next";
 import "./dashboard.css";
 import Reservation from "../../components/reservation/Reservation";
 import Charts from "../../components/DashboardCharts/Charts";
 import RatingPage from "../RatingsPage/RatingPage";
 
 function DashBoard() {
-  const { t } = useTranslation(); // Initialize t function for translations
+  const { t } = useTranslation();
 
   return (
     <>

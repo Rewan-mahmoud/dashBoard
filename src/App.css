@@ -1,244 +1,237 @@
-
-
-
 html {
-    scroll-behavior: smooth;
-  }
-  
+  scroll-behavior: smooth;
+}
 
 .col {
-    /* padding: 20px; */
-    background-color: #F4F6F9;
-
-  }
+  /* padding: 20px; */
+  background-color: #f4f6f9;
+}
 
 .tableTitle {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
-.icons{
-    cursor: pointer;
+.icons {
+  cursor: pointer;
 }
-.modal-header{
-    flex-direction: column;
-     font-size: 30px;
-     color: #239EC2;
-     font-family: "Cairo", sans-serif;
-     font-weight: bold;
+.modal-header {
+  flex-direction: column;
+  font-size: 30px;
+  color: #239ec2;
+  font-family: "Cairo", sans-serif;
+  font-weight: bold;
 }
-.activeIcon{
-    color: green;
+.activeIcon {
+  color: green;
 }
-.inactive{
-    color: gray;
+.inactive {
+  color: gray;
 }
 .AddServicesButton button {
-    width: 170px;
-    height: 40px;
-    background-color: #239EC2;
-    font-family: "Cairo", sans-serif;
-    border-radius: 18px;
-    border: none;
-    margin-left: 50px;
-    color:white;
+  width: 170px;
+  height: 40px;
+  background-color: #239ec2;
+  font-family: "Cairo", sans-serif;
+  border-radius: 18px;
+  border: none;
+  margin-left: 50px;
+  color: white;
 }
 .AddServicesButton button img {
-    width: 17px;
-
-
+  width: 17px;
 }
-.LoginContent{
-    padding: 0px 130px;
+.LoginContent {
+  padding: 0px 130px;
 }
 .LoginContent h1 {
-   color: #239EC2;
-    font-size: 64px;
-    font-family: "Cairo", sans-serif;
+  color: #239ec2;
+  font-size: 64px;
+  font-family: "Cairo", sans-serif;
 }
 .LoginContent p {
-   font-size:24px ; 
-   color: #646466;
-   margin-top: 20px;
-   font-family: "Cairo", sans-serif;
+  font-size: 24px;
+  color: #646466;
+  margin-top: 20px;
+  font-family: "Cairo", sans-serif;
 }
-.leftSide{
-    height: 100vh;
-    background-color: #F4F6F9;
+.leftSide {
+  height: 100vh;
+  background-color: #f4f6f9;
 }
 .AddUserArrow-icon {
-    position: absolute;
-    top: 45%;
-    left: 232px;
-    transform: translateY(-50%);
+  position: absolute;
+  top: 45%;
+  left: 232px;
+  transform: translateY(-50%);
 }
-.ReservationArrow-icon{
-    position: absolute;
-    top: 12%;
-    left: 299px;
-    transform: translateY(-50%);
-    color: #239EC2;
+.ReservationArrow-icon {
+  position: absolute;
+  top: 12%;
+  left: 299px;
+  transform: translateY(-50%);
+  color: #239ec2;
 }
-.modal{
-    --bs-modal-width: 680px !important;
-    /* --bs-modal-padding: 4rem !important; */
-    --bs-modal-footer-border-color:none !important;
+.modal {
+  --bs-modal-width: 680px !important;
+  /* --bs-modal-padding: 4rem !important; */
+  --bs-modal-footer-border-color: none !important;
 }
-.modal-backdrop{
-    --bs-backdrop-bg: #f4f4f4 !important;
+.modal-backdrop {
+  --bs-backdrop-bg: #f4f4f4 !important;
 }
 
-.modal-footer{
-    padding: 40px 20px !important;
+.modal-footer {
+  padding: 40px 20px !important;
 }
 .reservationSelect {
-    width: 23rem;
-    font-family: "Cairo", sans-serif;
-    padding: 0px 29px;
-    height: 3rem;
-    padding-right: 53px;
-    position: relative;
+  width: 23rem;
+  font-family: "Cairo", sans-serif;
+  padding: 0px 29px;
+  height: 3rem;
+  padding-right: 53px;
+  position: relative;
 }
 .Calender {
-    position: absolute;
-    right: 38px;
-    bottom: 53px;
+  position: absolute;
+  right: 38px;
+  bottom: 53px;
 }
 .LotalyProgram img {
-    transform: translate(0px, 50px);
+  transform: translate(0px, 50px);
 }
-.logout a{
-    font-family: "Cairo", sans-serif;
+.logout a {
+  font-family: "Cairo", sans-serif;
 }
-a{
-    text-decoration: none !important;
+a {
+  text-decoration: none !important;
 }
-.editbutton{
-    border: none !important;
-    background-color: transparent;
+.editbutton {
+  border: none !important;
+  background-color: transparent;
 }
 .img-thumbnail {
-    border: none;
+  border: none;
 }
-.addtional{
-    color: aqua;
+.addtional {
+  color: aqua;
 }
 /* General button styles */
 button {
-    font-size: 14px;
+  font-size: 14px;
 
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  /* Save button specific styling */
-  .save-btn {
-    background-color: #299ecc;
-    padding: 8px 16px;
-    color: white;
-    margin:0px  10px;
-  }
-  
-  .save-btn:hover {
-    background-color: #85bfc9;
-    transform: scale(1.05);
-  }
-  
-  .save-btn:active {
-    transform: scale(0.95);
-  }
-  
-  /* Cancel button specific styling */
-  .cancel-btn {
-    background-color: #dc3545;
-    color: white;
-    padding: 8px 16px;
-  }
-  
-  .cancel-btn:hover {
-    background-color: #c82333;
-    transform: scale(1.05);
-  }
-  
-  .cancel-btn:active {
-    transform: scale(0.95);
-  }
-  .fixed-icon {
-    width: 50px;
-    height: 50px;
-    object-fit: contain; /* Ensures the aspect ratio is maintained */
-  }
-  .time-selection-container {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-  
-  .time-box {
-    background-color: #f6f6f6;
-    border-radius: 10px;
-    width: 235px;
-    height: 120px;
-    text-align: center;
-    padding-top: 10px;
-    position: relative;
-  }
-  
-  .time-box.selected {
-    border: 1px solid #ccc;
-    background-color: white;
-  }
-  
-  .time-label {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 10px;
-  }
-  
-  .time-placeholder {
-    font-size: 24px;
-    color: #999;
-  }
-  
-  .time-pointer {
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    margin-left: -10px;
-    width: 20px;
-    height: 20px;
-    background-color: white;
-    border-left: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    transform: rotate(45deg);
-  }
-  
-  .settingForm button{
-margin-left: 15px;
-  }
-  .BottomButtons{
-   
-    text-align: left;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
-  .BottomButtons .save{
-    width: 100px;
-    height: 45px;
-    background-color: #04A1DC;
-    border-radius: 18px;
-    color: white;
-    margin-left:15px;
-    font-family: "Cairo", sans-serif;
-    border: none;
-    
-  }
-.BottomButtons .cancel{
-    width: 100px;
-    height: 45px;
-    background-color: #FAFAFA;
-    border-radius: 18px;
-    color: #B3B3B3;
-    font-family: "Cairo", sans-serif;
-    border:2px #B3B3B3 solid !important;
-    
-  }
+
+/* Save button specific styling */
+.save-btn {
+  background-color: #299ecc;
+  padding: 8px 16px;
+  color: white;
+  margin: 0px 10px;
+}
+
+.save-btn:hover {
+  background-color: #85bfc9;
+  transform: scale(1.05);
+}
+
+.save-btn:active {
+  transform: scale(0.95);
+}
+
+/* Cancel button specific styling */
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 16px;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+.cancel-btn:active {
+  transform: scale(0.95);
+}
+.fixed-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain; /* Ensures the aspect ratio is maintained */
+}
+.time-selection-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.time-box {
+  background-color: #f6f6f6;
+  border-radius: 10px;
+  width: 235px;
+  height: 120px;
+  text-align: center;
+  padding-top: 10px;
+  position: relative;
+}
+
+.time-box.selected {
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.time-label {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.time-placeholder {
+  font-size: 24px;
+  color: #999;
+}
+
+.time-pointer {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  margin-left: -10px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-left: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  transform: rotate(45deg);
+}
+
+.settingForm button {
+  margin-left: 15px;
+}
+.BottomButtons {
+  text-align: left;
+}
+.BottomButtons .save {
+  width: 100px;
+  height: 45px;
+  background-color: #04a1dc;
+  border-radius: 18px;
+  color: white;
+  margin-left: 15px;
+  font-family: "Cairo", sans-serif;
+  border: none;
+}
+.BottomButtons .cancel {
+  width: 100px;
+  height: 45px;
+  background-color: #fafafa;
+  border-radius: 18px;
+  color: #b3b3b3;
+  font-family: "Cairo", sans-serif;
+  border: 2px #b3b3b3 solid !important;
+}
+/* >>>>>>>>>>>>>>>>>>>>>>>RESPONSIVEEE>>>>>>>>>>>>>>>>>>>>>>> */
+/* >>>>>>>>>>>>>HEADER>>>>>>>>>>>>>> */
+

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import deletee from "../../assests/delete.svg";
 import clock from "../../assests/clock-rewind.svg";
 import { Button, Modal } from "react-bootstrap";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { useAuth } from '../../AuthContext';
+import { useAuth } from "../../AuthContext";
 
 const Reservation = () => {
   const [data, setData] = useState([]);
@@ -17,13 +17,22 @@ const Reservation = () => {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [selectedPatient, setSelectedPatient] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState(""); 
+  const [selectedTime, setSelectedTime] = useState("");
   const [appointmentDetails, setAppointmentDetails] = useState(null);
   const [show, setShow] = useState(false);
 
-  const timeSlots = ["1:00 ", "2:00 ", "3:00 ", "4:00 ", "5:00 ", "6:00 ", "7:00 ", "8:00 "];
-  const [selectedHour, setSelectedHour] = useState('--');
-  const [selectedMinute, setSelectedMinute] = useState('--');
+  const timeSlots = [
+    "1:00",
+    "2:00",
+    "3:00",
+    "4:00",
+    "5:00",
+    "6:00",
+    "7:00",
+    "8:00",
+  ];
+  const [selectedHour, setSelectedHour] = useState("--");
+  const [selectedMinute, setSelectedMinute] = useState("--");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,10 +40,10 @@ const Reservation = () => {
         const response = await fetch("https://naql.nozzm.com/api/appointment", {
           method: "GET",
           headers: {
-            "Accept": "application/json",
+            Accept: "application/json",
             Authorization: `Bearer ${token}`,
             lang: i18n.language,
-          }
+          },
         });
 
         const result = await response.json();
@@ -103,35 +112,40 @@ const Reservation = () => {
 
   const handleShow = async (id) => {
     try {
-      const response = await fetch(`https://naql.nozzm.com/api/show_appointment/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
+      const response = await fetch(
+        `https://naql.nozzm.com/api/show_appointment/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       const result = await response.json();
       if (result.status) {
         setAppointmentDetails(result.data);
         setSelectedDoctor(result.data.doctor_name);
         setSelectedPatient(result.data.patient_name);
         setSelectedDate(result.data.date);
-  
-        const [hour, minute] = result.data.time.split(':');
+
+        const [hour, minute] = result.data.time.split(":");
         let hour24 = parseInt(hour, 10);
-        
+
         if (result.data.time.includes("pm") && hour24 < 12) {
           hour24 += 12;
         } else if (result.data.time.includes("am") && hour24 === 12) {
           hour24 = 0;
         }
-  
-        const formattedTime = `${String(hour24).padStart(2, '0')}:${minute.replace(' pm', '').replace(' am', '')}`;
-        
-        setSelectedTime(formattedTime); 
-        setSelectedHour(String(hour24).padStart(2, '0'));
-        setSelectedMinute(minute.replace(' pm', '').replace(' am', ''));
-        
+
+        const formattedTime = `${String(hour24).padStart(2, "0")}:${minute
+          .replace(" pm", "")
+          .replace(" am", "")}`;
+
+        setSelectedTime(formattedTime);
+        setSelectedHour(String(hour24).padStart(2, "0"));
+        setSelectedMinute(minute.replace(" pm", "").replace(" am", ""));
+
         setShow(true);
       } else {
         setError(result.message);
@@ -141,7 +155,6 @@ const Reservation = () => {
       setError(error.message);
     }
   };
-  
 
   const handleDelete = (id) => {
     const newData = data.filter((row) => row.id !== id);
@@ -154,84 +167,98 @@ const Reservation = () => {
   };
 
   const handleTimeSelection = (time) => {
-  const [hour, minute] = time.split(':');
-  let hour24 = parseInt(hour, 10);
-  
-  if (time.includes("pm") && hour24 < 12) {
-    hour24 += 12;
-  } else if (time.includes("am") && hour24 === 12) {
-    hour24 = 0;
-  }
+    const [hour, minute] = time.split(":");
+    let hour24 = parseInt(hour, 10);
 
-  const formattedTime = `${String(hour24).padStart(2, '0')}:${minute.replace(' pm', '').replace(' am', '')}`;
-  
-  setSelectedTime(formattedTime);
-  setSelectedHour(String(hour24).padStart(2, '0'));
-  setSelectedMinute(minute.replace(' pm', '').replace(' am', ''));
-};
-
-const handleSave = async () => {
-  const formData = new FormData();
-  formData.append('doctors_id', doctors.find(doc => doc.name === selectedDoctor)?.id); 
-  formData.append('date', selectedDate); 
-  formData.append('time', selectedTime); 
-  
- 
-  if (!formData.get('doctors_id') || !formData.get('date') || !formData.get('time')) {
-    setError("Please ensure that all fields are filled.");
-    return;
-  }
-
-  try {
-    const response = await fetch(`https://naql.nozzm.com/api/reschedule/${appointmentDetails.id}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json"
-      },
-      body: formData
-    });
-
-    const result = await response.json();
-    if (result.status) {
-      const updatedData = data.map(row =>
-        row.id === appointmentDetails.id
-          ? { ...row, doctor_name: selectedDoctor, date: selectedDate, time: selectedTime }
-          : row
-      );
-      setData(updatedData);
-      handleClose();
-    } else {
-      console.error("Failed to save changes:", result.message);
-      setError(result.message);
+    if (time.includes("pm") && hour24 < 12) {
+      hour24 += 12;
+    } else if (time.includes("am") && hour24 === 12) {
+      hour24 = 0;
     }
-  } catch (error) {
-    console.error("Error saving changes:", error);
-    setError(error.message);
-  }
-};
 
-  
-  
+    const formattedTime = `${String(hour24).padStart(2, "0")}:${minute
+      .replace(" pm", "")
+      .replace(" am", "")}`;
+
+    setSelectedTime(formattedTime);
+    setSelectedHour(String(hour24).padStart(2, "0"));
+    setSelectedMinute(minute.replace(" pm", "").replace(" am", ""));
+  };
+
+  const handleSave = async () => {
+    const formData = new FormData();
+    formData.append(
+      "doctors_id",
+      doctors.find((doc) => doc.name === selectedDoctor)?.id
+    );
+    formData.append("date", selectedDate);
+    formData.append("time", selectedTime);
+
+    if (
+      !formData.get("doctors_id") ||
+      !formData.get("date") ||
+      !formData.get("time")
+    ) {
+      setError("Please ensure that all fields are filled.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://naql.nozzm.com/api/reschedule/${appointmentDetails.id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+          body: formData,
+        }
+      );
+
+      const result = await response.json();
+      if (result.status) {
+        const updatedData = data.map((row) =>
+          row.id === appointmentDetails.id
+            ? {
+                ...row,
+                doctor_name: selectedDoctor,
+                date: selectedDate,
+                time: selectedTime,
+              }
+            : row
+        );
+        setData(updatedData);
+        handleClose();
+      } else {
+        console.error("Failed to save changes:", result.message);
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      setError(error.message);
+    }
+  };
+
   return (
     <div className="container tables bg-white mt-5">
-      <div className="tableTitle d-flex justify-content-between">
-        <h3>الحجوزات</h3>
+      <div className="tableTitle">
+        <h3>{t("reservations")}</h3>
       </div>
-
-      <table className="table borderless">
+     
+      <table className=" table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">الرقم</th>
-            <th scope="col">اسم المريض</th>
-            <th scope="col">العمر</th>
-            <th scope="col">الجنس</th>
-            <th scope="col">اسم الجلسة</th>
-            <th scope="col">اسم الدكتور</th>
-            <th scope="col">مدة الجلسة</th>
-            <th scope="col">نوع الجلسة</th>
-            <th scope="col">الوقت و التاريخ</th>
-            <th scope="col">الاعدادات</th>
+            <th>#</th>
+            <th>{t("patient_name")}</th>
+            <th>{t("age")}</th>
+            <th>{t("gender")}</th>
+            <th>{t("session_name")}</th>
+            <th> {t("doctor_name")}</th>
+            <th>{t("session_duration")}</th>
+            <th>{t("session_type")}</th>
+            <th>{t("date_and_time")}</th>
+            <th>{t("actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -243,7 +270,7 @@ const handleSave = async () => {
               <td>{row.gender}</td>
               <td>{row.sessions_title}</td>
               <td>{row.doctor_name}</td>
-              <td>{`${row.sessions_num} دقيقة`}</td>
+              <td>{`${row.sessions_num} minutes`}</td>
               <td>{row.sessions_kind}</td>
               <td>{`${row.date} ${row.time}`}</td>
               <td>
@@ -252,9 +279,13 @@ const handleSave = async () => {
                     variant="primary"
                     onClick={() => handleShow(row.id)}
                     src={clock}
-                    alt=""
+                    alt="Edit"
                   />
-                  <img src={deletee} alt="" onClick={() => handleDelete(row.id)} />
+                  <img
+                    src={deletee}
+                    alt="Delete"
+                    onClick={() => handleDelete(row.id)}
+                  />
                 </div>
               </td>
             </tr>
@@ -262,16 +293,16 @@ const handleSave = async () => {
         </tbody>
       </table>
 
-      {/* Reschedule Modal */}
+
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>إعادة جدولة الموعد</Modal.Title>
+          <Modal.Title>{t("reschedule_appointment")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {appointmentDetails ? (
             <>
               <div className="settingForm mb-3">
-                <label htmlFor="patientSelect">اسم المريض:</label>
+                <label htmlFor="patientSelect">{t("patient_name")}</label>
                 <select
                   id="patientSelect"
                   className="form-control reservationSelect"
@@ -291,7 +322,7 @@ const handleSave = async () => {
               </div>
 
               <div className="settingForm mb-3">
-                <label htmlFor="doctorSelect">الطبيب المعالج:</label>
+                <label htmlFor="doctorSelect">{t("doctor_name")}</label>
                 <select
                   id="doctorSelect"
                   className="form-control reservationSelect"
@@ -311,7 +342,7 @@ const handleSave = async () => {
               </div>
 
               <div className="settingForm mb-3">
-                <label htmlFor="dateSelect">تحديد تاريخ :</label>
+                <label htmlFor="dateSelect">{t("select_date")}</label>
                 <input
                   type="date"
                   id="dateSelect"
@@ -322,27 +353,33 @@ const handleSave = async () => {
               </div>
 
               <div className="settingForm mb-3">
-                <label>تحديد موعد جديد:</label>
+                <label>{t("select_new_time")}</label>
                 <div className="time-display d-flex justify-content-around">
                   <div className="time-box">
-                    <div className="time-label">الدقائق</div>
-                    <div className="time-placeholder">{selectedMinute || '--'}</div>
+                    <div className="time-label">{t("minutes")}</div>
+                    <div className="time-placeholder">
+                      {selectedMinute || "--"}
+                    </div>
                   </div>
                   <div className="time-box">
-                    <div className="time-label">الساعة</div>
-                    <div className="time-placeholder">{selectedHour || '--'}</div>
+                    <div className="time-label">{t("hours")}</div>
+                    <div className="time-placeholder">
+                      {selectedHour || "--"}
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div className="settingForm mb-3">
-                <label>اختيار الوقت:</label>
+                <label>{t("select_time_slot")}</label>
                 <div className="d-flex flex-wrap">
                   {timeSlots.map((time) => (
                     <button
                       key={time}
                       type="button"
-                      className={`btn ${selectedTime === time ? 'btn-primary' : 'btn-secondary'} m-2`}
+                      className={`btn ${
+                        selectedTime === time ? "btn-primary" : "btn-secondary"
+                      } m-2`}
                       onClick={() => handleTimeSelection(time)}
                     >
                       {time}
@@ -352,18 +389,18 @@ const handleSave = async () => {
               </div>
             </>
           ) : (
-            <p>Loading...</p>
+            <p>{t("loading")}</p>
           )}
         </Modal.Body>
-        
-       <span> {error}</span>
+
+        <span>{error}</span>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleSave}>
-            حفظ
-          </Button>
-          <Button variant="secondary" onClick={handleClose}>
-            الغاء
-          </Button>
+          <button className="save-btn" onClick={handleSave}>
+            {t("save")}
+          </button>
+          <button className="cancel-btn" onClick={handleClose}>
+            {t("cancel")}
+          </button>
         </Modal.Footer>
       </Modal>
     </div>

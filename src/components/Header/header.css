@@ -1,76 +1,71 @@
-.Header{
-    direction: rtl;
-    background-color: white;
+.Header {
+  direction: rtl;
+  background-color: white;
 }
-.title{
-    text-decoration: none;
-    font-size: 26px;
-    color: #239EC2;
-    font-family: cairo;
-}
-.searchInput{
-    padding: 10px 20px;
-}
-.HeaderIcons img{
-    margin-left: 24px;
+.title {
+  text-decoration: none;
+  font-size: 26px;
+  color: #239ec2;
+  font-family: cairo;
 }
 .searchInput {
-     padding: 5px 80px ;
-    border-radius: 13px;
-    width: 100%;
-    border: 1px solid #239EC2; 
-    outline: none; 
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
-
+  padding: 10px 20px;
+}
+.HeaderIcons img {
+  margin-left: 24px;
+}
+.searchInput {
+  padding: 5px 80px;
+  border-radius: 13px;
+  width: 100%;
+  border: 1px solid #239ec2;
+  outline: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 .searchContainer {
-    position: relative;
-    width: 56%;
-  }
-  
+  position: relative;
+  width: 56%;
+}
 
-  
-  .searchIcon {
-    position: absolute;
-    top: 63%;
-    right: 45px; /* adjust this value based on your preference */
-    transform: translateY(-50%);
-  }
-  .Header {
-    position: relative;
-  }
-  
-  .Header .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .Header .dropdown-content {
-    display: none;
-    position: absolute;
-    right: -72px;
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-  }
+.searchIcon {
+  position: absolute;
+  top: 63%;
+  right: 45px; /* adjust this value based on your preference */
+  transform: translateY(-50%);
+}
+.Header {
+  position: relative;
+}
 
-  
-  
-  .Header .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
-  
-  .Header .dropdown-content a:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .Header .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
+.Header .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.Header .dropdown-content {
+  display: none;
+  position: absolute;
+  right: -72px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.Header .dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.Header .dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.Header .dropdown:hover .dropdown-content {
+  display: block;
+}
+
 .HeaderIcons.rtl {
   flex-direction: row-reverse;
 }
@@ -103,7 +98,8 @@
 
 .Header.ltr .searchContainer {
   margin-right: 20px;
-}@media (min-width: 992px) {
+}
+@media (min-width: 992px) {
   .Header {
     padding: 15px 30px;
   }
@@ -160,4 +156,103 @@
   .title {
     font-size: 20px;
   }
+}
+@media (min-width: 750px) and (max-width: 1024px) {
+  .HeaderLogo img {
+    width: 50% !important;
+  }
+  .container,
+  .container-sm {
+    max-width: 719px;
+  }
+}
+/* Tablets: Ensure the layout is responsive for screens between 750px and 1024px */
+@media (min-width: 750px) and (max-width: 1024px) {
+  .Header {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
+  .table th{
+    font-size: 26px;
+  }
+
+  .HeaderLogo {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .HeaderLogo img {
+    width: 35% !important; /* Scale down logo size */
+  }
+
+  .searchContainer {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .searchInput {
+    padding: 8px 15px; /* Adjust padding for smaller screen */
+    font-size: 14px; /* Reduce font size */
+  }
+
+  .searchIcon {
+    right: 15px; /* Ensure it aligns properly */
+  }
+
+  .HeaderIcons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .HeaderIcons img {
+    margin: 0 10px; /* Adjust spacing between icons */
+    width: 24px; /* Scale icons for tablets */
+  }
+
+  .HeaderIcons span {
+    font-size: 14px; /* Adjust language switcher font size */
+  }
+
+  .dropdown-content {
+    right: 0; /* Adjust dropdown to fit tablet layout */
+  }
+
+  .title {
+    font-size: 26px; /* Adjust title font size */
+    text-align: center; /* Center the title */
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1080px) and (max-width: 1920px) {
+  .table td{
+    font-size: 20px !important;
+  }
+  .table th {
+    font-size: 23px !important;
+  }
+  .nav-link {
+    font-size: 20px !important;
+  }
+  .HeaderIcons img  {
+    width: 40px;
+  }
+  .HeaderIcons svg {
+    font-size: 30px;
+    vertical-align: middle;
+  }
+  .tableTitle span {
+    font-size: 20px !important;
+  }
+  .tableTitle button {
+    width: 195px;
+    height: 54px;
+  }
+ .container{
+  max-width: 1474px;
+ }
 }

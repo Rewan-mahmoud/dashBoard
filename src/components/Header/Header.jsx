@@ -57,24 +57,20 @@ function Header() {
   }, [currentLanguage]);
 
   return (
-    <div className={`Header ${isScrolled ? "scrolled" : ""} ${currentLanguage === "ar" ? "rtl" : "ltr"}`}>
+    <div
+      className={`Header ${isScrolled ? "scrolled" : ""} ${
+        currentLanguage === "ar" ? "rtl" : "ltr"
+      }`}
+    >
       <nav className="d-flex align-items-center justify-content-between">
-        <div>
+        <div className="HeaderLogo">
           <img src={img} width="100" alt="logo" />
           <Link to="/Dashboard" className="title">
             {t("SelfExpert")}
           </Link>
         </div>
 
-        <div className="searchContainer">
-          <input
-            className="searchInput"
-            placeholder={t("Search")}
-            type="search"
-            aria-label={t("Search")}
-          />
-          <img className="searchIcon" src={search} alt="Search" />
-        </div>
+        
 
         <div className="HeaderIcons">
           <Link to="/Chat">
@@ -83,30 +79,35 @@ function Header() {
           <Link to="/RatingPage">
             <img src={star} alt="Star" />
           </Link>
-          <Link >
+          <Link>
             <img src={person} alt="Person" />
           </Link>
-          <Link >
+          <Link>
             <img src={Verticalcontainer} alt="Vertical Container" />
           </Link>
-
+          <Link>
+            <FontAwesomeIcon
+              icon={faGlobe}
+              onClick={switchLanguage}
+              style={{ cursor: "pointer" }}
+              color="#299ECC"
+            />
+          </Link>
           {/* Language Switch Button */}
-          <FontAwesomeIcon
-            icon={faGlobe}
+
+          <span
+            style={{ marginLeft: "10px", cursor: "pointer" }}
             onClick={switchLanguage}
-            style={{ cursor: "pointer" }}
-            color="#299ECC"
-          />
-          <span style={{ marginLeft: "10px", cursor: "pointer" }} onClick={switchLanguage}>
+          >
             {currentLanguage === "en" ? "العربية" : "English"}
           </span>
 
           <div className="dropdown">
-            <a href="">
+            <Link>
               <img src={mingcute} alt="Mingcute" />
-            </a>
+            </Link>
             <div className="dropdown-content logout">
-              <a href="/Login">{t("logout")}</a>
+              <Link to="/Login" >{t("logout")}</Link>
             </div>
           </div>
         </div>

@@ -6,6 +6,8 @@ import starEmpty from '../../assests/starEmpty.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../AuthContext';
+import { useTranslation } from "react-i18next";
+
 // StarRating Component
 const StarRating = ({ rating, onRatingChange }) => {
   const handleStarClick = (index) => {
@@ -28,10 +30,13 @@ const StarRating = ({ rating, onRatingChange }) => {
 };
 
 export default function RatingPage() {
+  const { t } = useTranslation();
   const [data, setData] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newRowData, setNewRowData] = useState({});
-  const { token } = useAuth();  const [error, setError] = useState(null);
+  const { token } = useAuth();
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     fetch('https://naql.nozzm.com/api/rating', {
       method: 'POST',
@@ -67,7 +72,7 @@ export default function RatingPage() {
           'Content-Type': 'application/json',
           'lang': 'ar'
         },
-        body: JSON.stringify({ stauts: newStatus }), // Ensure the parameter name is correct
+        body: JSON.stringify({ stauts: newStatus }),
       });
       const result = await response.json();
       if (result.status) {
@@ -76,13 +81,9 @@ export default function RatingPage() {
             row.id === id ? { ...row, status: newStatus === 1 ? 'active' : 'inactive' } : row
           )
         );
-      } else {
-        // console.error('Failed to toggle active status:', result.message);
-      
       }
     } catch (error) {
-      // console.error('Error toggling active status:', error);
-      // setError(error.message);
+      console.error('Error toggling active status:', error);
     }
   };
 
@@ -106,13 +107,9 @@ export default function RatingPage() {
       const result = await response.json();
       if (result.status) {
         setData(data.filter(row => row.id !== id));
-      } else {
-        console.error('Failed to delete data:', result.message);
-        setError(result.message);
       }
     } catch (error) {
       console.error('Error deleting data:', error);
-      setError(error.message);
     }
   };
 
@@ -146,20 +143,20 @@ export default function RatingPage() {
   return (
     <div className="container tables bg-white mt-5">
       <div className="tableTitle">
-        <h3>التقييمات</h3>
+        <h3>{t("ratings")}</h3>
       </div>
 
       <table className="table borderless TableDr text-center">
         <thead>
           <tr>
-            <th scope="col">الرقم</th>
-            <th scope="col">اسم الدكتور</th>
-            <th scope="col">التقييم</th>
-            <th scope="col">التعليقات</th>
-            <th scope="col">الاعدادات</th>
+            <th scope="col">{t("number")}</th>
+            <th scope="col">{t("doctor_name")}</th>
+            <th scope="col">{t("rating")}</th>
+            <th scope="col">{t("comments")}</th>
+            <th scope="col">{t("actions")}</th>
           </tr>
         </thead>
-        <tbody className='text-center'>
+        <tbody className="text-center">
           {data.map(row => (
             <tr key={row.id}>
               <td>{row.id}</td>
@@ -186,21 +183,21 @@ export default function RatingPage() {
               </td>
               <td>
                 {editingId === row.id ? (
-                  <React.Fragment>
-                    <button onClick={handleSave}>Save</button>
-                    <button onClick={() => setEditingId(null)}>Cancel</button>
-                  </React.Fragment>
+                  <>
+                    <button onClick={handleSave}>{t("save")}</button>
+                    <button onClick={() => setEditingId(null)}>{t("cancel")}</button>
+                  </>
                 ) : (
-                  <React.Fragment>
-                    <div className='drTableIcon'>
-                    <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  className={row.status === 'active' ? 'activeIcon' : 'inactive'}
-                  onClick={() => toggleActive(row.id, row.status)}
-                />                  
-              <img src={deletee} alt="Delete" onClick={() => handleDelete(row.id)} />
+                  <>
+                    <div className="drTableIcon">
+                      <FontAwesomeIcon
+                        icon={faCircleCheck}
+                        className={row.status === 'active' ? 'activeIcon' : 'inactive'}
+                        onClick={() => toggleActive(row.id, row.status)}
+                      />
+                      <img src={deletee} alt={t("delete")} onClick={() => handleDelete(row.id)} />
                     </div>
-                  </React.Fragment>
+                  </>
                 )}
               </td>
             </tr>

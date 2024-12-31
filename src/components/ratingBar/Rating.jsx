@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import './rating.css'; 
+import React, { useState } from "react";
+import "./rating.css";
 
 const RatingBar = ({ rating, onRate }) => {
   const [hoverRating, setHoverRating] = useState(0);
@@ -38,54 +38,62 @@ const RatingBar = ({ rating, onRate }) => {
 const Rating = () => {
   const [doctorRatings, setDoctorRatings] = useState({
     "Dr. Smith": 0,
-    "Dr. Johnson": 0
+    "Dr. Johnson": 0,
   });
 
   const handleRateDoctor = (doctorName, rating) => {
     setDoctorRatings({
       ...doctorRatings,
-      [doctorName]: rating
+      [doctorName]: rating,
     });
   };
 
   return (
     <div className="container tables bg-white mt-5">
-        <h3 className='ratingTitle' >اعلي تقييما</h3>
-    <table className='table borderless '>
-      
-      <tbody>
-        <tr>
+      <h3 className="ratingTitle">اعلي تقييما</h3>
+      <table className="table borderless ">
+        <tbody>
+          <tr>
             <td>1#</td>
-          <td>د/رانيا بشر </td>
-          <td>طبيب بشري</td>
-          <td>250 تقييما</td>
-          
-          <td>
-            <RatingBar rating={doctorRatings["Dr. Smith"]} onRate={(rating) => handleRateDoctor("Dr. Smith", rating)} />
-          </td>
-        </tr>
-        <tr>
-        <td>2#</td>
-        <td>د/رانيا بشر </td>
-          <td>طبيب بشري</td>
-          <td>250 تقييما</td>
-          
-          <td>
-            <RatingBar rating={doctorRatings["Dr. Johnson"]} onRate={(rating) => handleRateDoctor("Dr. Johnson", rating)} />
-          </td>
-        </tr>
-        <tr>
-        <td>3#</td>
-        <td>د/رانيا بشر </td>
-          <td>طبيب بشري</td>
-          <td>250 تقييما</td>
-          
-          <td>
-            <RatingBar rating={doctorRatings["Dr. adel"]} onRate={(rating) => handleRateDoctor("Dr. adel", rating)} />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <td>د/رانيا بشر </td>
+            <td>طبيب بشري</td>
+            <td>250 تقييما</td>
+
+            <td>
+              <RatingBar
+                rating={doctorRatings["Dr. Smith"]}
+                onRate={(rating) => handleRateDoctor("Dr. Smith", rating)}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>2#</td>
+            <td>د/رانيا بشر </td>
+            <td>طبيب بشري</td>
+            <td>250 تقييما</td>
+
+            <td>
+              <RatingBar
+                rating={doctorRatings["Dr. Johnson"]}
+                onRate={(rating) => handleRateDoctor("Dr. Johnson", rating)}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>3#</td>
+            <td>د/رانيا بشر </td>
+            <td>طبيب بشري</td>
+            <td>250 تقييما</td>
+
+            <td>
+              <RatingBar
+                rating={doctorRatings["Dr. adel"]}
+                onRate={(rating) => handleRateDoctor("Dr. adel", rating)}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };

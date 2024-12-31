@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
-import "./permission.css";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../AuthContext";
-import { Link } from "react-router-dom";
+import "./permission.css";
+
 const AddPermissions = () => {
   const { t } = useTranslation();
+  const { id } = useParams(); // Get ID from URL (for edit mode)
+  const navigate = useNavigate(); // For navigation after saving
+  const { token } = useAuth();
   const [permissions, setPermissions] = useState({});
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
-  const { token } = useAuth();
   const modules = [
     "Dashboard",
     "Doctor",
@@ -28,9 +30,54 @@ const AddPermissions = () => {
     "FAQ",
     "General Settings",
   ];
-  
-  const permissionTypes = ["Create", "Edit", "Delete"]; // Use only valid permission types
-  
+  const permissionTypes = ["Create", "Edit", "Delete"];
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(
+            `https://naql.nozzm.com/api/show_roles/${id}`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+
+            // Set Arabic and English names
+            setNameAr(data.data.name);
+            setNameEn(data.data.name_en);
+
+            // Parse permissions into a usable format
+            const parsedPermissions = data.data.permissions.reduce(
+              (acc, perm) => {
+                const type = perm.name.split(" ")[0]; // Extract permission type
+                const module = perm.name.split(" ").slice(1).join(" "); // Extract module name
+                acc[module] = acc[module] || {};
+                acc[module][type] = true; // Set true for this permission type
+                return acc;
+              },
+              {}
+            );
+
+            setPermissions(parsedPermissions);
+          } else {
+            console.error("Failed to fetch role data");
+          }
+        } catch (error) {
+          console.error("Error fetching role data:", error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [id, token]);
+
+  console.log("name", nameAr);
   const handleCheckboxChange = (module, type) => {
     setPermissions((prevPermissions) => ({
       ...prevPermissions,
@@ -40,56 +87,66 @@ const AddPermissions = () => {
       },
     }));
   };
-  
+
   const handleSubmit = async () => {
+    // Validation for name inputs
     if (!nameAr || !nameEn) {
       alert("Please fill in both the Arabic and English names.");
       return;
     }
-  
+
+    // Format permissions into the required API payload structure
     const formattedPermissions = Object.keys(permissions).flatMap((module) =>
-      Object.keys(permissions[module])
-        .map((type) =>
-          permissions[module][type] ? { name: `${type} ${module}` } : null
-        )
-        .filter(Boolean)
+      Object.keys(permissions[module] || {})
+        .filter((type) => permissions[module][type])
+        .map((type) => `${type} ${module}`)
     );
-  
+
+    if (formattedPermissions.length === 0) {
+      alert("Please select at least one permission.");
+      return;
+    }
+
     const payload = {
       name: nameAr,
       name_en: nameEn,
       permissions: formattedPermissions,
     };
-  
+
     try {
-      const response = await fetch("https://naql.nozzm.com/api/add_roles", {
-        method: "POST",
+
+      const url = id
+        ? `https://naql.nozzm.com/api/update_roles/${id}` 
+        : "https://naql.nozzm.com/api/add_roles"; // Use add endpoint for creating new roles
+
+      // Send the API request
+      const response = await fetch(url, {
+        method: "POST", 
         headers: {
-          "Content-Type": "application/json", // Ensure Content-Type is included
-          "Accept": "application/json",
-          Authorization: `Bearer ${token || ''}`, // Ensure token is defined
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
-  
+
       if (response.ok) {
-        const data = await response.json();
-        console.log("Permissions successfully added:", data);
+        alert(id ? "Role successfully updated!" : "Role successfully added!");
+        navigate("/Permissions"); // Redirect back to the Permissions list
       } else {
         const errorData = await response.json();
-        console.error("Failed to add permissions:", errorData);
-        alert(`Error: ${errorData.message || errorData}`);
+        alert(
+          `Error: ${errorData.message || "Operation failed. Please try again."}`
+        );
       }
     } catch (error) {
-      console.error("Error adding permissions:", error);
+      console.error("Error saving role:", error);
       alert("An error occurred. Please try again.");
     }
   };
-  
-  
+
   return (
     <div className="container tables bg-white mt-5">
-      <div className="tableTitle d-flex justify-content-between ">
+      <div className="tableTitle d-flex justify-content-between">
         <h3>{t("permissions.addPermission")}</h3>
       </div>
 
@@ -151,8 +208,9 @@ const AddPermissions = () => {
         <button className="save" onClick={handleSubmit}>
           <span>{t("permissions.save")}</span>
         </button>
-        <button  className="cancel">
-          <Link to="/Permissions">{t("permissions.cancel")}</Link>
+
+        <button className="cancel" onClick={() => navigate("/Permissions")}>
+          {t("permissions.cancel")}
         </button>
       </div>
     </div>

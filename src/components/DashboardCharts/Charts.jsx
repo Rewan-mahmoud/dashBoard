@@ -1,36 +1,37 @@
 import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
+import { useTranslation } from "react-i18next";
 
 const Charts = () => {
-  const [timeFrame, setTimeFrame] = useState("yearly"); // Track the selected time frame
+  const { t } = useTranslation(); // Initialize useTranslation
+  const [timeFrame, setTimeFrame] = useState("yearly");
 
   // Chart Data (update this based on `timeFrame` if needed)
   const data = {
     labels: [
-      "يناير",
-      "فبراير",
-      "مارس",
-      "أبريل",
-      "مايو",
-      "يونيو",
-      "يوليو",
-      "أغسطس",
-      "سبتمبر",
-      "أكتوبر",
-      "نوفمبر",
-      "ديسمبر",
+      t("charts.months.january"),
+      t("charts.months.february"),
+      t("charts.months.march"),
+      t("charts.months.april"),
+      t("charts.months.may"),
+      t("charts.months.june"),
+      t("charts.months.july"),
+      t("charts.months.august"),
+      t("charts.months.september"),
+      t("charts.months.october"),
+      t("charts.months.november"),
+      t("charts.months.december"),
     ],
     datasets: [
       {
-        label: "عدد الزوار",
+        label: t("charts.visitorsLabel"),
         data: [
           2000, 3000, 2500, 5201, 4000, 3900, 3950, 4200, 3000, 3500, 3100,
           4500,
         ],
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "#4a90e2",
-
         borderWidth: 2,
         pointBackgroundColor: "#4a90e2",
         fill: true,
@@ -51,7 +52,7 @@ const Charts = () => {
         bodyColor: "#fff",
         callbacks: {
           label: function (context) {
-            return `عدد الزوار ${context.raw}`;
+            return `${t("charts.visitorsCount")} ${context.raw}`;
           },
         },
       },
@@ -61,7 +62,7 @@ const Charts = () => {
         beginAtZero: true,
         ticks: {
           callback: function (value) {
-            return value / 1000 + "k";
+            return value / 1000 + t("charts.thousands");
           },
         },
       },
@@ -96,10 +97,10 @@ const Charts = () => {
             fontSize: "1.5rem",
             color: "#333",
             fontWeight: "bold",
-            fontFamily: " Cairo, sans-serif",
+            fontFamily: "Cairo, sans-serif",
           }}
         >
-          الزوار
+          {t("charts.title")}
         </h2>
         {/* Time Frame Tabs */}
         <div
@@ -109,7 +110,7 @@ const Charts = () => {
             backgroundColor: "#f7f8fc",
             padding: "20px 30px",
             borderRadius: "8px",
-            fontFamily: " Cairo, sans-serif",
+            fontFamily: "Cairo, sans-serif",
           }}
         >
           <button
@@ -124,7 +125,7 @@ const Charts = () => {
               cursor: "pointer",
             }}
           >
-            يومي
+            {t("charts.daily")}
           </button>
           <button
             onClick={() => setTimeFrame("weekly")}
@@ -138,7 +139,7 @@ const Charts = () => {
               cursor: "pointer",
             }}
           >
-            أسبوعي
+            {t("charts.weekly")}
           </button>
           <button
             onClick={() => setTimeFrame("yearly")}
@@ -152,12 +153,12 @@ const Charts = () => {
               cursor: "pointer",
             }}
           >
-            سنوي
+            {t("charts.yearly")}
           </button>
         </div>
       </div>
       {/* Chart */}
-      <div className=" px-5 pb-5">
+      <div className="px-5 pb-5">
         <Line data={data} options={options} />
       </div>
     </div>
